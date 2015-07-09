@@ -1,0 +1,19 @@
+{
+  "name": "gitpun",
+  "version": "1.0.0",
+  "description": "git stuff",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IncognizantDoppelganger/gitpun.git"
+  },
+  "author": "Alberto, Dani, Devon, Terry",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IncognizantDoppelganger/gitpun/issues"
+  },
+  "homepage": "https://github.com/IncognizantDoppelganger/gitpun#readme"
+}
