@@ -1,0 +1,19 @@
+{
+  "name": "gitpun",
+  "version": "0.0.0",
+  "homepage": "https://github.com/IncognizantDoppelganger/gitpun",
+  "authors": [
+    "Devon",
+    "Dani",
+    "Terry"
+  ],
+  "description": "git stuff",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
