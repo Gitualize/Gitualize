@@ -185,3 +185,4 @@ no problem getting your changes merged in.
 [GitHub Flow]: http://scottchacon.com/2011/08/31/github-flow.html
 [Squash]: http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html
 
+
