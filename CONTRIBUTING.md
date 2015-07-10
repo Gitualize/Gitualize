@@ -27,6 +27,12 @@
 1. Once the pull request has been reviewed, it will be merged by another member of the team. Do not merge your own commits.
 
 ## Detailed Workflow
+For dev we are using pg 'test' db. Setup:
+1) Run `brew install postgres`
+2) Follow the on-screen instructions to add it to the launch agents and start pg.
+3) `createdb test` to create a db called test which Bookshelf will tap
+into.
+4) `psql` to type queries
 
 ### Fork the repo
 

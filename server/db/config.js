@@ -1,24 +1,43 @@
-
 var knex = require('knex')({
   client: 'pg',
   connection: process.env.DATABASE_URL || {
     host: 'localhost',
-    user: 'terrychan',
+    user: 'xuehu',
     // password: '',
-    database: 'gitpun',
+    database: 'test',
     charset: 'utf8'
   }
 });
 
 var bookshelf = require('bookshelf')(knex);
+bookshelf.plugin('registry');
 
-bookshelf.knex.schema.hasTable('Repo').then(function (exists) {
+knex.schema.dropTableIfExists('repo');
+knex.schema.dropTableIfExists('commit');
+
+bookshelf.knex.schema.hasTable('repo').then(function (exists) {
   if (!exists) {
-    bookshelf.knex.schema.createTable('Repo', function (line) {
-      line.increments('id').primary();
-      line.string('name', 20000); //json
-      line.integer('value');
-      line.timestamps();
+    bookshelf.knex.schema.createTable('repo', function (repo) {
+      repo.increments('id').primary();
+      repo.string('name', 255); //user/reponame
+      //repo.integer('value');
+      repo.timestamps();
+    }).then(function (table) {
+      console.log('Created table', table);
+    });
+  }
+});
+bookshelf.knex.schema.hasTable('commit').then(function (exists) {
+  if (!exists) {
+    bookshelf.knex.schema.createTable('commit', function (commit) {
+      commit.increments('id').primary(); //the follow numbers are somewhat arbitrary. change em and add other fields
+      commit.string('sha', 255); //user/reponame
+      commit.string('user', 255); //JSON, person who made the commit
+      commit.text('diff', 20000); //JSON diff/patch
+      commit.text('files', 5000); //files changed. json array of urls
+      commit.integer('repo_id').references('repo.id');
+      //repo.integer('value');
+      commit.timestamps();
     }).then(function (table) {
       console.log('Created table', table);
     });
