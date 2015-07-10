@@ -53,7 +53,7 @@ We use PostgreSQL as our RDB.
 1. The app will navigate to 'postgres://127.0.0.1:5432/gitpun' where 127.0.0.1 is the default localhost and 5432 is the default port
 
 ### Database Dev Support
-![alt tag](https://github.com/IncognizantDoppelganger/gitpun/tree/test/resources/Database.png)
+![alt tag](https://github.com/IncognizantDoppelganger/gitpun/blob/test/resources/Database.png?raw=true)
 
 We've created a schema visualization image with http://ondras.zarovi.cz/sql/demo/
 
