@@ -1,3 +1,4 @@
+
 var express = require('express');
 var app = express();
 var request = require('request');
@@ -13,14 +14,12 @@ app.get('/repos/:gitUser/:repoName', function(req, res){
   var gitUser = req.param('gitUser');
   var repoName = req.param('repoName');
 
-  console.log(repoName);
-
   var options = {
     url: 'https://api.github.com/repos/' + gitUser + '/' + repoName + '/commits',
     headers: {
       'User-Agent': 'http://developer.github.com/v3/#user-agent-required'
     }
-  }
+  };
 
   request(options, function(error, response, body) {
     // console.log(JSON.parse(body));
@@ -31,7 +30,7 @@ app.get('/repos/:gitUser/:repoName', function(req, res){
 
 app.use(express.static(__dirname + '/../client'));
 
-var server = app.listen(process.env.PORT || 3000, function(){
+app.listen(process.env.PORT || 3000, function(){
 });
 
 new Commit({sha: '123', user: 'dani'}).save().then(function(commit) {
