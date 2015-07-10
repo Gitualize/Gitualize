@@ -156,13 +156,8 @@ This is just to help you organize your process
 - [ ] Did I cut my work branch off of master (don't cut new branches from existing feature brances)?
 - [ ] Did I follow the correct naming convention for my branch?
 - [ ] Is my branch focused on a single main change?
-<<<<<<< HEAD:CONTRIBUTING.md
  - [ ] Do all of my changes directly relate to this change?
 - [ ] Did I rebase the upstream test branch after I finished all my
-=======
-- [ ] Do all of my changes directly relate to this change?
-- [ ] Did I rebase the upstream master branch after I finished all my
->>>>>>> fix extra space:_CONTRIBUTING.md
   work?
 - [ ] Did I write a clear pull request message detailing what changes I made?
 - [ ] Did I get a code review?
