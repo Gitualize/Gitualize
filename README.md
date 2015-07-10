@@ -24,7 +24,7 @@
 
 ## Requirements
 
-- Node 0.10.x
+- Node 0.11.x+
 - Redis 2.6.x
 - Postgresql 9.1.x
 - etc
@@ -60,7 +60,6 @@ We've created a schema visualization image with http://ondras.zarovi.cz/sql/demo
 ### Roadmap
 
 View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
-
 
 ## Contributing
 
