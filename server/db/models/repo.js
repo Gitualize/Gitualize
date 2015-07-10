@@ -1,3 +1,4 @@
+
 var db = require('../config');
 require('./commit'); //don't need var assignment, using bookshelf registry
 
