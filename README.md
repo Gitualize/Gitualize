@@ -24,7 +24,7 @@
 
 ## Requirements
 
-- Node 0.10.x
+- Node 0.12.x
 - Redis 2.6.x
 - Postgresql 9.1.x
 - etc
@@ -41,6 +41,12 @@ sudo npm install -g bower
 npm install
 bower install
 ```
+
+### Setting up Travis CI
+
+1. Navigate to [travis-ci](https://travis-ci.org/) and click Signup or Signin if you already have an account
+1. Mouseover your Account name on the top right and select Accounts
+1. Enable the checkbox for 'your_github_username/gitpun'
 
 ### Setting up your Database
 
@@ -60,7 +66,6 @@ We've created a schema visualization image with http://ondras.zarovi.cz/sql/demo
 ### Roadmap
 
 View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
-
 
 ## Contributing
 
