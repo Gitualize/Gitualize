@@ -156,12 +156,12 @@ This is just to help you organize your process
 - [ ] Did I cut my work branch off of master (don't cut new branches from existing feature brances)?
 - [ ] Did I follow the correct naming convention for my branch?
 - [ ] Is my branch focused on a single main change?
- - [ ] Do all of my changes directly relate to this change?
-- [ ] Did I rebase the upstream test branch after I finished all my
+- [ ] Do all of my changes directly relate to this change?
+- [ ] Did I rebase the upstream master branch after I finished all my
   work?
 - [ ] Did I write a clear pull request message detailing what changes I made?
 - [ ] Did I get a code review?
- - [ ] Did I make any requested changes from that code review?
+- [ ] Did I make any requested changes from that code review?
 
 If you follow all of these guidelines and make good changes, you should have
 no problem getting your changes merged in.
@@ -179,3 +179,5 @@ no problem getting your changes merged in.
 [Git Flow]: http://nvie.com/posts/a-successful-git-branching-model/
 [GitHub Flow]: http://scottchacon.com/2011/08/31/github-flow.html
 [Squash]: http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html
+
+
