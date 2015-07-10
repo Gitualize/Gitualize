@@ -4,9 +4,9 @@
 
 ## Team
 
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
-  - __Development Team Members__: teamMember, teamMember
+  - __Product Owner__: Dani
+  - __Scrum Master__: Devon
+  - __Development Team Members__: Alberto, Terry
 
 ## Table of Contents
 
