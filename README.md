@@ -42,6 +42,12 @@ npm install
 bower install
 ```
 
+### Setting up Travis CI
+
+1. Navigate to [travis-ci](https://travis-ci.org/) and click Signup or Signin if you already have an account
+1. Mouseover your Account name on the top right and select Accounts
+1. Enable the checkbox for 'your_github_username/gitpun'
+
 ### Setting up your Database
 
 We use PostgreSQL as our RDB.
