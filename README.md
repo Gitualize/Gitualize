@@ -24,7 +24,7 @@
 
 ## Requirements
 
-- Node 0.11.x+
+- Node 0.12.x
 - Redis 2.6.x
 - Postgresql 9.1.x
 - etc
