@@ -19,6 +19,7 @@
   ],
   "dependencies": {
     "jquery": "~2.1.4",
-    "underscore": "~1.8.3"
+    "underscore": "~1.8.3",
+    "react": "~0.13.3"
   }
 }
