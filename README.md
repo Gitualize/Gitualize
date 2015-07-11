@@ -37,9 +37,9 @@
 From within the root directory:
 
 ```sh
-sudo npm install -g bower
+npm install -g browserify
 npm install
-bower install
+browserify -t reactify client/js/* -o client/bundle.js
 ```
 
 ### Setting up Travis CI
