@@ -32,7 +32,6 @@
     "watchify": "^3.2.3"
   },
   "devDependencies": {
-    "bower": "^1.4.1",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
     "gulp-jasmine": "^2.0.1",
