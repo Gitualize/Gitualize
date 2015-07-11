@@ -37,7 +37,7 @@
 From within the root directory:
 
 ```sh
-sudo npm install -g browserify
+npm install -g browserify
 npm install
 browserify -t reactify client/js/* -o client/bundle.js
 ```
