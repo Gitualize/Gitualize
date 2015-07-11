@@ -1,4 +1,3 @@
-
 var db = require('../config');
 require('./repo'); //don't need var assignment, using bookshelf registry
 
