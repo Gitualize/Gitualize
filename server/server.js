@@ -32,10 +32,11 @@ app.use(express.static(__dirname + '/../client'));
 app.listen(process.env.PORT || 3000, function(){
 });
 
-new Commit({sha: '123', user: 'dani'}).save().then(function(commit) {
-  console.log('saved commit: ', commit);
-});
+// new Commit({sha: '123', user: 'dani'}).save().then(function(commit) {
+//   console.log('saved commit: ', commit);
+// });
 
+module.exports = {name: 'terry'};
 
 
 
