@@ -37,9 +37,8 @@
 From within the root directory:
 
 ```sh
-npm install -g browserify
 npm install
-browserify -t reactify client/js/* -o client/bundle.js
+gulp
 ```
 
 ### Setting up Travis CI
