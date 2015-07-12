@@ -1,39 +1,29 @@
+var _ = require('underscore');
 var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
-
-var Landing = React.createClass({
-  render: function () {
-    return <h2>Landing</h2>;
-  }
-});
-
-var AllFiles = React.createClass({
-  render: function () {
-    return <h2>All Files</h2>;
-  }
-});
-
-// declare our routes and their hierarchy
-var routes = (
-  <Route handler={App}>
-    <Route path="landing" handler={Landing}/>
-    <Route path="all-files" handler={AllFiles}/>
-  </Route>
-);
+var DefaultRoute = Router.DefaultRoute;
+var Views = require('./views.jsx');
 
 var App = React.createClass({
   render () {
     return (
-      <div>
-        <h1>App</h1>
+      <div><h1>Gitualizer</h1>
         <RouteHandler/>
       </div>
-    )
+    );
   }
 });
+var routes = (
+  <Route path='/' handler={App}>
+    <Route path="about" handler={Views.About}/>
+    <Route path="repos/:repoName" handler={Views.Folder}/>
+    <Route path="*" handler={Views.Landing}/>
+    <DefaultRoute handler={Views.Landing}/>
+  </Route>
+);
 
-Router.run(routes, Router.HashLocation, function (Root) {
-  React.render(<Root/>, document.body);
+Router.run(routes, function (Handler) {
+  React.render(<Handler/>, document.getElementById('content'));
 });
