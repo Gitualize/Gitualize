@@ -5,7 +5,7 @@ var Landing = React.createClass({
     e.preventDefault();
   },
   render: function () {
-    return <hi><form className='repoForm' onSubmit={this.handleSubmit}>
+    return <form className='repoForm' onSubmit={this.handleSubmit}>
       <input type='text' placeholder='Search repo...' />
       <input type='submit' value='go'/>
       </form>;
