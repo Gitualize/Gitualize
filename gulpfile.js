@@ -65,6 +65,6 @@ gulp.task('browserify', function() {
     .pipe(gulp.dest('./client/build'));
 });
 
-gulp.task('build', ['jshint', 'test']);
+gulp.task('build', [/*'jshint',*/ 'test']);
 
-gulp.task('default',['browserify']);
+gulp.task('default',['browserify', 'build']);
