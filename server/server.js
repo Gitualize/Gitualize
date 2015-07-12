@@ -36,7 +36,6 @@ app.listen(process.env.PORT || 3000, function(){
 //   console.log('saved commit: ', commit);
 // });
 
-module.exports = {name: 'terry'};
 
 
 
