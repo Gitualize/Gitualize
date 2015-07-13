@@ -1,8 +1,13 @@
+var express = require('express');
+var request = require('request');
 var db = require('../../server/db/config.js');
 var Repo = require('../../server/db/models/repo.js');
 var Commit = require('../../server/db/models/commit.js');
 var Repos = require('../../server/db/collections/repos.js');
 var Commits = require('../../server/db/collections/commits.js');
+
+// turn off node server before testing
+var server = require('../../server/server.js').server;
 
 describe('test db', function(){
   var config = db.knex.schema.client.config;
@@ -127,6 +132,31 @@ describe('Commits Collection', function(){
   it('should Commits defined', function(){
     expect(Commits).toBeDefined();
     expect(Commits.model).toBe(Commit);
+  });
+
+});
+
+describe('Server', function(){
+
+  it('should be defined', function(done){
+    expect(server).toBeDefined();
+    done();
+  });
+
+  it('should be listening to a port', function(done){
+
+    request('http://127.0.0.1:3000/', function(error, response, body){
+      console.log(body);
+      done();
+    });
+
+  });
+
+
+  
+  afterAll(function(){
+    server.close();
+
   });
 
 });
