@@ -10,6 +10,19 @@ bookshelf.plugin('registry');
 knex.schema.dropTableIfExists('repo');
 knex.schema.dropTableIfExists('commit');
 
+bookshelf.knex.schema.hasTable('users').then(function(exists) {
+  if (!exists) {
+    db.knex.schema.createTable('users', function(table) {
+      table.increments('id').primary();
+      table.string('username', 255);
+    }).then(function(table) {
+      console.log('Created table: users');
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+  }
+});
 bookshelf.knex.schema.hasTable('repo').then(function (exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('repo', function (repo) {
@@ -18,7 +31,7 @@ bookshelf.knex.schema.hasTable('repo').then(function (exists) {
       //repo.integer('value');
       repo.timestamps();
     }).then(function (table) {
-      console.log('Created table', table);
+      console.log('Created table: repo');
     });
   }
 });
@@ -34,7 +47,7 @@ bookshelf.knex.schema.hasTable('commit').then(function (exists) {
       //repo.integer('value');
       commit.timestamps();
     }).then(function (table) {
-      console.log('Created table', table);
+      console.log('Created table: commit');
     });
   }
 });
