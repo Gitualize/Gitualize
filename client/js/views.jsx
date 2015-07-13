@@ -7,38 +7,63 @@ var About = React.createClass({
     return <h2>About</h2>;
   }
 });
+var access_token;
 var Folder = React.createClass({
   componentDidMount: function() {
     console.log(this.props.params.repoName);
     var repoName = this.props.params.repoName;
     var repoOwner = this.props.params.repoOwner;
-    $.getJSON('/secret.json', function(data) { //need some kind of angular factory
-      var github = new Github({token: data.github_token, auth: 'oauth'});
-      var repo = github.getRepo(repoOwner, repoName);
-      repo.show(function(err, repo) {
-        console.log(repo);
-        this.setState({data: JSON.stringify(repo)});
-      }.bind(this));
-
-      //repo.getCommits({sha: 'master'}, function(commits) { //in progress, not working
-        //console.log(commits);
-      //});
-
+    var github = new Github({token: access_token, auth: 'oauth'});
+    var repo = github.getRepo(repoOwner, repoName);
+    //repo.show(function(err, repo) {
+    //}.bind(this));
+    //repo.getCommit('master', '039ce8097a376ab348e91320dea3317e244969a5', function(err, commit) { 
+      //console.log('commit: ',commit);
+    //});
+    $.getJSON('https://api.github.com/repos/'+repoOwner+'/'+repoName+'/commits', {access_token: access_token}, function(commits) {
+      debugger;
+      this.setState({commits: commits});
+      //console.log('commits: ', commits);
     }.bind(this));
+    //repo.getCommits(function(commits) { //getCommits from githubApi wrapper doesn't work?
+      //console.log('commits: ', commits);
+    //});
   },
   getInitialState: function() {
-    return {data: []};
+    return {commits: []};
   },
   render: function () {
+
+    var commits = this.state.commits.map(function(commit) {
+      return <Commit>
+        {commit}
+      </Commit>
+    });
     return <div>
       <h2>Folder view</h2>
       {this.props.params.repoName}
-      {this.state.data}
+      <ul>
+        {commits}
+      </ul>
     </div>
+  }
+});
+
+var Commit = React.createClass({
+  render: function () {
+    return <li>
+      {this.props.children}
+    </li>
   }
 });
 var Landing = React.createClass({
   mixins : [Navigation],
+  componentDidMount: function() {
+    if (access_token) return; //set the access token here so folder view has it
+    $.getJSON('/secret.json', function(data) { //need some kind of angular factory
+      access_token = access_token || data.github_token;
+    });
+  },
   handleSubmit: function(e) {
     console.log('submitted');
     e.preventDefault();
