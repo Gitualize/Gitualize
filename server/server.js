@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client'));
 
-app.use('./db/user', usersRouter);
+app.use('/user', usersRouter);
 // app.use('/commit', commitsRouter);
 
 require('./db/users/usersRoutes.js') (usersRouter);
