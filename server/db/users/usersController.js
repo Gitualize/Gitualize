@@ -38,4 +38,12 @@ module.exports = {
       console.log('controller error: ', error);
     });
   },
+
+  getRepo: function(req, res) {
+
+  },
+
+  getRepoFilter: function(req, res) {
+    
+  }
 };
