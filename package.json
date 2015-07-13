@@ -23,6 +23,7 @@
     "browserify": "^10.2.6",
     "cors": "^2.7.1",
     "express": "^4.13.1",
+    "github-api": "^0.10.6",
     "jquery": "^2.1.4",
     "knex": "^0.8.6",
     "morgan": "^1.6.1",

@@ -29,3 +29,6 @@ dist/
 node_modules/
 bower_components/
 bundle.js
+
+#access tokens
+client/secret.json
