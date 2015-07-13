@@ -68,37 +68,37 @@ We've created a schema visualization image with http://ondras.zarovi.cz/sql/demo
 If a call to our API yields nothing we will attempt to make a call to the Github API to update our records.
 
 ```sh
-api/username/:username
+api/user/:username
 ```
 
 Returns a list of repositories we have on record for a given user
 
 ```sh
-api/username/:username/repo/:repository_name/
+api/user/:username/repo/:repository_name/
 ```
 
 Returns a full commit history for the master branch of the repo
 
 ```sh
-api/username/:username/repo/:repository_name/branch?=:branch_name
+api/user/:username/repo/:repository_name/branch?=:branch_name
 ```
 
 Returns a full commit history for the branch_name branch of the repo
 
 ```sh
-api/username/:username/repo/:repository_name/date?=:date
+api/user/:username/repo/:repository_name/date?=:date
 ```
 
 Returns a full commit history of a repo's branch (default to master) after a given date
 
 ```sh
-api/username/:username/repo/:repository_name/user?=:username
+api/user/:username/repo/:repository_name/user?=:username
 ```
 
 Returns a full commit history of a repo's branch (default to master) by a given user
 
 ```sh
-api/username/:username/repo/:repository_name/data?=true
+api/user/:username/repo/:repository_name/data?=true
 ```
 
 Will return the full details of every commit of a repo's branch (default to master)
