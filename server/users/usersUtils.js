@@ -1,6 +1,6 @@
-var db = require('../config');
-var Users = require('../collections/users');
-var User = require('../models/user');
+var db = require('../db/config');
+var Users = require('../db/collections/users');
+var User = require('../db/models/user');
 
 module.exports = {
   //get a user from DB by username

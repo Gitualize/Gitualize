@@ -21,14 +21,14 @@ app.use(express.static(__dirname + '/../client'));
 app.use('/user', usersRouter);
 // app.use('/commit', commitsRouter);
 
-require('./db/users/usersRoutes.js') (usersRouter);
+require('./users/usersRoutes.js') (usersRouter);
 // require('db/events/commitsRoutes.js') (commitsRouter);
 
 
 // get commits with username and repo name
 // app.get('/repos/:gitUser/:repoName', function(req, res){
 
-//   var gitUser = req.param('gitUser');
+//   var gitUser = req.param('gistUser');
 //   var repoName = req.param('repoName');
 
 //   var options = {
