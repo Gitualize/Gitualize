@@ -42,8 +42,4 @@ module.exports = {
   getRepo: function(req, res) {
 
   },
-
-  getRepoFilter: function(req, res) {
-    
-  }
 };
