@@ -18,11 +18,11 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client'));
 
-app.use('/user', usersRouter);
-app.use('/commit', eventsRouter);
+app.use('./db/user', usersRouter);
+// app.use('/commit', commitsRouter);
 
-require('./users/usersRoutes.js') (usersRouter);
-// require('./events/commitsRoutes.js') (commitsRouter);
+require('./db/users/usersRoutes.js') (usersRouter);
+// require('db/events/commitsRoutes.js') (commitsRouter);
 
 
 // get commits with username and repo name
