@@ -80,25 +80,25 @@ api/user/:username/repo/:repository_name/
 Returns a full commit history for the master branch of the repo
 
 ```sh
-api/user/:username/repo/:repository_name/branch?=:branch_name
+api/user/:username/repo/:repository_name?branch=:branch_name
 ```
 
 Returns a full commit history for the branch_name branch of the repo
 
 ```sh
-api/user/:username/repo/:repository_name/date?=:date
+api/user/:username/repo/:repository_name?date=:date
 ```
 
 Returns a full commit history of a repo's branch (default to master) after a given date
 
 ```sh
-api/user/:username/repo/:repository_name/user?=:username
+api/user/:username/repo/:repository_name?user=:username
 ```
 
 Returns a full commit history of a repo's branch (default to master) by a given user
 
 ```sh
-api/user/:username/repo/:repository_name/data?=true
+api/user/:username/repo/:repository_name?data=true
 ```
 
 Will return the full details of every commit of a repo's branch (default to master)
