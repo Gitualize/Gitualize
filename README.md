@@ -67,33 +67,47 @@ We've created a schema visualization image with http://ondras.zarovi.cz/sql/demo
 
 If a call to our API yields nothing we will attempt to make a call to the Github API to update our records.
 
-1. api/username/:username
+```sh
+api/username/:username
+```
 
-Returns a list of repositorys we have on record for a given user
+Returns a list of repositories we have on record for a given user
 
-1. api/username/:username/repo/:repository_name/
+```sh
+api/username/:username/repo/:repository_name/
+```
 
 Returns a full commit history for the master branch of the repo
 
-1. api/username/:username/repo/:repository_name/branch?=:branch_name
+```sh
+api/username/:username/repo/:repository_name/branch?=:branch_name
+```
 
 Returns a full commit history for the branch_name branch of the repo
 
-1. api/username/:username/repo/:repository_name/date?=:date
+```sh
+api/username/:username/repo/:repository_name/date?=:date
+```
 
 Returns a full commit history of a repo's branch (default to master) after a given date
 
-1. api/username/:username/repo/:repository_name/user?=:username
+```sh
+api/username/:username/repo/:repository_name/user?=:username
+```
 
 Returns a full commit history of a repo's branch (default to master) by a given user
 
-1. api/username/:username/repo/:repository_name/data?=true
+```sh
+api/username/:username/repo/:repository_name/data?=true
+```
 
 Will return the full details of every commit of a repo's branch (default to master)
 
-1. api/commit/:commit_id
+```sh
+api/commit/:commit_id
+```
 
-Returns the full details of a commit including lines added and deleted, files changed, and full details about what was changed int the file
+Returns the full details of a commit including lines added and deleted, files changed, and full details about what was changed in the file
 
 ### Roadmap
 
