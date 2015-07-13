@@ -3,13 +3,12 @@ var morgan = require('morgan'), // used for logging incoming request
   cors = require('cors'),
   path = require('path');
   express = require('express');
-  request = require('request');
   db = require('./db/config.js');
 
 var app = express();
 
 var usersRouter = new express.Router();
-var commitsRouter = new express.Router();
+// var commitsRouter = new express.Router();
 
 app.use(cors());
 app.use(morgan('dev'));
@@ -23,7 +22,9 @@ app.use('/user', usersRouter);
 app.use('/commit', eventsRouter);
 
 require('./users/usersRoutes.js') (usersRouter);
-require('./events/eventsRoutes.js') (eventsRouter);
+// require('./events/commitsRoutes.js') (commitsRouter);
+
+
 // get commits with username and repo name
 // app.get('/repos/:gitUser/:repoName', function(req, res){
 
