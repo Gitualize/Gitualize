@@ -62,7 +62,7 @@ describe('Repo model', function(){
   });
 
   it('should have a has-many relationship with Commit', function(){
-    expect(r.commits().relatedData.target).toBe(Commit);
+    expect(r.commit().relatedData.target).toBe(Commit);
   });
 
   it('should add a model to the database', function(done){
