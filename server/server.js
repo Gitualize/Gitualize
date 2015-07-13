@@ -24,7 +24,6 @@ app.use('/user', usersRouter);
 require('./users/usersRoutes.js') (usersRouter);
 // require('db/events/commitsRoutes.js') (commitsRouter);
 
-
 // get commits with username and repo name
 // app.get('/repos/:gitUser/:repoName', function(req, res){
 
@@ -45,15 +44,17 @@ require('./users/usersRoutes.js') (usersRouter);
 
 // });
 
-app.listen(process.env.PORT || 3000, function(){
+app.use(express.static(__dirname + '/../client'));
+
+var server = app.listen(process.env.PORT || 3000, function(){
+  console.log('listening to port: ' + 3000);
 });
 
 // new Commit({sha: '123', user: 'dani'}).save().then(function(commit) {
 //   console.log('saved commit: ', commit);
 // });
 
-
-
+exports.server = server;
 
 
 
