@@ -10,15 +10,30 @@ var About = React.createClass({
 var Folder = React.createClass({
   componentDidMount: function() {
     console.log(this.props.params.repoName);
-    $.getJSON('/secret.json', function(data) {
+    var repoName = this.props.params.repoName;
+    var repoOwner = this.props.params.repoOwner;
+    $.getJSON('/secret.json', function(data) { //need some kind of angular factory
       var github = new Github({token: data.github_token, auth: 'oauth'});
-      console.dir(github);
-    });
+      var repo = github.getRepo(repoOwner, repoName);
+      repo.show(function(err, repo) {
+        console.log(repo);
+        this.setState({data: JSON.stringify(repo)});
+      }.bind(this));
+
+      //repo.getCommits({sha: 'master'}, function(commits) { //in progress, not working
+        //console.log(commits);
+      //});
+
+    }.bind(this));
+  },
+  getInitialState: function() {
+    return {data: []};
   },
   render: function () {
     return <div>
       <h2>Folder view</h2>
       {this.props.params.repoName}
+      {this.state.data}
     </div>
   }
 });
