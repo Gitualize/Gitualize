@@ -4,7 +4,11 @@ var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var minifyCss = require('gulp-minify-css');
 var jshint = require('gulp-jshint');
+
 var jasmine = require('gulp-jasmine');
+var jest = require('gulp-jest');
+var jestIO = require('gulp-jest-iojs');
+
 var notify = require('gulp-notify');
 var shell = require('gulp-shell');
 var browserify = require('browserify');
@@ -38,6 +42,16 @@ gulp.task('test', function(){
   .pipe(jasmine());
 });
 
+gulp.task('jest', function(){
+  return gulp.src('./spec/unit/__tests__')
+    .pipe(jest({
+      scriptPreprocessor: '../../../preprocessor.js',
+      unmockedModulePathPatterns: ['node_modules/react'],
+      testPathIgnorePatterns: ['node_modules', 'spec/support'],
+      moduleFileExtensions: ['js', 'json', 'react']
+    }));
+});
+
 gulp.task('browserify', function() {
   var bundler = browserify({
     entries: ['./client/js/app.js'],
@@ -64,6 +78,22 @@ gulp.task('browserify', function() {
   .bundle() // Create the initial bundle when starting the task
   .pipe(source('./client/js/app.js'))
   .pipe(gulp.dest('./client/build'));
+
+  // return bundler.bundle()
+  //   .on('update', function(){
+  //     var updateStart = Date.now();
+  //     console.log('Updating!');
+  //     watcher.bundle() // Create new bundle that uses the cache for high performance
+  //     .pipe(source('./client/js/app.js'))
+  //     // This is where you add uglifying etc.
+  //     .pipe(gulp.dest('./client/build'));
+  //     console.log('Updated!', (Date.now() - updateStart) + 'ms');
+  //   })
+  //   .on('error', function(err){
+  //     console.log(err);
+  //   })
+  //   .pipe(source('./client/js/app.js'))
+  //   .pipe(gulp.dest('./client/build'));
 });
 
 gulp.task('build', [/*'jshint',*/ 'test']);

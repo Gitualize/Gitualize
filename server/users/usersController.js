@@ -1,6 +1,6 @@
 var url = require('url');
 var utils = require('./usersUtils');
-var Promise = require('bluebird')
+var Promise = require('bluebird');
 var request = require('request');
 
 module.exports = {
