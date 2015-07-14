@@ -12,44 +12,48 @@ knex.schema.dropTableIfExists('commit');
 
 bookshelf.knex.schema.hasTable('users').then(function(exists) {
   if (!exists) {
-    db.knex.schema.createTable('users', function(table) {
-      table.increments('id').primary();
-      table.string('username', 255);
+    bookshelf.knex.schema.createTable('users', function(table) {
+      table.string('user', 255).primary()
     }).then(function(table) {
       console.log('Created table: users');
+      bookshelf.knex.schema.hasTable('repos').then(function (exists) {
+        if (!exists) {
+          bookshelf.knex.schema.createTable('repos', function (repo) {
+            repo.string('full_name', 255).primary(); //user/repo
+            repo.string('name', 255).notNullable(); //repo
+            repo.string('owner', 255).notNullable().references('user').inTable('users') //user
+            repo.timestamps();
+          }).then(function (table) {
+            console.log('Created table: repos');
+            bookshelf.knex.schema.hasTable('commits').then(function (exists) {
+              if (!exists) {
+                bookshelf.knex.schema.createTable('commits', function (commit) {
+                  commit.string('sha', 255).primary(); //branch
+                  commit.text('diff', 20000); //JSON diff/patch
+                  commit.text('files', 5000); //files changed. json array of urls
+                  commit.string('repo').notNullable().references('full_name').inTable('repos');
+                  commit.string('commiter').notNullable().references('users').inTable('users');
+                  commit.timestamps();
+                }).then(function (table) {
+                  console.log('Created table: commit');
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
+              }
+            });
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+        }
+      });
     })
     .catch(function(error) {
       console.log(error);
     });
   }
 });
-bookshelf.knex.schema.hasTable('repo').then(function (exists) {
-  if (!exists) {
-    bookshelf.knex.schema.createTable('repo', function (repo) {
-      repo.increments('id').primary();
-      repo.string('name', 255); //user/reponame
-      //repo.integer('value');
-      repo.timestamps();
-    }).then(function (table) {
-      console.log('Created table: repo');
-    });
-  }
-});
-bookshelf.knex.schema.hasTable('commit').then(function (exists) {
-  if (!exists) {
-    bookshelf.knex.schema.createTable('commit', function (commit) {
-      commit.increments('id').primary(); //the follow numbers are somewhat arbitrary. change em and add other fields
-      commit.string('sha', 255); //user/reponame
-      commit.string('user', 255); //JSON, person who made the commit
-      commit.text('diff', 20000); //JSON diff/patch
-      commit.text('files', 5000); //files changed. json array of urls
-      commit.integer('repo_id').references('repo.id');
-      //repo.integer('value');
-      commit.timestamps();
-    }).then(function (table) {
-      console.log('Created table: commit');
-    });
-  }
-});
+
 
 module.exports = bookshelf;
