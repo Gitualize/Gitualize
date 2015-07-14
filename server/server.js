@@ -8,6 +8,7 @@ var morgan = require('morgan'), // used for logging incoming request
 var app = express();
 
 var usersRouter = new express.Router();
+var reposRouter = new express.Router();
 // var commitsRouter = new express.Router();
 
 app.use(cors());
@@ -19,9 +20,11 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client'));
 
 app.use('/user', usersRouter);
+app.use('/repos', reposRouter);
 // app.use('/commit', commitsRouter);
 
 require('./users/usersRoutes.js') (usersRouter);
+require('./repos/reposRoutes.js') (reposRouter);
 // require('db/events/commitsRoutes.js') (commitsRouter);
 
 // get commits with username and repo name
