@@ -6,8 +6,8 @@ module.exports = {
     var user = req.params.user;
     var repo = req.params.repo;
 
-    utils.retrieveRepo(user + '/' + repo).then(function(repo) {
-      if (repo) return res.json(repo);
+    utils.retrieveRepo(user + '/' + repo).then(function(dbRepo) {
+      if (dbRepo) return res.json(dbRepo.attributes);
       var options = {
         url: 'https://api.github.com/repos/' + user + '/' + repo,
         headers: {
@@ -17,9 +17,9 @@ module.exports = {
 
       request(options, function(error, response, body) {
         // console.log(JSON.parse(body));
-        utils.storeRepo(response.body).then(function(data) {
-          if (data) {
-            res.json(data);
+        utils.storeRepo(response.body).then(function(dbRepo) {
+          if (dbRepo) {
+            res.json(dbRepo.attributes);
           } else {
             res.status(500).end();
           }
