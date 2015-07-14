@@ -2,14 +2,15 @@ var Promise = require('bluebird');
 var db = require('../db/config');
 var Repos = require('../db/collections/repos');
 var Repo = require('../db/models/repo');
-var utils = require('../users/usersUtils');
+//var User = require('../db/models/user');
+//var utils = require('../users/usersUtils');
 
-var retrieveRepos = function(name, callback) {
+var retrieveRepo = function(name, callback) {
   new Repo({
     full_name : name
   }).fetch().then(function(found) {
     if (found) {
-      callback(null, found.attributes);
+      callback(null, found);
     } else {
       console.log('could not find repo: ', name);
       callback(null, null);
@@ -29,7 +30,7 @@ var storeRepo = function(repo, callback) {
     full_name: full_name
   }).fetch().then(function(found) {
     if (found) {
-      callback(null, found.attributes);
+      callback(null, found);
       console.log('repo already found:', name);
     } else {
       var newRepo = new Repo({
@@ -39,7 +40,7 @@ var storeRepo = function(repo, callback) {
       });
       newRepo.save().then(function(newRepo) {
         Repos.add(newRepo);
-        callback(null, newRepo.attributes);
+        callback(null, newRepo);
       })
       .catch(function(error) {
         console.log('error:', error);
