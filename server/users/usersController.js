@@ -5,7 +5,7 @@ var request = require('request');
 
 module.exports = {
   getUser: function(req, res) {
-    var username = (url.parse(req.url).pathname).slice(1);
+    var username = req.params.user;
     var R = Promise.promisify(utils.retrieveUser);
     R(username).then(function(user) {
       if (user) {

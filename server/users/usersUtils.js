@@ -34,9 +34,9 @@ module.exports = {
           var newUser = new User({
             user: user,
           });
-          newUser.save().then(function(success) {
-            Users.add(success);
-            callback(null, success.attributes);
+          newUser.save().then(function(newUser) {
+            Users.add(newUser);
+            callback(null, newUser.attributes);
           })
           .catch(function(error) {
             console.log('error:', error);
