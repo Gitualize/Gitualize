@@ -38,8 +38,4 @@ module.exports = {
       console.log('controller error: ', error);
     });
   },
-
-  getRepo: function(req, res) {
-    
-  },
 };
