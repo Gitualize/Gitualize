@@ -7,7 +7,7 @@ var Repos = require('../../server/db/collections/repos.js');
 var Commits = require('../../server/db/collections/commits.js');
 
 // turn off node server before testing
-var server = require('../../server/server.js').server;
+var server = require('../../server/server.js').export;
 
 describe('test db', function(){
   var config = db.knex.schema.client.config;
@@ -137,26 +137,55 @@ describe('Commits Collection', function(){
 });
 
 describe('Server', function(){
+  // console.log(server.server.address());
 
-  it('should be defined', function(done){
-    expect(server).toBeDefined();
-    done();
+  it('should be defined', function() {
+    expect(server.app).toBeDefined();
   });
 
-  it('should be listening to a port', function(done){
+  it('sould be running', function() {
+    expect(server.server).toBeDefined();
+    expect(server.server.address().port).toBeDefined();
+  });
+
+  it('should be requesting the static page', function(done){
 
     request('http://127.0.0.1:3000/', function(error, response, body){
-      console.log(body);
+      expect(response.statusCode).toBe(200);
       done();
     });
 
   });
 
+  it('should get a repo', function(done){
+    
+    request('http://127.0.0.1:3000/repo/jashkenas/backbone', function(error, response, body){
+      expect(response.statusCode).toBe(200);
+      done();
+    });
 
-  
+  });
+
+  it('should get a user', function(done){
+
+    request('http://127.0.0.1:3000/jashkenas', function(error, response, body){
+      expect(response.statusCode).toBe(200);
+      done();
+    });
+
+  });
+
+  it('should get a users repo with filters', function(done){
+
+    request('http://127.0.0.1:3000/jashkenas/repo/backbone', function(error, response, body){
+      expect(response.statusCode).toBe(200);
+      done();
+    });
+
+  });
+
   afterAll(function(){
     server.close();
-
   });
 
 });
