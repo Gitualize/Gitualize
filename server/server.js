@@ -44,8 +44,6 @@ require('./users/usersRoutes.js') (usersRouter);
 
 // });
 
-app.use(express.static(__dirname + '/../client'));
-
 var server = app.listen(process.env.PORT || 3000, function(){
   console.log('listening to port: ' + 3000);
 });
@@ -54,8 +52,4 @@ var server = app.listen(process.env.PORT || 3000, function(){
 //   console.log('saved commit: ', commit);
 // });
 
-exports.server = server;
-
-
-
-
+exports.export = {server: server, app:app};
