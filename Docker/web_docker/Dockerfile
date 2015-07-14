@@ -1,3 +1,4 @@
 FROM node
 WORKDIR /gitpun
-CMD ["node", "server/server.js"]
+RUN npm install -g nodemon
+CMD ["nodemon", "server/server.js"]
