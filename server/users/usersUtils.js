@@ -3,15 +3,16 @@ var Users = require('../db/collections/users');
 var User = require('../db/models/user');
 
 module.exports = {
-  //get a user from DB by username
-  retrieveUser: function(username, callback) {
+  //get a user from DB by user
+  retrieveUser: function(user, callback) {
     new User({
-        username: username
+        user: user
       }).fetch().then(function(found) {
         if (found) {
           callback(null, found.attributes);
         } else {
-          console.log('username not found' + username);
+          console.log('user not found' + user);
+          callback(null, null);
         }
       })
       .catch(function(error) {
@@ -21,21 +22,21 @@ module.exports = {
 
   //store a new user in DB https://developer.github.com/v3/users/
   storeUser: function(user, callback) {
-    var username = user.login;
+    var user = user.login;
 
     new User({
-        username: username
+        user: user
       }).fetch().then(function(found) {
         if (found) {
           callback(null, found.attributes);
-          console.log('user already found:', username);
+          console.log('user already found:', user);
         } else {
-          var user = new User({
-            username: username,
+          var newUser = new User({
+            user: user,
           });
-          user.save().then(function(newUser) {
-            Users.add(newUser);
-            callback(null, newUser);
+          newUser.save().then(function(success) {
+            Users.add(success);
+            callback(null, success.attributes);
           })
           .catch(function(error) {
             console.log('error:', error);
