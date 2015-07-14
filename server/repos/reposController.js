@@ -5,13 +5,10 @@ var request = require('request');
 
 module.exports = {
   getRepo: function(req, res) {
-    var href = url.parse(req.url);
-    var pathname = href.pathname.split('/');
-    var query = href.query;
-    var user = pathname[2];
-    var repo = pathname[4];
+    var user = req.params.user;
+    var repo = req.params.repo;
 
-    var R = Promise.promisify(utils.retrieveRepos);
+    var R = Promise.promisify(utils.retrieveRepo);
       R(user + '/' + repo).then(function(repo) {
         if (repo) {
           res.json(repo);
@@ -45,9 +42,7 @@ module.exports = {
   },
 
   getRepos: function(req, res) {
-    var href = url.parse(req.url);
-    var pathname = href.pathname.split('/');
-    var user = pathname[2];
+    var user = req.params.user;
 
     var R = Promise.promisify(utils.retrieveRepos);
     R(user).then(function(repos) {

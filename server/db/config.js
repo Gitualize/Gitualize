@@ -31,7 +31,6 @@ bookshelf.knex.schema.hasTable('users').then(function(exists) {
                   commit.string('sha', 255).primary(); //branch
                   commit.text('diff', 20000); //JSON diff/patch
                   commit.text('files', 5000); //files changed. json array of urls
-                  commit.string('tree', 255);
                   commit.string('repo').notNullable().references('full_name').inTable('repos');
                   commit.string('commiter').notNullable().references('users').inTable('users');
                   commit.timestamps();

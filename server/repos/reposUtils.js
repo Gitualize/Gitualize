@@ -56,9 +56,9 @@ module.exports = {
             name: name,
             owner: owner
           });
-          newRepo.save().then(function(success) {
-            Repos.add(success);
-            callback(null, success.attributes);
+          newRepo.save().then(function(newRepo) {
+            Repos.add(newRepo);
+            callback(null, newRepo.attributes);
           })
           .catch(function(error) {
             console.log('error:', error);
