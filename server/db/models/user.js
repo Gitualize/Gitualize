@@ -12,3 +12,5 @@ var User = db.Model.extend({
     return this.hasMany('repo');
   },
 });
+
+module.exports = db.model('user', User);

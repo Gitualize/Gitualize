@@ -3,7 +3,7 @@ require('./repo'); //don't need var assignment, using bookshelf registry
 require('./user'); //don't need var assignment, using bookshelf registry
 
 var Commit = db.Model.extend({
-  tableName: 'commits',
+  tableName: 'commit',
   hasTimestamps: true,
   repo: function() {
     return this.belongsTo('repo');
