@@ -3,7 +3,7 @@ require('./commit'); //don't need var assignment, using bookshelf registry
 require('./repo'); //don't need var assignment, using bookshelf registry
 
 var User = db.Model.extend({
-  tableName: 'users',
+  tableName: 'user',
   hasTimestamps: false, //CAN CHANGE THIS LATER, ALSO UPDATE DB-CONFIG IF SO
   commit: function() {
     return this.hasMany('commit');
@@ -12,3 +12,5 @@ var User = db.Model.extend({
     return this.hasMany('repo');
   },
 });
+
+module.exports = db.model('user', User);

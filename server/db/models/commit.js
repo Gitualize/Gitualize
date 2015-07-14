@@ -8,7 +8,7 @@ var Commit = db.Model.extend({
   repo: function() {
     return this.belongsTo('repo');
   },
-  user : function() {
+  user: function() {
     return this.belongsTo('user');
   }
 });
