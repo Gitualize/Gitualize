@@ -9,8 +9,29 @@ var About = React.createClass({
 });
 var access_token;
 var Folder = React.createClass({
+  getLastCommitTime: function(commits) { //helper
+    return commits.length > 0 && commits[commits.length-1].commit.committer.date;
+  },
+  getCommits: function(fullRepoName, maxCommits) { //move logic to server when ready
+    var localLastCommitTime, pulledLastCommitTime;
+    var getMoreCommits = function() {
+      localLastCommitTime = this.getLastCommitTime(this.state.commits) || Date.now(); //date.now really a placeholder, incorrect time format
+      $.getJSON('https://api.github.com/repos/'+fullRepoName+'/commits', {access_token: access_token, until: localLastCommitTime}, function(newCommits) {
+        pulledLastCommitTime = this.getLastCommitTime(newCommits);
+        if (pulledLastCommitTime === localLastCommitTime || this.state.commits.length > maxCommits) { //we have all the commits
+          console.log('got all commits: ', this.state.commits);
+        } else {
+          this.setState({commits: this.state.commits.concat(newCommits)});
+          getMoreCommits();
+        }
+      }.bind(this));
+    }.bind(this);
+    getMoreCommits();
+  },
+  getFiles: function() {
+  },
   componentDidMount: function() {
-    console.log(this.props.params.repoName);
+    console.log('accesstoken: ', access_token);
     var repoName = this.props.params.repoName;
     var repoOwner = this.props.params.repoOwner;
     var github = new Github({token: access_token, auth: 'oauth'});
@@ -18,19 +39,15 @@ var Folder = React.createClass({
     //repo.show(function(err, repo) {
     //}.bind(this));
     //repo.getCommit('master', '039ce8097a376ab348e91320dea3317e244969a5', function(err, commit) { 
-      //console.log('commit: ',commit);
+    //console.log('commit: ',commit);
     //});
-    $.getJSON('https://api.github.com/repos/'+repoOwner+'/'+repoName+'/commits', {access_token: access_token}, function(commits) {
-      debugger;
-      this.setState({commits: commits});
-      //console.log('commits: ', commits);
-    }.bind(this));
     //repo.getCommits(function(commits) { //getCommits from githubApi wrapper doesn't work?
-      //console.log('commits: ', commits);
+    //console.log('commits: ', commits);
     //});
+    this.getCommits(repoOwner+'/'+repoName, 500); //NUM/30 requests
   },
   getInitialState: function() {
-    return {commits: []};
+    return {commits: [], files: []};
   },
   render: function () {
 
@@ -43,7 +60,7 @@ var Folder = React.createClass({
       <h2>Folder view</h2>
       {this.props.params.repoName}
       <ul>
-        {commits}
+        {File}
       </ul>
     </div>
   }
