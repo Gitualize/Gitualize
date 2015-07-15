@@ -1,7 +1,6 @@
 var db = require('../db/config');
 var Repos = require('../db/collections/repos');
 var Repo = require('../db/models/repo');
-var User = require('../db/models/user');
 var utils = require('../users/usersUtils');
 
 module.exports = {

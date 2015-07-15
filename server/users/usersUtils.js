@@ -11,7 +11,7 @@ module.exports = {
         if (found) {
           callback(null, found.attributes);
         } else {
-          console.log('user not found' + user);
+          console.log('user not found: ', user);
           callback(null, null);
         }
       })
@@ -21,9 +21,8 @@ module.exports = {
   },
 
   //store a new user in DB https://developer.github.com/v3/users/
-  storeUser: function(user, callback) {
-    var user = user.login;
-
+  storeUser: function(userdata, callback) {
+    var user = userdata.login;
     new User({
         user: user
       }).fetch().then(function(found) {
@@ -34,6 +33,8 @@ module.exports = {
           var newUser = new User({
             user: user,
           });
+          newUser.id = null;
+          console.log('newuser: ', newUser);
           newUser.save().then(function(newUser) {
             Users.add(newUser);
             callback(null, newUser.attributes);

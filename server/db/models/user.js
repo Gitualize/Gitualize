@@ -4,6 +4,7 @@ require('./repo'); //don't need var assignment, using bookshelf registry
 
 var User = db.Model.extend({
   tableName: 'user',
+  idAttribute: 'user',
   hasTimestamps: false, //CAN CHANGE THIS LATER, ALSO UPDATE DB-CONFIG IF SO
   commit: function() {
     return this.hasMany('commit');
