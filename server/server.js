@@ -4,6 +4,9 @@ var morgan = require('morgan'), // used for logging incoming request
   path = require('path');
   express = require('express');
   db = require('./db/config.js');
+var request = require('request');
+var fs = require('fs');
+
 
 var app = express();
 
@@ -27,28 +30,47 @@ require('./users/usersRoutes.js') (usersRouter);
 require('./repos/reposRoutes.js') (reposRouter);
 // require('db/events/commitsRoutes.js') (commitsRouter);
 
-// get commits with username and repo name
-// app.get('/repos/:gitUser/:repoName', function(req, res){
-
-//   var gitUser = req.param('gistUser');
-//   var repoName = req.param('repoName');
-
-//   var options = {
-//     url: 'https://api.github.com/repos/' + gitUser + '/' + repoName + '/commits',
-//     headers: {
-//       'User-Agent': 'http://developer.github.com/v3/#user-agent-required'
-//     }
-//   };
-
-//   request(options, function(error, response, body) {
-//     // console.log(JSON.parse(body));
-//     res.send(body);
-//   });
-
-// });
-
 var server = app.listen(process.env.PORT || 3000, function(){
   console.log('listening to port: ' + 3000);
+});
+
+var client_id = '29039cba3aedb378674e'; //client key
+var client_secret = '75e252ae0b96801ca987a5452408146d835c63fc'; //client secret
+
+app.get('/auth', function(req, res){
+  console.log('redirect to github');
+
+  res.redirect('https://github.com/login/oauth/authorize?client_id=' + client_id);
+
+  request.get({
+    url: 'https://github.com/login/oauth/authorize'
+  });
+
+});
+
+app.get('/authenticate', function(req, res) {
+  var code = req.query.code;
+  console.log(code);
+
+  res.redirect('/');
+
+  request.post({
+    url: 'https://github.com/login/oauth/access_token?client_id=' + client_id +'&client_secret=' + client_secret + '&code=' + code
+  }, function(err, res, body){
+    var access_token = body.slice(body.indexOf('=') + 1, body.indexOf('&'));
+
+    console.log('Access token: ' + access_token);
+
+    var token = {'github_token': access_token};
+
+    fs.writeFile('./client/secret.json', JSON.stringify(token), function(err){
+      if(err) {
+        throw err;
+      }
+      console.log('access_token saved!');
+    });
+  });
+
 });
 
 // new Commit({sha: '123', user: 'dani'}).save().then(function(commit) {
