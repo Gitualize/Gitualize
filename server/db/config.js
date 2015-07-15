@@ -1,6 +1,6 @@
 var knex = require('knex')({
   client: 'pg',
-  connection: {
+  connection: 'postgres://127.0.0.1:5432/gitpun' || {
       host: process.env.DB_PORT_5432_TCP_ADDR,
       user: 'docker',
       password: 'docker',
