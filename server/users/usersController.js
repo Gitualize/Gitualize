@@ -1,4 +1,3 @@
-var url = require('url');
 var utils = require('./usersUtils');
 var Promise = require('bluebird')
 var request = require('request');
@@ -11,6 +10,7 @@ module.exports = {
       if (user) {
         res.json(user);
       } else { //try Github
+        console.log('Asking github for: ', username);
         var options = {
           url: 'https://api.github.com/users/' + username,
           headers: {
@@ -19,9 +19,9 @@ module.exports = {
         };
 
         request(options, function(error, response, body) {
-          // console.log(JSON.parse(body));
+          console.log('Github Response: ', response.body);
           var A = Promise.promisify(utils.storeUser);
-          A(response.body).then(function(data) {
+          A(JSON.parse(response.body)).then(function(data) {
             if (data) {
               res.json(data);
             } else {

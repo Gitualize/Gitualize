@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client'));
 
-app.use('/user', usersRouter);
+app.use('/users', usersRouter);
 app.use('/repos', reposRouter);
 // app.use('/commit', commitsRouter);
 
