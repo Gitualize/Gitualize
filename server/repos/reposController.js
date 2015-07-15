@@ -37,7 +37,9 @@ module.exports = {
           console.error('error getting github db: ', error);
           return res.status(500).end();
         }
+        //res.json(body.attributes);
         utils.storeRepo(JSON.parse(body)).then(function(dbRepo) {
+          console.log(dbRepo);
           if (dbRepo) {
             res.json(dbRepo.attributes);
           } else {

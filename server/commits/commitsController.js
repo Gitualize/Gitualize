@@ -17,7 +17,7 @@ module.exports = {
       };
       //commits not in db, go to github
       request(options, function(error, response, body) {
-        utils.storeCommits(repoFullName, response.body).then(function(commits) {
+        utils.storeCommits(repoFullName, body).then(function(commits) {
           if (commits) {
             res.json(commits);
           } else {
