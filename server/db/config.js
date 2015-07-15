@@ -26,7 +26,7 @@ bookshelf.knex.schema.hasTable('user').then(function(exists) {
       bookshelf.knex.schema.hasTable('repo').then(function (exists) {
         if (!exists) {
           bookshelf.knex.schema.createTable('repo', function (repo) {
-            repo.string('full_name', 255).primary(); //user/repo
+            repo.string('fullName', 500).primary(); //user/repo
             repo.string('name', 255).notNullable(); //repo
             repo.string('owner', 255).notNullable().references('user').inTable('user') //user
             repo.timestamps();
@@ -38,7 +38,7 @@ bookshelf.knex.schema.hasTable('user').then(function(exists) {
                   commit.string('sha', 255).primary(); //branch
                   commit.text('diff', 20000); //JSON diff/patch
                   commit.text('files', 5000); //files changed. json array of urls
-                  commit.string('repo').notNullable().references('full_name').inTable('repo');
+                  commit.string('repo').notNullable().references('fullName').inTable('repo');
                   commit.string('commiter').notNullable().references('user').inTable('user');
                   commit.timestamps();
                 }).then(function (table) {
