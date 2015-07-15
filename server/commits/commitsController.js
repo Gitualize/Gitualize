@@ -1,4 +1,4 @@
-//var utils = require('./commitsUtils');
+var utils = require('./commitsUtils');
 var Promise = require('bluebird');
 var request = require('request');
 
