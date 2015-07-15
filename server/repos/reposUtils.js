@@ -7,12 +7,12 @@ var Repo = require('../db/models/repo');
 
 var retrieveRepo = function(name, callback) {
   new Repo({
-    full_name : name
+    fullName : name
   }).fetch().then(function(found) {
     if (found) {
       callback(null, found);
     } else {
-      console.log('could not find repo: ', name);
+      console.log('could not find repo in db: ', name);
       callback(null, null);
     }
   })
@@ -22,22 +22,26 @@ var retrieveRepo = function(name, callback) {
 };
 
 var storeRepo = function(repo, callback) {
+  if (!repo) return console.error('tried to store repo in db but repo was null');
   var name = repo.name;
-  var full_name = repo.full_name;
+  var fullName = repo.full_name;
   var owner = repo.owner;
+  console.log('repo full name: ', fullName);
 
   new Repo({
-    full_name: full_name
+    fullName: fullName
   }).fetch().then(function(found) {
     if (found) {
       callback(null, found);
       console.log('repo already found:', name);
     } else {
       var newRepo = new Repo({
-        full_name: full_name,
+        fullName: fullName,
         name: name,
         owner: owner
       });
+      //newRepo.id = null;
+      //console.log('new repo before saving: ', newRepo);
       newRepo.save().then(function(newRepo) {
         Repos.add(newRepo);
         callback(null, newRepo);

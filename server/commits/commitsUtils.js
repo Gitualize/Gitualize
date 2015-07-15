@@ -20,7 +20,7 @@ var retrieveCommits = function(repoFullName, callback) {
   });
 };
 //new Repo({
-//full_name : repoFullName
+//fullName : repoFullName
 //}).fetch().then(function(dbRepo) {
 //if (dbRepo) {
 //callback(null, dbRepo.commits);
