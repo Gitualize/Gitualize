@@ -6,10 +6,10 @@ var User = db.Model.extend({
   tableName: 'user',
   idAttribute: 'user',
   hasTimestamps: false, //CAN CHANGE THIS LATER, ALSO UPDATE DB-CONFIG IF SO
-  commit: function() {
+  commits: function() {
     return this.hasMany('commit');
   },
-  repo: function() {
+  repos: function() {
     return this.hasMany('repo');
   },
 });

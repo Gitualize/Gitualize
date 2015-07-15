@@ -25,7 +25,7 @@ var storeRepo = function(repo, callback) {
   if (!repo) return console.error('tried to store repo in db but repo was null');
   var name = repo.name;
   var fullName = repo.full_name;
-  var owner = repo.owner;
+  var owner = repo.owner.login;
   console.log('repo full name: ', fullName);
 
   new Repo({
@@ -40,15 +40,18 @@ var storeRepo = function(repo, callback) {
         name: name,
         owner: owner
       });
-      //newRepo.id = null;
+      console.log('going to save new repo: ', newRepo);
+      newRepo.id = null;
       //console.log('new repo before saving: ', newRepo);
       newRepo.save().then(function(newRepo) {
+        if (!newRepo) return;
+        console.log('new repo: ', newRepo);
         Repos.add(newRepo);
         callback(null, newRepo);
-      })
-      .catch(function(error) {
-        console.log('error:', error);
       });
+      //.catch(function(error) { //maybe bookshelf doesn't implement this
+        //console.log('error saving repo to db:', error);
+      //});
     }
   })
   .catch(function(error) {

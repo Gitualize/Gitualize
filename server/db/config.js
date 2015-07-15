@@ -20,15 +20,16 @@ knex.schema.dropTableIfExists('user');
 bookshelf.knex.schema.hasTable('user').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('user', function(table) {
-      table.string('user', 255).primary();
+      table.string('user', 100).primary();
     }).then(function(table) {
       console.log('Created table: user');
       bookshelf.knex.schema.hasTable('repo').then(function (exists) {
         if (!exists) {
           bookshelf.knex.schema.createTable('repo', function (repo) {
-            repo.string('fullName', 500).primary(); //user/repo
-            repo.string('name', 255).notNullable(); //repo
-            repo.string('owner', 255).notNullable().references('user').inTable('user') //user
+            repo.string('fullName', 200).primary(); //user/repo
+            repo.string('name', 100).notNullable(); //repo
+            //repo.string('owner', 100).notNullable().references('user').inTable('user') //user
+            repo.string('owner', 100).notNullable(); //for now or else have to have a user in usertable before testing repos
             repo.timestamps();
           }).then(function (table) {
             console.log('Created table: repo');
