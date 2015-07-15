@@ -50,7 +50,7 @@ var storeRepo = function(repo, callback) {
   .catch(function(error) {
     console.log('error:', error);
   });
-},
+};
 
 module.exports = {
   //get a repo from DB by reponame with possible filters
@@ -69,7 +69,6 @@ module.exports = {
   //console.log('error:', error);
   //});
   //},
-
   retrieveRepo: Promise.promisify(retrieveRepo),
   storeRepo: Promise.promisify(storeRepo)
   //store a new repo in DB https://developer.github.com/v3/repos/#get
