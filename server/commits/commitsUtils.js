@@ -44,7 +44,7 @@ var storeCommits = function(repoFullName, commits, callback) {
   .catch(function(error) {
     console.log('error finding repo:', error);
   });
-},
+};
 module.exports = {
   retrieveCommits: Promise.promisify(retrieveCommits),
   //store a new repo's commits in DB
