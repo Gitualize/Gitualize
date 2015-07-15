@@ -28,5 +28,3 @@ var routes = (
 Router.run(routes, function (Handler) {
   React.render(<Handler/>, document.getElementById('content'));
 });
-
-module.exports = App;

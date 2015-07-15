@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 var morgan = require('morgan'), // used for logging incoming request
   bodyParser = require('body-parser'),
   cors = require('cors'),
