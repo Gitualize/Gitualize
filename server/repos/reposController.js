@@ -8,6 +8,7 @@ module.exports = {
 
     utils.retrieveRepo(user + '/' + repo).then(function(dbRepo) {
       if (dbRepo) return res.json(dbRepo.attributes);
+      //TODO oauth token
       var options = {
         url: 'https://api.github.com/repos/' + user + '/' + repo,
         headers: {
