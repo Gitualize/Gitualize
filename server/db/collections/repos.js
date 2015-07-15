@@ -1,7 +1,7 @@
 var db = require('../config.js');
 var Repo = require('../models/repo.js');
 
-var Repos = new db.collection();
+var Repos = Repo.collection();
 
 Repos.model = Repo;
 
