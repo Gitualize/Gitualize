@@ -1,9 +1,9 @@
-var morgan = require('morgan'), // used for logging incoming request
-  bodyParser = require('body-parser'),
-  cors = require('cors'),
-  path = require('path');
-  express = require('express');
-  db = require('./db/config.js');
+var morgan = require('morgan'); // used for logging incoming request
+var bodyParser = require('body-parser');
+var cors = require('cors');
+var path = require('path');
+var express = require('express');
+var db = require('./db/config.js');
 var request = require('request');
 var fs = require('fs');
 
