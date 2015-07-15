@@ -1,4 +1,3 @@
-var url = require('url');
 var utils = require('./reposUtils');
 var Promise = require('bluebird')
 var request = require('request');

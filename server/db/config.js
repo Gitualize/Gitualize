@@ -20,7 +20,7 @@ knex.schema.dropTableIfExists('user');
 bookshelf.knex.schema.hasTable('user').then(function(exists) {
   if (!exists) {
     bookshelf.knex.schema.createTable('user', function(table) {
-      table.string('user', 255).primary()
+      table.string('user', 255).primary();
     }).then(function(table) {
       console.log('Created table: user');
       bookshelf.knex.schema.hasTable('repo').then(function (exists) {
