@@ -10,7 +10,8 @@ var Views = require('./views/views.react.jsx');
 var App = React.createClass({
   render () {
     return (
-      <div><h1>Gitualize</h1>
+      <div>
+        <Views.Title/>
         <RouteHandler/>
       </div>
     );
