@@ -2,7 +2,7 @@ var React = require('react');
 
 var Playbar = React.createClass({
   render: function () {
-    return <div>
+    return <div>Playbar
     </div>
   }
 });
