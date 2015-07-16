@@ -66,7 +66,6 @@ app.get('/auth', function(req, res){
 });
 
 app.get('/authenticate', function(req, res) { //, next) {
-  debugger;
   var code = req.query.code;
 
   request.post({
