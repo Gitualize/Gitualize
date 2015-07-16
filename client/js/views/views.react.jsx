@@ -1,3 +1,4 @@
+//master view file for now
 var React = require('react');
 var $ = require('jquery');
 var Navigation = require('react-router').Navigation;
@@ -7,7 +8,6 @@ var About = React.createClass({
     return <h2>About</h2>;
   }
 });
-var access_token;
 var Folder = React.createClass({
   getCommits: function(fullRepoName) {
     $.getJSON('https://localhost:3000/'+fullRepoName, {access_token: access_token}, function(commits) {
