@@ -106,20 +106,24 @@ describe('Commit model', function(){
   it('should have a belongs-to relationship with Repo', function(){
     expect(c.repo().relatedData.target).toBe(Repo);
   });
+
+  it('should have a belongs-to relationship with User', function(){
+    expect(c.user().relatedData.target).toBe(User);
+  });
   
-  // it('should add a model to the database', function(done){
+  it('should add a model to the database', function(done){
 
-  //   new Commit({sha: 1234, user: 'test'}).save().then(function(commit) {
-  //     var attr = commit.attributes;
+    new Commit({sha: 1234, user: 'test'}).save().then(function(commit) {
+      var attr = commit.attributes;
 
-  //     expect(attr.sha).toBe(1234);
-  //     expect(attr.user).toBe('test');
+      expect(attr.sha).toBe(1234);
+      expect(attr.user).toBe('test');
 
-  //     commit.destroy();
-  //     done();
-  //   });
+      commit.destroy();
+      done();
+    });
     
-  // });
+  });
 
 });
 
@@ -148,18 +152,18 @@ describe('User model', function(){
     expect(u.repos().relatedData.target).toBe(Repo);
   });
   
-  it('should add a model to the database', function(done){
+  // it('should add a model to the database', function(done){
 
-    new User({current_user: 'test'}).save().then(function(user) {
-      var attr = user.attributes;
+  //   new User({current_user: 'test'}).save().then(function(user) {
+  //     var attr = user.attributes;
 
-      expect(attr.current_user).toBe('test');
+  //     expect(attr.current_user).toBe('test');
 
-      user.destroy();
-      done();
-    });
+  //     user.destroy();
+  //     done();
+  //   });
     
-  });
+  // });
 
 });
 
@@ -214,7 +218,7 @@ describe('Server', function(){
 
   it('should get a repo', function(done){
     
-    request('http://127.0.0.1:3000/repo/jashkenas/backbone', function(error, response, body){
+    request('http://127.0.0.1:3000/repos/jashkenas/backbone', function(error, response, body){
       expect(response.statusCode).toBe(200);
       done();
     });
