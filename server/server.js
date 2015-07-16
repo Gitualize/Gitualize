@@ -51,33 +51,39 @@ var client_id; //client key
 var client_secret; //client secret
 
 app.get('/auth', function(req, res){
+  //console.log('req.params.repoFullName: ', req.params.repoFullName);
+  //console.log('req.query.repoFullName: ', req.query.repoFullName);
   fs.readFile('./client/secret.json', function(err, data){
     var body = JSON.parse(data);
 
     client_id = body.client_id;
     client_secret = body.client_secret;
+    var redirectUrl = 'https://localhost:3000/authenticate?repoFullName='+req.query.repoFullName;
     
-    res.redirect('https://github.com/login/oauth/authorize?client_id=' + client_id);
+    console.log('going to github/oauth/authorize');
+    res.redirect('https://github.com/login/oauth/authorize?client_id=' + client_id + '&redirect_uri=' + redirectUrl);
   });
-
 });
 
-app.get('/authenticate', function(req, res) {
+app.get('/authenticate', function(req, res) { //, next) {
+  debugger;
   var code = req.query.code;
 
   request.post({
     url: 'https://github.com/login/oauth/access_token?client_id=' + client_id +'&client_secret=' + client_secret + '&code=' + code
   }, function(err, response, body){
-    var access_token = body.slice(body.indexOf('=') + 1, body.indexOf('&'));
+    console.log('github body: ', body);
+    var accessToken = body.slice(body.indexOf('=') + 1, body.indexOf('&'));
+    console.log('Access token: ' + accessToken);
 
-    console.log('Access token: ' + access_token);
+    //var token = {'github_token': access_token};
 
-    var token = {'github_token': access_token};
-
-    res.json(token);
+    //res.json(token);
+    //next(); //and also pass in token
+    
+    res.redirect('/repos/' + req.query.repoFullName + '/commits?accessToken=' + accessToken);
   });
-
-});
+}) //, commitsController.getCommits);
 
 // new Commit({sha: '123', user: 'dani'}).save().then(function(commit) {
 //   console.log('saved commit: ', commit);
