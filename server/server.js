@@ -25,6 +25,10 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client'));
 
+var server = app.listen(process.env.PORT || 3000, function(){
+  console.log('listening to port: ' + 3000);
+});
+
 //ROUTES-------------------------
 app.get('/repos/:repoOwner/:repoName/commits', commitsController.getCommits);
 //app.get('/repos/:repoOwner/:repoName', reposController.getRepo);
@@ -42,9 +46,6 @@ app.get('/repos/:repoOwner/:repoName/commits', commitsController.getCommits);
 //require('./commits/commitsRoutes.js') (commitsRouter);
 // require('db/events/commitsRoutes.js') (commitsRouter);
 
-var server = app.listen(process.env.PORT || 3000, function(){
-  console.log('listening to port: ' + 3000);
-});
 
 var client_id; //client key
 var client_secret; //client secret
