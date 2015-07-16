@@ -8,13 +8,15 @@ var Playbar = require('./playbar.react.jsx');
 
 var Visualize = React.createClass({
   render: function () {
+    var fullRepoName = this.props.params.repoName + '/' + this.props.params.repoOwner;
     return <div>
       <Path/>
       <Directory/>
-      <Folder/>
+      <Folder fullRepoName={fullRepoName}/>
       <Playbar/>
     </div>
   }
 });
 
 module.exports = Visualize;
+
