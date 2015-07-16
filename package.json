@@ -31,6 +31,7 @@
     "pg": "^4.4.0",
     "react": "^0.13.3",
     "react-router": "^0.13.3",
+    "react-tools": "^0.13.3",
     "reactify": "^1.1.1",
     "request": "^2.58.0",
     "underscore": "^1.8.3",

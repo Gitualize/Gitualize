@@ -15,6 +15,7 @@ var App = React.createClass({
     );
   }
 });
+
 var routes = (
   <Route path='/' handler={App}>
     <Route path="about" handler={Views.About}/>
