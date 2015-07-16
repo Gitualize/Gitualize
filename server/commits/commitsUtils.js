@@ -20,14 +20,10 @@ var accessToken;
   });
 })();
 
-//var repoUtils = require('../repos/reposUtils');
-
 //var github = new Github({token: access_token, auth: 'oauth'});
 //var repo = github.getRepo(repoOwner, repoName);
 //
-//get commits from DB
 var getCommitsFromDb = Promise.promisify(function(repoFullName, callback) {
-  //repoUtils.retrieveRepo(repoFullName)
   new Repo({
     fullName : repoFullName
   }).fetch().then(function(dbRepo) {
@@ -58,36 +54,24 @@ var addCommitsToRepo = function(dbRepo, commits, callback) { //helper for saveCo
   var repoCommits = dbRepo.commits();
   if (!repoCommits) return console.error('repo ', repoFullName, ' has no commits relationship. wtf');
   console.log('commits in addCommitsToRepo: ', commits);
-  debugger;
-  //commits = _.map(commits, function(commit) {
-    //return {sha: commit.sha, committer: commit.committer.login, date: commit.commiter
-    //'sha', 'committer');
-  //console.log('going to store commits: ', commits);
   callback(null, commits); //give caller immediately so don't have to wait for them to finish storing
   commits.forEach(function(commit) { //the general /commits only has very general info. we must then get the detailed info for each commit later
     repoCommits.create(commit);
   });
-  //})
-  //.catch(function(error) {
-  //console.log('error in saveCommitsToDb: ', error);
-  //});
 };
 var saveCommitsToDb = Promise.promisify(function(repoFullName, commits, callback) {
   console.log('begin saving repo: ', repoFullName, ' to db');
   console.log('and saving commits: ', commits, ' to db');
-  debugger;
   new Repo({
     fullName: repoFullName
   }).fetch().then(function(dbRepo) {
     if (dbRepo) { //repo exists in db
-      debugger;
       addCommitsToRepo(dbRepo, commits, callback);
     } else { //make new repo
       new Repo({
         fullName: repoFullName
       }).save()
       .then(function(dbRepo) {
-        debugger;
         addCommitsToRepo(dbRepo, commits, callback);
       });
     }
@@ -98,28 +82,39 @@ var saveCommitsToDb = Promise.promisify(function(repoFullName, commits, callback
     return commits.length > 0 && commits[commits.length-1].date;
   };
   var cleanCommitData = function(commits) {
-    debugger;
+    if (commits === null) return;
+    var committer;
     return _.map(commits, function(commit) {
-      return {sha: commit.sha, committer: commit.committer.login, date: commit.commit.committer.date}; //omg
+      //omg apparently there may not be a commit.committer.
+      //if (!commit) debugger;
+      //if (!commit.committer) //omg
+      //if (!commit.committer.login) debugger;
+      committer = (commit.committer && commit.committer.login) || (commit.author && commit.author.login) || commit.commit.committer.name;
+      //I hate myself
+      return {sha: commit.sha, committer: committer, date: commit.commit.committer.date}; //omg
     });
   };
   module.exports = {
     getCommitsFromDb: getCommitsFromDb,
-    saveCommitsToDb : saveCommitsToDb,
     getCommitsFromGithub: Promise.promisify(function(repoFullName, maxCommits, callback) {
       console.log('trying to go to github');
       var localLastCommitTime = Date.now(), pulledLastCommitTime, githubCommits = [];
-      var options = { url: 'https://api.github.com/repos/' + repoFullName + '/commits', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {until: localLastCommitTime, access_token: accessToken} };
+      var options = { url: 'https://api.github.com/repos/' + repoFullName + '/commits', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken} };
       (function getMoreCommits() {
         localLastCommitTime = getLastCommitTime(githubCommits) || Date.now(); //date.now really a placeholder, incorrect time format
+        options.qs.until = localLastCommitTime;
         //$ or request or http.get....
         //$.getJSON('https://api.github.com/repos/'+repoFullName+'/commits', {access_token: accessToken, until: localLastCommitTime}, function(newCommits) {
         request(options, function(error, response, newCommits) {
+          if (error) return callback(error, null);
+          newCommits = JSON.parse(newCommits);
           if (newCommits.message === 'Not Found') {
             var msg = 'Repo ' + repoFullName + ' does not exist.';
             return callback(msg, null);
           }
-          newCommits = cleanCommitData(JSON.parse(newCommits));
+          console.log('newCommits: ', newCommits);
+          //TODO handle if newCommits is empty
+          newCommits = cleanCommitData(newCommits);
           pulledLastCommitTime = getLastCommitTime(newCommits);
           if (pulledLastCommitTime === localLastCommitTime || githubCommits.length > maxCommits) { //we have all the commits
             //console.log('got all commits: ', Commits);
@@ -129,7 +124,6 @@ var saveCommitsToDb = Promise.promisify(function(repoFullName, commits, callback
             //Commits.add(newCommits);
             githubCommits = githubCommits.concat(newCommits);
             console.log('new commits fetched: ', newCommits);
-            debugger;
             saveCommitsToDb(repoFullName, newCommits).then(function(commits) {
               console.log('saved commits: ', commits);
               //if (!commits) return res.status(500).end();
