@@ -46,41 +46,34 @@ var server = app.listen(process.env.PORT || 3000, function(){
   console.log('listening to port: ' + 3000);
 });
 
-var client_id = '29039cba3aedb378674e'; //client key
-var client_secret = '75e252ae0b96801ca987a5452408146d835c63fc'; //client secret
+var client_id; //client key
+var client_secret; //client secret
 
 app.get('/auth', function(req, res){
-  console.log('redirect to github');
+  fs.readFile('./client/secret.json', function(err, data){
+    var body = JSON.parse(data);
 
-  res.redirect('https://github.com/login/oauth/authorize?client_id=' + client_id);
-
-  request.get({
-    url: 'https://github.com/login/oauth/authorize'
+    client_id = body.client_id;
+    client_secret = body.client_secret;
+    
+    res.redirect('https://github.com/login/oauth/authorize?client_id=' + client_id);
   });
 
 });
 
 app.get('/authenticate', function(req, res) {
   var code = req.query.code;
-  console.log(code);
-
-  res.redirect('/');
 
   request.post({
     url: 'https://github.com/login/oauth/access_token?client_id=' + client_id +'&client_secret=' + client_secret + '&code=' + code
-  }, function(err, res, body){
+  }, function(err, response, body){
     var access_token = body.slice(body.indexOf('=') + 1, body.indexOf('&'));
 
     console.log('Access token: ' + access_token);
 
     var token = {'github_token': access_token};
 
-    fs.writeFile('./client/secret.json', JSON.stringify(token), function(err){
-      if(err) {
-        throw err;
-      }
-      console.log('access_token saved!');
-    });
+    res.json(token);
   });
 
 });
