@@ -6,6 +6,8 @@ var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
 var DefaultRoute = Router.DefaultRoute;
 var Views = require('./views/views.react.jsx');
+var Alert = require('react-bootstrap').Alert;
+var bootstrap = require('bootstrap');
 
 var App = React.createClass({
   render () {
