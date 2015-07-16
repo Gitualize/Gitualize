@@ -4,12 +4,8 @@ var React = require('react');
 //var Github = require('github-api');
 var Landing = require('./landing.react.jsx');
 var Navbar = require('./navbar.react.jsx');
+var About = require('./about.react.jsx');
 
-var About = React.createClass({
-  render: function () {
-    return <h2>About</h2>;
-  }
-});
 var Folder = React.createClass({
   getCommits: function(fullRepoName) {
     $.getJSON('https://localhost:3000/'+fullRepoName, {access_token: access_token}, function(commits) {
@@ -85,3 +81,4 @@ module.exports.Landing = Landing;
 module.exports.About = About;
 module.exports.Folder = Folder;
 module.exports.Navbar = Navbar;
+module.exports.About = About;

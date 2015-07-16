@@ -1,5 +1,3 @@
-var $ = require('jquery');
-// var bootstrap = require('bootstrap');
 var ReactBootstrap = require('react-bootstrap');
 var React = require('react');
 var Navbar = ReactBootstrap.Navbar;
