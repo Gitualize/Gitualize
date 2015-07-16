@@ -4,7 +4,7 @@ var Router = require('react-router');
 var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
 var DefaultRoute = Router.DefaultRoute;
-var Views = require('./views.react.jsx');
+var Views = require('../views/views.react.jsx');
 
 var App = React.createClass({
   render () {
