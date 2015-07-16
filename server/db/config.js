@@ -44,6 +44,7 @@ bookshelf.knex.schema.hasTable('user').then(function(exists) {
                   commit.text('files', 5000); //files changed. json array of urls
                   commit.integer('repo_id').notNullable().references('repo.id');
                   commit.string('committer').notNullable(); //.references('user')
+                  commit.string('date');
                   commit.timestamps();
                 }).then(function (table) {
                   console.log('Created table: commit');
