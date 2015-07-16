@@ -1,4 +1,7 @@
+var ReactBootstrap = require('react-bootstrap');
 var React = require('react');
+var Input = ReactBootstrap.Input;
+var ButtonInput = ReactBootstrap.ButtonInput;
 var Navigation = require('react-router').Navigation;
 
 var Landing = React.createClass({
@@ -12,18 +15,41 @@ var Landing = React.createClass({
   handleSubmit: function(e) {
     console.log('submitted');
     e.preventDefault();
-    var repo = React.findDOMNode(this.refs.repo).value.split('/');
+    var repo = this.refs.repo.getValue().split('/');
     //this.transitionTo('repos', {repoName: repo});
     this.transitionTo('repo', {repoOwner: repo[0], repoName: repo[1]});
   },
-  render: function () {
-    return <div>
-      (try jashkenas/backbone)
+
+  getInitialState: function() {
+    return {
+      disabled: true,
+      style: null
+    };
+  },
+
+  validationState: function() {
+    var string = this.refs.repo.getValue();
+    var style = 'danger';
+
+    if (string.match(/[\w]+\/[\w]+/)) { style = 'success'; }
+    else if (string.match(/[\w]/)) { style = 'warning'; }
+
+    var disabled = style !== 'success';
+
+    return { style, disabled };
+  },
+
+  handleChange: function() {
+    this.setState( this.validationState() );
+  },
+
+  render: function() {
+    return (
       <form className='repoForm' onSubmit={this.handleSubmit}>
-        <input type='text' ref='repo' placeholder='user/reponame - try jashkenas/backbone' />
-        <input type='submit' value='go'/>
+        <Input type='text' ref='repo' label='Visualize a repo' onChange={this.handleChange} placeholder='user/reponame - try jashkenas/backbone'/>
+        <ButtonInput type='submit' value='Go' bsStyle={this.state.style} disabled={this.state.disabled} />
       </form>
-    </div>
+    );
   }
 });
 
