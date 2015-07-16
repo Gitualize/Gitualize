@@ -67,4 +67,4 @@ gulp.task('browserify', function() {
 });
 
 gulp.task('build', [/*'jshint',*/ 'test']);
-gulp.task('default',['browserify', 'build']);
+gulp.task('default',['browserify']);

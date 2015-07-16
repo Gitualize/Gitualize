@@ -1,7 +1,10 @@
 //main router file
 var _ = require('underscore');
+var $ = require('jquery');
 var React = require('react');
 var Router = require('react-router');
+// var Alert = require('react-bootstrap').Alert;
+// var bootstrap = require('bootstrap');
 var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
 var DefaultRoute = Router.DefaultRoute;
@@ -11,7 +14,7 @@ var App = React.createClass({
   render () {
     return (
       <div>
-        <Views.Title/>
+        <Views.Navbar/>
         <RouteHandler/>
       </div>
     );
