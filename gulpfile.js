@@ -52,15 +52,15 @@ gulp.task('browserify', function() {
     var updateStart = Date.now();
     console.log('Updating!');
     watcher.bundle() // Create new bundle that uses the cache for high performance
+    .on('error', notify.onError(function(error) {
+      console.log(error.message);
+      this.emit('end');
+    }))
     .pipe(source('./client/js/app.js'))
     // This is where you add uglifying etc.
     .pipe(gulp.dest('./client/build'));
     console.log('Updated!', (Date.now() - updateStart) + 'ms');
   })
-  .on('error', notify.onError(function(error) { //attempt to not crash watchify if error caught. this doesn't work
-    console.log(error.message);
-    this.emit('end');
-  }))
   .bundle() // Create the initial bundle when starting the task
   .pipe(source('./client/js/app.js'))
   .pipe(gulp.dest('./client/build'));
