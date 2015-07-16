@@ -1,9 +1,9 @@
 //master view file for now
-var React = require('react');
 var $ = require('jquery');
+var React = require('react');
 //var Github = require('github-api');
-var Title = require('./title.react.jsx');
 var Landing = require('./landing.react.jsx');
+var Navbar = require('./navbar.react.jsx');
 
 var About = React.createClass({
   render: function () {
@@ -84,4 +84,4 @@ var Commit = React.createClass({
 module.exports.Landing = Landing;
 module.exports.About = About;
 module.exports.Folder = Folder;
-module.exports.Title = Title;
+module.exports.Navbar = Navbar;
