@@ -3,6 +3,8 @@ var React = require('react');
 var $ = require('jquery');
 var Navigation = require('react-router').Navigation;
 //var Github = require('github-api');
+var Title = require('./title.react.jsx');
+
 var About = React.createClass({
   render: function () {
     return <h2>About</h2>;
@@ -107,3 +109,4 @@ var Landing = React.createClass({
 module.exports.Landing = Landing;
 module.exports.About = About;
 module.exports.Folder = Folder;
+module.exports.Title = Title;
