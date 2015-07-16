@@ -61,7 +61,7 @@ var addCommitsToRepo = function(dbRepo, commits, callback) { //helper for saveCo
 };
 var saveCommitsToDb = Promise.promisify(function(repoFullName, commits, callback) {
   console.log('begin saving repo: ', repoFullName, ' to db');
-  console.log('and saving commits: ', commits, ' to db');
+  console.log('and saving commits to db');
   new Repo({
     fullName: repoFullName
   }).fetch().then(function(dbRepo) {
@@ -107,58 +107,19 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, 
       var msg = 'Repo ' + repoFullName + ' does not exist.';
       return callback(msg, null);
     }
-    console.log('newCommits: ', newCommits);
+    console.log('newCommits.length = ', newCommits.length);
     //TODO handle if newCommits is empty
     newCommits = cleanCommitData(newCommits);
     callback(null, newCommits);
     saveCommitsToDb(repoFullName, newCommits)
     .then(function(commits) {
-      console.log('saved commits: ', commits);
+      console.log('saved ' + commits.length + ' commits');
       //if (!commits) return res.status(500).end();
     }).catch(function(error) { //TODO many to many commits to repos relationship establish for forks
       console.log('error saving commits to db: ', error);
     });
   });
 });
-
-//replaced with 1 param above. nooooo
-//(function getMoreCommits() {
-//localLastCommitTime = getLastCommitTime(githubCommits) || Date.now(); //date.now really a placeholder, incorrect time format
-//options.qs.until = localLastCommitTime;
-////$ or request or http.get....
-////$.getJSON('https://api.github.com/repos/'+repoFullName+'/commits', {access_token: accessToken, until: localLastCommitTime}, function(newCommits) {
-//request(options, function(error, response, newCommits) {
-//if (error) return callback(error, null);
-//newCommits = JSON.parse(newCommits);
-//if (newCommits.message === 'Not Found') {
-//var msg = 'Repo ' + repoFullName + ' does not exist.';
-//return callback(msg, null);
-//}
-//console.log('newCommits: ', newCommits);
-////TODO handle if newCommits is empty
-//newCommits = cleanCommitData(newCommits);
-//pulledLastCommitTime = getLastCommitTime(newCommits);
-//if (pulledLastCommitTime === localLastCommitTime || githubCommits.length > maxCommits) { //we have all the commits
-////console.log('got all commits: ', Commits);
-//console.log('got all commits: ', githubCommits);
-//callback(null, githubCommits);
-//} else {
-////Commits.add(newCommits);
-//githubCommits = githubCommits.concat(newCommits);
-//console.log('new commits fetched: ', newCommits);
-//saveCommitsToDb(repoFullName, newCommits).then(function(commits) {
-//console.log('saved commits: ', commits);
-////if (!commits) return res.status(500).end();
-//getMoreCommits();
-//})
-//.catch(function(error) {
-//console.log('error saving commits to db: ', error);
-//});
-//}
-//});
-////this.setState({commits: this.state.commits.concat(newCommits)});
-//})();
-//});
 
 module.exports = {
   getCommitsFromDb: getCommitsFromDb,
