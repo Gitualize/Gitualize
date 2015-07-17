@@ -6,7 +6,7 @@ var OverlayTrigger = ReactBootstrap.OverlayTrigger;
 var Button = ReactBootstrap.Button;
 var Glyphicon = ReactBootstrap.Glyphicon;
 
-var commitLength = 60; // fake data
+var commitLength = 20; // fake data
 
 var Playbar = React.createClass({
   clock: function(seconds) {
@@ -26,6 +26,12 @@ var Playbar = React.createClass({
       this.seconds = this.seconds % 60;
       this.minutes = this.minutes % 60;
     }
+    this.time.reset = function() {
+      this.total = 0;
+      this.seconds = 0;
+      this.minutes = 0;
+      this.hours = 0;
+    }
   },
 
   getInitialState: function() {
@@ -33,7 +39,7 @@ var Playbar = React.createClass({
     return {
       date: this.time.toString(),
       now: 0,
-      glyphicon: 'pause',
+      glyphicon: 'play',
       commit : 0
     };
   },
@@ -46,11 +52,17 @@ var Playbar = React.createClass({
     clearInterval(this.timer);
   },
 
+  end: function() {
+    this.pause();
+    var glyphicon = 'refresh';
+    this.setState( {glyphicon} );
+  },
+
   tick: function() {
     var now = this.state.now + 1;
     this.setState( {now} );
     if (now % 10 === 0) {
-      if (now % (commitLength*10) === 0) this.pause();
+      if (now % (commitLength*10) === 0) this.end();
       this.time.add(1);
       var date = this.time.toString();
       this.setState( {date} );
@@ -58,14 +70,20 @@ var Playbar = React.createClass({
   },
 
   handleClick: function() {
-    if (this.state.glyphicon === 'pause') {
-      var glyphicon = 'play';
-      this.setState( {glyphicon} );
-      this.play();
-    } else {
+    if (this.state.glyphicon === 'play') {
       var glyphicon = 'pause';
       this.setState( {glyphicon} );
+      this.play();
+    } else if (this.state.glyphicon === 'pause') {
+      var glyphicon = 'play';
+      this.setState( {glyphicon} );
       this.pause();
+    } else {
+      var glyphicon = 'play';
+      var now = 0;
+      this.time.reset();
+      var date = this.time.toString();
+      this.setState( {glyphicon, now, date} );
     }
   },
 
