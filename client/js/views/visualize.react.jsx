@@ -9,8 +9,9 @@ var Playbar = require('./playbar.react.jsx');
 
 var Visualize = React.createClass({
   getCommits: function () {
-    var fullRepoName = this.props.params.repoName + '/' + this.props.params.repoOwner;
-    $.getJSON('/repos/'+fullRepoName+'/commits', function(commits) {
+    debugger;
+    var fullRepoName = this.props.params.repo;
+    $.ajax('/repos/'+fullRepoName+'/commits', {dataType: 'jsonp'}, function(commits) {
       this.setState({commits: commits});
     }.bind(this));
   },
@@ -32,7 +33,6 @@ var Visualize = React.createClass({
   },
 
   render: function () {
-    
     return <div>
       <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
       <Directory currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
