@@ -22,6 +22,7 @@ var gitHubLogin = function(req, res) {
   });
 };
 
+//if we moved this to a route on our client it would prolly work as expected
 var getAccessToken = function(req, res) {
   var code = req.query.code;
   request.post({
