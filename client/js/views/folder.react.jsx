@@ -9,13 +9,6 @@ var Commit = React.createClass({
 });
 
 var Folder = React.createClass({
-  getFiles: function() {
-  },
-
-  getInitialState: function() {
-    return {files: []};
-  },
-  
   render: function () {
     var commits = this.props.commits.map(function(commit) {
       return <Commit>
