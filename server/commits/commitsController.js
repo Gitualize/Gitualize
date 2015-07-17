@@ -1,5 +1,4 @@
 var utils = require('./commitsUtils');
-var auth = require('../auth/authController.js');
 var Promise = require('bluebird');
 module.exports = {
   getCommits: function(req, res) {
