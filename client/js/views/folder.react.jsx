@@ -1,5 +1,4 @@
 var React = require('react');
-var $ = require('jquery');
 
 var Commit = React.createClass({
   render: function () {
