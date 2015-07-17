@@ -1,9 +1,11 @@
 var fs = require('fs');
 var request = require('request');
+var jwt = require('jwt-simple');
+
 
 var client_id; //client key
 var client_secret; //client secret
-
+var jwt_secret; // jwt secret
 
 var gitHubLogin = function(req, res) {
   console.log('auth controller login');
@@ -13,6 +15,8 @@ var gitHubLogin = function(req, res) {
     var body = JSON.parse(data);
     client_id = body.client_id;
     client_secret = body.client_secret;
+    jwt_secret = body.jwt_secret;
+
     var redirectUrl = 'http://localhost:3000/getAccessToken?repoFullName='+req.query.repoFullName;
     //TODO fix this horribleness, even worse cuz https doesn't work
     console.log('going to github/oauth/authorize');
@@ -27,8 +31,12 @@ var getAccessToken = function(req, res) {
   }, function(err, response, body){
     console.log('github body: ', body);
     var accessToken = body.slice(body.indexOf('=') + 1, body.indexOf('&'));
+
+    var payload = {'access_token': accessToken};
+    var encodedToken = jwt.encode(payload, jwt_secret);
+    // console.log('TOKEN!!!!!!!!!' + encodedToken);
     
-    res.redirect('/repos/' + req.query.repoFullName + '/commits?accessToken=' + accessToken);
+    res.redirect('/repos/' + req.query.repoFullName + '/commits?token=' + encodedToken);
   });
 };//, commitsController.getCommits);
 
