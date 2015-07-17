@@ -18,7 +18,7 @@ var Folder = React.createClass({
     return <div>
       <h2>Folder view</h2>
       <ul>
-        {commits[this.props.currentCommit]}
+        {commits[this.props.commitIndex]}
       </ul>
     </div>
   }

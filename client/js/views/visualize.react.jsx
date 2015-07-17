@@ -23,9 +23,9 @@ var Visualize = React.createClass({
 
   getCurrentCommit: function () {
     var repoFullName = this.props.params.repoName + '/' + this.props.params.repoOwner;
-    var sha = this.state.commits[this.state.currentCommit].sha;
+    var sha = this.state.commits[this.state.commitIndex].sha;
     $.getJSON('/repos/' + fullRepoName + '/commits/' + sha, function(commit) {
-      this.setState({commit: commit});
+      this.setState({currentCommit: commit});
     }.bind(this));
   },
 
@@ -33,8 +33,8 @@ var Visualize = React.createClass({
     this.getCommits();
   },
 
-  updateCurrentCommit: function (index) {
-    this.setState({currentCommit: index});
+  updateCommitIndex: function (index) {
+    this.setState({commitIndex: index});
   },
 
   updateCurrentPath: function (path) {
@@ -42,7 +42,7 @@ var Visualize = React.createClass({
   },
 
   getInitialState: function() {
-    return {commits: [], currentCommit: 0, commit: {}, currentPath: ['aaa', 'bbb', 'ccc']};
+    return {commits: [], commitIndex: 0, currentCommit: {}, currentPath: ['aaa', 'bbb', 'ccc']};
   },
 
   render: function () {
@@ -50,8 +50,8 @@ var Visualize = React.createClass({
     return <div>
       <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
       <Directory currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-      <Folder commits={this.state.commits} currentCommit={this.state.currentCommit} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-      <Playbar numberOfCommits={this.state.commits.length} currentCommit={this.state.currentCommit} updateCurrentCommit={this.updateCurrentCommit}/>
+      <Folder commits={this.state.commits} commitIndex={this.state.commitIndex} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+      <Playbar numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
     </div>
   }
 });
