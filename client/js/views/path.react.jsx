@@ -2,7 +2,6 @@ var React = require('react');
 
 var Path = React.createClass({
   handleClick: function (index) {
-    console.log(index);
     this.props.updateCurrentPath(this.props.currentPath.slice(0, index + 1));
   },
 
