@@ -23,7 +23,7 @@ var Visualize = React.createClass({
     var fullRepoName = this.props.params.repoName + '/' + this.props.params.repoOwner;
     return <div>
       <Path currentPath={this.state.currentPath} updateCurrentPath={this.state.updateCurrentPath}/>
-      <Directory/>
+      <Directory currentPath={this.state.currentPath} updateCurrentPath={this.state.updateCurrentPath}/>
       <Folder fullRepoName={fullRepoName} currentCommit={this.state.currentCommit} currentPath={this.state.currentPath} updateCurrentPath={this.state.updateCurrentPath}/>
       <Playbar currentCommit={this.state.currentCommit} updateCurrentCommit={this.updateCurrentCommit}/>
     </div>
