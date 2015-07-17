@@ -3,8 +3,10 @@ var request = require('request');
 var db = require('../../server/db/config.js');
 var Repo = require('../../server/db/models/repo.js');
 var Commit = require('../../server/db/models/commit.js');
+var User = require('../../server/db/models/user.js');
 var Repos = require('../../server/db/collections/repos.js');
 var Commits = require('../../server/db/collections/commits.js');
+var Users = require('../../server/db/collections/users.js');
 
 // turn off node server before testing
 var server = require('../../server/server.js').export;
@@ -62,7 +64,11 @@ describe('Repo model', function(){
   });
 
   it('should have a has-many relationship with Commit', function(){
-    expect(r.commit().relatedData.target).toBe(Commit);
+    expect(r.commits().relatedData.target).toBe(Commit);
+  });
+
+  it('should have a belongs-to relationship with user', function(){
+    expect(r.user().relatedData.target).toBe(User);
   });
 
   it('should add a model to the database', function(done){
@@ -100,6 +106,10 @@ describe('Commit model', function(){
   it('should have a belongs-to relationship with Repo', function(){
     expect(c.repo().relatedData.target).toBe(Repo);
   });
+
+  it('should have a belongs-to relationship with User', function(){
+    expect(c.user().relatedData.target).toBe(User);
+  });
   
   it('should add a model to the database', function(done){
 
@@ -117,6 +127,46 @@ describe('Commit model', function(){
 
 });
 
+describe('User model', function(){
+
+  it('should have Commit defined', function(){
+    expect(Commit).toBeDefined();
+  });
+
+  var u = new User();
+  it('should be a model class', function(){
+    expect(u).toBeDefined();
+    expect(u instanceof User).toBe(true);
+  });
+
+  it('should be a Bookshelf model', function(){
+    u.set({test:'1234'})
+    expect(u.get('test')).toBe('1234');
+  });
+
+  it('should have a has-many relationship with Commit', function(){
+    expect(u.commits().relatedData.target).toBe(Commit);
+  });
+
+  it('should have a has-many relationship with Repos', function(){
+    expect(u.repos().relatedData.target).toBe(Repo);
+  });
+  
+  // it('should add a model to the database', function(done){
+
+  //   new User({current_user: 'test'}).save().then(function(user) {
+  //     var attr = user.attributes;
+
+  //     expect(attr.current_user).toBe('test');
+
+  //     user.destroy();
+  //     done();
+  //   });
+    
+  // });
+
+});
+
 describe('Repos Collection', function(){
   // var rs = Repos.forge([{name1: 'terry'},{name2: 'terrance'}])
 
@@ -129,9 +179,18 @@ describe('Repos Collection', function(){
 
 describe('Commits Collection', function(){
 
-  it('should Commits defined', function(){
+  it('should have Commits defined', function(){
     expect(Commits).toBeDefined();
     expect(Commits.model).toBe(Commit);
+  });
+
+});
+
+describe('Users Collection', function(){
+
+  it('should have Users defined', function(){
+    expect(Users).toBeDefined();
+    expect(Users.model).toBe(User);
   });
 
 });
@@ -159,7 +218,7 @@ describe('Server', function(){
 
   it('should get a repo', function(done){
     
-    request('http://127.0.0.1:3000/repo/jashkenas/backbone', function(error, response, body){
+    request('http://127.0.0.1:3000/repos/jashkenas/backbone', function(error, response, body){
       expect(response.statusCode).toBe(200);
       done();
     });
