@@ -20,8 +20,8 @@ var Visualize = React.createClass({
     return <div>
       <Path/>
       <Directory/>
-      <Folder fullRepoName={fullRepoName} currentCommit=this.state.currentCommit/>
-      <Playbar currentCommit=this.state.currentCommit/>
+      <Folder fullRepoName={fullRepoName} currentCommit={this.state.currentCommit}/>
+      <Playbar currentCommit={this.state.currentCommit} updateCurrentCommit={this.updateCurrentCommit}/>
     </div>
   }
 });
