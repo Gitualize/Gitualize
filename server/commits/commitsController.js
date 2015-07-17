@@ -1,5 +1,7 @@
 var utils = require('./commitsUtils');
 var Promise = require('bluebird');
+var jwt = require('jwt-simple');
+
 module.exports = {
   getCommits: function(req, res) {
     var accessToken = req.query.accessToken; //TODO use sessions to save this instead of pass around
@@ -16,6 +18,8 @@ module.exports = {
       console.log('commits not in db, going to github');
       //commits not in db, go to github
       //TODO oauth token here
+
+      // var accessToken = jwt.decode(encodedToken, );
       if (!accessToken) { //redjrect to /auth with original repo request info
         return res.redirect('/auth?repoFullName='+repoFullName); //whyy
         res.end();

@@ -36,7 +36,6 @@
     "react-tools": "^0.13.3",
     "reactify": "^1.1.1",
     "request": "^2.58.0",
-    "request-promise": "^0.4.2",
     "underscore": "^1.8.3",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.2.3"
@@ -53,6 +52,9 @@
     "gulp-watch": "^4.2.4",
     "jasmine": "^2.3.1",
     "jshint": "^2.8.0",
-    "jshint-stylish": "^2.0.1"
+    "jshint-stylish": "^2.0.1",
+    "jwt-simple": "^0.3.0",
+    "passport": "^0.2.2",
+    "passport-github": "^0.1.5"
   }
 }
