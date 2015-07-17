@@ -4,6 +4,7 @@ var request = require('request');
 var client_id; //client key
 var client_secret; //client secret
 
+
 var gitHubLogin = function(req, res) {
   console.log('auth controller login');
   // console.log('req.params.repoFullName: ', req.params);
