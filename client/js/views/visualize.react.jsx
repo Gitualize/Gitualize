@@ -17,8 +17,15 @@ var Visualize = React.createClass({
         window.location = commits.authUrl; //transitionTo doesn't work for external urls
         return;
       }
-      console.log('commits: ', commits);
       this.setState({commits: commits});
+    }.bind(this));
+  },
+
+  getCurrentCommit: function () {
+    var repoFullName = this.props.params.repoName + '/' + this.props.params.repoOwner;
+    var sha = this.state.commits[this.state.currentCommit].sha;
+    $.getJSON('/repos/' + fullRepoName + '/commits/' + sha, function(commit) {
+      this.setState({commit: commit});
     }.bind(this));
   },
 
@@ -35,7 +42,7 @@ var Visualize = React.createClass({
   },
 
   getInitialState: function() {
-    return {commits: [], currentCommit: 0, currentPath: ['aaa', 'bbb', 'ccc']};
+    return {commits: [], currentCommit: 0, commit: {}, currentPath: ['aaa', 'bbb', 'ccc']};
   },
 
   render: function () {
