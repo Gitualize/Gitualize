@@ -10,36 +10,21 @@ var Commit = React.createClass({
 });
 
 var Folder = React.createClass({
-  getCommits: function(fullRepoName) {
-    $.getJSON('/repos/'+fullRepoName+'/commits', function(commits) {
-      this.setState({commits: commits});
-    }.bind(this));
-  },
-
-  //getLastCommitTime: function(commits) { //helper
-    //return commits.length > 0 && commits[commits.length-1].commit.committer.date;
-  //},
-
   getFiles: function() {
   },
 
-  componentDidMount: function() {
-    this.getCommits(this.props.fullRepoName); //NUM/30 requests
-  },
-
   getInitialState: function() {
-    return {commits: [], files: []};
+    return {files: []};
   },
   
   render: function () {
-    var commits = this.state.commits.map(function(commit) {
+    var commits = this.props.commits.map(function(commit) {
       return <Commit>
         {commit}
       </Commit>
     });
     return <div>
       <h2>Folder view</h2>
-      {this.props.fullRepoName}
       <ul>
         {commits[this.props.currentCommit]}
       </ul>
