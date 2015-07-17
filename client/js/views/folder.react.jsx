@@ -10,15 +10,10 @@ var Commit = React.createClass({
 
 var Folder = React.createClass({
   render: function () {
-    var commits = this.props.commits.map(function(commit) {
-      return <Commit>
-        {commit}
-      </Commit>
-    });
     return <div>
       <h2>Folder view</h2>
       <ul>
-        {commits[this.props.commitIndex]}
+        {this.props.currentCommit}
       </ul>
     </div>
   }
