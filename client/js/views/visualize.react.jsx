@@ -11,16 +11,20 @@ var Visualize = React.createClass({
     this.setState({currentCommit: index});
   },
 
+  updateCurrentPath: function (path) {
+    this.setState({currentPath: path});
+  },
+
   getInitialState: function() {
-    return {currentCommit: 0};
+    return {currentCommit: 0, currentPath: '/'};
   },
 
   render: function () {
     var fullRepoName = this.props.params.repoName + '/' + this.props.params.repoOwner;
     return <div>
-      <Path/>
+      <Path currentPath={this.state.currentPath} updateCurrentPath={this.state.updateCurrentPath}/>
       <Directory/>
-      <Folder fullRepoName={fullRepoName} currentCommit={this.state.currentCommit}/>
+      <Folder fullRepoName={fullRepoName} currentCommit={this.state.currentCommit} currentPath={this.state.currentPath} updateCurrentPath={this.state.updateCurrentPath}/>
       <Playbar currentCommit={this.state.currentCommit} updateCurrentCommit={this.updateCurrentCommit}/>
     </div>
   }
