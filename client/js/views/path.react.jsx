@@ -2,7 +2,7 @@ var React = require('react');
 
 var Path = React.createClass({
   render: function () {
-    return <div>Path
+    return <div>Path: {this.props.currentPath}
     </div>
   }
 });
