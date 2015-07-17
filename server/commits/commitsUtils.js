@@ -94,6 +94,20 @@ var cleanCommitData = function(commits) {
     return {sha: commit.sha, committer: committer, date: commit.commit.committer.date}; //omg
   });
 };
+
+var visitEachCommit = function(commits, options) {
+  var generalUrl = options.url;
+  _.each(commits, function(commit) {
+    options.url = generalUrl + commit.sha;
+    request(options, function(error, response, commit) {
+      commit = JSON.parse(commit); //detailed commit info
+      console.log('sha: ', commit.sha, 'patch: ',commit.files.patch);
+    });
+    options.url = generalUrl; //reset
+    //visit each commit sha with github api
+    //collect the data
+  });
+};
 var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, callback) {
   console.log('trying to go to github');
   var localLastCommitTime = Date.now(), pulledLastCommitTime, githubCommits = [];
@@ -110,6 +124,9 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, 
     console.log('newCommits.length = ', newCommits.length);
     //TODO handle if newCommits is empty
     newCommits = cleanCommitData(newCommits);
+    var commitOptions = { url: 'https://api.github.com/repos/' + repoFullName + '/commits/', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken} };
+    //TODO DRY with above options
+    visitEachCommit(newCommits, commitOptions);
     callback(null, newCommits);
     saveCommitsToDb(repoFullName, newCommits)
     .then(function(commits) {
