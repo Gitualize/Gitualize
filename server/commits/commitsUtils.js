@@ -11,14 +11,17 @@ var Github = require('github-api');
 var request = require('request');
 
 var accessToken;
-(function getAccessToken() {
-  if (accessToken) return;
-  fs.readFile('client/secret.json', function(err, data) {
-    data = JSON.parse(data.toString());
-    //console.log('data: ', data);
-    accessToken = data.github_token;
-  });
-})();
+var setAccessToken = function(token) {
+  accessToken = token;
+};
+//(function getAccessToken() {
+  //if (accessToken) return;
+  //fs.readFile('client/secret.json', function(err, data) {
+    //data = JSON.parse(data.toString());
+    ////console.log('data: ', data);
+    //accessToken = data.github_token;
+  //});
+//})();
 
 //var github = new Github({token: access_token, auth: 'oauth'});
 //var repo = github.getRepo(repoOwner, repoName);
@@ -78,9 +81,9 @@ var saveCommitsToDb = Promise.promisify(function(repoFullName, commits, callback
   });
 });
 
-var getLastCommitTime = function(commits) { //helper
-  return commits.length > 0 && commits[commits.length-1].date;
-};
+//var getLastCommitTime = function(commits) { //helper
+  //return commits.length > 0 && commits[commits.length-1].date;
+//};
 var cleanCommitData = function(commits) {
   if (commits === null) return;
   var committer;
@@ -116,7 +119,7 @@ var visitEachCommit = function(commits, options) { //visit each commit, update c
       commitDetailed = JSON.parse(commitDetailed); //detailed commit info
       //commitDetailed
       //saveCommitToDb(commit);
-      console.log('sha: ', commitDetailed.sha, 'patches: ', _.pluck(commitDetailed.files, 'patch')); //test
+      //console.log('sha: ', commitDetailed.sha, 'patches: ', _.pluck(commitDetailed.files, 'patch')); //test
     });
     options.url = generalUrl; //reset
   });
@@ -124,7 +127,7 @@ var visitEachCommit = function(commits, options) { //visit each commit, update c
 };
 var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, callback) {
   console.log('trying to go to github');
-  var localLastCommitTime = Date.now(), pulledLastCommitTime, githubCommits = [];
+  //var localLastCommitTime = Date.now(), pulledLastCommitTime, githubCommits = [];
   var options = { url: 'https://api.github.com/repos/' + repoFullName + '/commits', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken, per_page: maxCommits} };
   //page param also avail for pagination
   request(options, function(error, response, newCommits) {
@@ -140,7 +143,7 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, 
     newCommits = cleanCommitData(newCommits).reverse(); //first thing in newCommits is the oldest commit
     var commitOptions = { url: 'https://api.github.com/repos/' + repoFullName + '/commits/', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken} };
     //TODO DRY with above options
-    visitEachCommit(newCommits, commitOptions);
+    newCommits = visitEachCommit(newCommits, commitOptions);
     callback(null, newCommits);
     saveCommitsToDb(repoFullName, newCommits)
     .then(function(commits) {
@@ -153,5 +156,6 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, 
 });
 
 module.exports = {
+  setAccessToken: setAccessToken,
   getCommitsFromDb: getCommitsFromDb,
   getCommitsFromGithub: getCommitsFromGithub };
