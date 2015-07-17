@@ -28,11 +28,7 @@ var Folder = React.createClass({
   },
 
   getInitialState: function() {
-    return {commits: [], files: [], currentCommit: 0};
-  },
-
-  setCurrentCommit: function(index) {
-    this.setState({currentCommit: index});
+    return {commits: [], files: []};
   },
   
   render: function () {
@@ -45,7 +41,7 @@ var Folder = React.createClass({
       <h2>Folder view</h2>
       {this.props.fullRepoName}
       <ul>
-        {commits[this.state.currentCommit]}
+        {commits[this.props.currentCommit]}
       </ul>
     </div>
   }
