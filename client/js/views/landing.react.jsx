@@ -1,8 +1,8 @@
-var ReactBootstrap = require('react-bootstrap');
 var React = require('react');
+var Navigation = require('react-router').Navigation;
+var ReactBootstrap = require('react-bootstrap');
 var Input = ReactBootstrap.Input;
 var ButtonInput = ReactBootstrap.ButtonInput;
-var Navigation = require('react-router').Navigation;
 
 var Landing = React.createClass({
   mixins : [Navigation],
@@ -15,9 +15,9 @@ var Landing = React.createClass({
   handleSubmit: function(e) {
     console.log('submitted');
     e.preventDefault();
-    var repo = this.refs.repo.getValue();
+    var repo = this.refs.repo.getValue().split('/');
     //this.transitionTo('repos', {repoName: repo});
-    this.transitionTo('repo', repo);
+    this.transitionTo('repo', {repoOwner: repo[0], repoName: repo[1]});
   },
 
   getInitialState: function() {

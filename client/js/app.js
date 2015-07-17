@@ -24,7 +24,7 @@ var App = React.createClass({
 var routes = (
   <Route path='/' handler={App}>
     <Route path="about" handler={Views.About}/>
-    <Route path="repo/:repo" name='repo' handler={Views.Visualize}/>
+    <Route path="repo/:repoOwner/:repoName" name='repo' handler={Views.Visualize}/>
     <Route path="*" handler={Views.Landing}/>
     <DefaultRoute handler={Views.Landing}/>
   </Route>
