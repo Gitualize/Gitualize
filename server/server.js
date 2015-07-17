@@ -24,7 +24,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client'));
-
 var server = app.listen(process.env.PORT || 3000, function(){
   console.log('listening to port: ' + 3000);
 });
@@ -55,28 +54,23 @@ app.get('/auth', function(req, res){
   //console.log('req.query.repoFullName: ', req.query.repoFullName);
   fs.readFile('./client/secret.json', function(err, data){
     var body = JSON.parse(data);
-
     client_id = body.client_id;
     client_secret = body.client_secret;
-    var redirectUrl = 'https://localhost:3000/authenticate?repoFullName='+req.query.repoFullName;
-    
+    var redirectUrl = 'http://localhost:3000/authenticate?repoFullName='+req.query.repoFullName;
+    //TODO fix this horribleness, even worse cuz https doesn't work
     console.log('going to github/oauth/authorize');
     res.redirect('https://github.com/login/oauth/authorize?client_id=' + client_id + '&redirect_uri=' + redirectUrl);
   });
 });
-
 app.get('/authenticate', function(req, res) { //, next) {
   var code = req.query.code;
-
   request.post({
     url: 'https://github.com/login/oauth/access_token?client_id=' + client_id +'&client_secret=' + client_secret + '&code=' + code
   }, function(err, response, body){
     console.log('github body: ', body);
     var accessToken = body.slice(body.indexOf('=') + 1, body.indexOf('&'));
-    console.log('Access token: ' + accessToken);
-
+    //console.log('Access token: ' + accessToken);
     //var token = {'github_token': access_token};
-
     //res.json(token);
     //next(); //and also pass in token
     
