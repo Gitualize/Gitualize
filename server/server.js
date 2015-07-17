@@ -6,6 +6,7 @@ var morgan = require('morgan'), // used for logging incoming request
   db = require('./db/config'),
   reposController = require('./repos/reposController'),
   commitsController = require('./commits/commitsController'),
+  authController = require('./auth/authController.js'),
   request = require('request'),
   fs = require('fs');
 
@@ -34,6 +35,8 @@ app.get('/repos/:repoOwner/:repoName/commits', commitsController.getCommits);
 //app.get('/:user/repos/:repo', reposController.getRepo); //get a user's repo with possible filters
 //app.get('/:user/repos', reposController.getRepos) //get a list of user's repos
 //app.get('/:user', usersController.getUser); //get a user
+app.get('/auth', authController.gitHubLogin);
+app.get('/getAccessToken', authController.getAccessToken);
 //-------------------------------
 
 //app.use('/users', usersRouter);
