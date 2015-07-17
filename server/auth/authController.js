@@ -13,10 +13,12 @@ var gitHubLogin = function(req, res) {
     var body = JSON.parse(data);
     client_id = body.client_id;
     client_secret = body.client_secret;
-    var redirectUrl = 'http://127.0.0.1:3000/getAccessToken?repoFullName='+req.query.repoFullName;
+    var redirectUrl = 'http://localhost:3000/getAccessToken?repoFullName='+req.query.repoFullName;
     //TODO fix this horribleness, even worse cuz https doesn't work
     console.log('going to github/oauth/authorize');
-    res.redirect('https://github.com/login/oauth/authorize?client_id=' + client_id + '&redirect_uri=' + redirectUrl);
+    //res.redirect('https://github.com/login/oauth/authorize?client_id=' + client_id + '&redirect_uri=' + redirectUrl);
+    var githubOauthUrl = 'https://github.com/login/oauth/authorize?client_id=' + client_id + '&redirect_uri=' + redirectUrl;
+    res.json({msg: 'auth required', authUrl: githubOauthUrl});
   });
 };
 
@@ -27,8 +29,12 @@ var getAccessToken = function(req, res) {
   }, function(err, response, body){
     console.log('github body: ', body);
     var accessToken = body.slice(body.indexOf('=') + 1, body.indexOf('&'));
-    
-    res.redirect('/repos/' + req.query.repoFullName + '/commits?accessToken=' + accessToken);
+    console.log('got access token');
+    //res.send('got access token');
+    //res.json({commit: 'commits and such'});
+    res.json({msg: 'authed', accessToken: accessToken});
+    //res.redirect('#/repos/' + req.query.repoFullName + '/commits?accessToken=' + accessToken);
+    //res.redirect('/repos/' + req.query.repoFullName + '/commits?accessToken=' + accessToken);
   });
 };//, commitsController.getCommits);
 

@@ -1,4 +1,5 @@
 var React = require('react');
+var Navigation = require('react-router').Navigation;
 var $ = require('jquery');
 
 var Path = require('./path.react.jsx');
@@ -8,16 +9,30 @@ var Folder = require('./folder.react.jsx');
 var Playbar = require('./playbar.react.jsx');
 
 var Visualize = React.createClass({
+  mixins : [Navigation],
   getCommits: function () {
-    debugger;
-    var fullRepoName = this.props.params.repo;
-    $.ajax('/repos/'+fullRepoName+'/commits', {dataType: 'jsonp'}, function(commits) {
+    var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
+    //ideas: somehow intercept backend redirect
+    //backend: after logging in and getting data as json, make client ping again
+    $.get('repos/'+repoFullName+'/commits', function(commits) {
+      if (commits.msg === 'auth required') {
+        console.log('must go now to: ', commits.authUrl);
+        //this.transitionTo(commits.authUrl); //something like this, but it doesn't work
+        //.then $.get again, msg should be the json of commits (loop)
+        //redirect to /getAccessToken
+      }
+      debugger;
+      console.log(commits);
       this.setState({commits: commits});
-    }.bind(this));
+    }.bind(this), 'json').then(function(c) {
+      console.log('hi');
+      debugger;
+    });
+    debugger;
   },
 
   componentDidMount: function() {
-    this.getCommits(this.props.fullRepoName); //NUM/30 requests
+    this.getCommits();
   },
 
   updateCurrentCommit: function (index) {
@@ -33,6 +48,7 @@ var Visualize = React.createClass({
   },
 
   render: function () {
+    
     return <div>
       <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
       <Directory currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
