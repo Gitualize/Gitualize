@@ -101,11 +101,9 @@ var visitEachCommit = function(commits, options) {
     options.url = generalUrl + commit.sha;
     request(options, function(error, response, commit) {
       commit = JSON.parse(commit); //detailed commit info
-      console.log('sha: ', commit.sha, 'patch: ',commit.files.patch);
+      console.log('sha: ', commit.sha, 'patches: ', _.pluck(commit.files, 'patch')); //test
     });
     options.url = generalUrl; //reset
-    //visit each commit sha with github api
-    //collect the data
   });
 };
 var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, callback) {
