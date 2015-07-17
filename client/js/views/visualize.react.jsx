@@ -12,23 +12,17 @@ var Visualize = React.createClass({
   mixins : [Navigation],
   getCommits: function () {
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
-    //ideas: somehow intercept backend redirect
-    //backend: after logging in and getting data as json, make client ping again
-    $.get('repos/'+repoFullName+'/commits', function(commits) {
+    $.get('repos/'+repoFullName+'/commits', {accessToken: this.props.query.accessToken}, function(commits) {
       if (commits.msg === 'auth required') {
-        console.log('must go now to: ', commits.authUrl);
-        //this.transitionTo(commits.authUrl); //something like this, but it doesn't work
-        //.then $.get again, msg should be the json of commits (loop)
-        //redirect to /getAccessToken
+        debugger;
+        window.location = commits.authUrl; //transitionTo doesn't work for external urls
+        return;
       }
-      debugger;
-      console.log(commits);
+      console.log('commits: ', commits);
       this.setState({commits: commits});
     }.bind(this), 'json').then(function(c) {
       console.log('hi');
-      debugger;
     });
-    debugger;
   },
 
   componentDidMount: function() {
