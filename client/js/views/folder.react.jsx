@@ -10,15 +10,22 @@ var File = React.createClass({
 
 var Folder = React.createClass({
   render: function () {
-    console.log(this.props)
-    var allFiles = this.props.currentCommit.files.map(function (file) {
-      return <File>
-        {file.filename}
-      </File>
-    });
+    var context = this;
+    var allFiles = this.props.currentCommit.files.filter(function (file) {
+      var path = context.props.currentPath.join('/');
+      if (file.filename.slice(0, path.length) !== path) {
+        return false;
+      }
+      return true;
+      })
+      .map(function (file) {
+        return <File>
+          {file.filename}
+        </File>
+      });
+
     return <div>
       <h2>Folder view</h2>
-      iofdsaj
       <ul>
         {allFiles}
       </ul>

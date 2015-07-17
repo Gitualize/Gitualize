@@ -42,7 +42,7 @@ var Visualize = React.createClass({
   },
 
   getInitialState: function() {
-    return {commits: [], commitIndex: 0, currentCommit: fred, currentPath: ['aaa', 'bbb', 'ccc']};
+    return {commits: [], commitIndex: 0, currentCommit: fred, currentPath: ['client', 'app', 'auth']};
   },
 
   render: function () {
