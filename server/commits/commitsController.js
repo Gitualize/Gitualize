@@ -3,7 +3,10 @@ var Promise = require('bluebird');
 module.exports = {
   getCommits: function(req, res) {
     var accessToken = req.query.accessToken; //TODO use sessions to save this instead of pass around
-    console.log('get Commits accessToken: ', accessToken);
+    if (accessToken) {
+      console.log('get Commits accessToken: ', accessToken);
+      utils.setAccessToken(accessToken);
+    }
     var repoOwner = req.params.repoOwner;
     var repoName = req.params.repoName;
     var repoFullName = repoOwner + '/' + repoName;
@@ -15,7 +18,7 @@ module.exports = {
       //TODO oauth token here
       if (!accessToken) { //redjrect to /auth with original repo request info
         return res.redirect('/auth?repoFullName='+repoFullName); //whyy
-        res.end(); 
+        res.end();
         //next();
       }
       utils.getCommitsFromGithub(repoFullName, 100)

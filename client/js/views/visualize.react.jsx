@@ -12,17 +12,14 @@ var Visualize = React.createClass({
   mixins : [Navigation],
   getCommits: function () {
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
-    $.get('repos/'+repoFullName+'/commits', {accessToken: this.props.query.accessToken}, function(commits) {
+    $.getJSON('repos/'+repoFullName+'/commits', {accessToken: this.props.query.accessToken}, function(commits) {
       if (commits.msg === 'auth required') {
-        debugger;
         window.location = commits.authUrl; //transitionTo doesn't work for external urls
         return;
       }
       console.log('commits: ', commits);
       this.setState({commits: commits});
-    }.bind(this), 'json').then(function(c) {
-      console.log('hi');
-    });
+    }.bind(this));
   },
 
   componentDidMount: function() {
