@@ -28,15 +28,15 @@ var Visualize = React.createClass({
   },
 
   getInitialState: function() {
-    return {commits: [], currentCommit: 0, currentPath: '/'};
+    return {commits: [], currentCommit: 0, currentPath: ['aaa', 'bbb', 'ccc']};
   },
 
   render: function () {
     
     return <div>
-      <Path currentPath={this.state.currentPath} updateCurrentPath={this.state.updateCurrentPath}/>
-      <Directory currentPath={this.state.currentPath} updateCurrentPath={this.state.updateCurrentPath}/>
-      <Folder commits={this.state.commits} currentCommit={this.state.currentCommit} currentPath={this.state.currentPath} updateCurrentPath={this.state.updateCurrentPath}/>
+      <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+      <Directory currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+      <Folder commits={this.state.commits} currentCommit={this.state.currentCommit} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
       <Playbar numberOfCommits={this.state.commits.length} currentCommit={this.state.currentCommit} updateCurrentCommit={this.updateCurrentCommit}/>
     </div>
   }
