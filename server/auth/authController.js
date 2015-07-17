@@ -30,10 +30,11 @@ var getAccessToken = function(req, res) {
     console.log('github body: ', body);
     var accessToken = body.slice(body.indexOf('=') + 1, body.indexOf('&'));
     console.log('got access token');
-    //res.send('got access token');
-    //res.json({commit: 'commits and such'});
-    res.json({msg: 'authed', accessToken: accessToken});
-    //res.redirect('#/repos/' + req.query.repoFullName + '/commits?accessToken=' + accessToken);
+    //TODO horrible
+    res.json({msg: 'authed', accessToken: accessToken, msg2: 'please go to /#/repo/' + req.query.repoFullName + '?accessToken=' + accessToken});
+
+    //but also don't redirect on the server!!
+    //res.redirect('#/repo/' + req.query.repoFullName + '?accessToken=' + accessToken);
     //res.redirect('/repos/' + req.query.repoFullName + '/commits?accessToken=' + accessToken);
   });
 };//, commitsController.getCommits);
