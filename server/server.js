@@ -31,6 +31,7 @@ var server = app.listen(process.env.PORT || 3000, function(){
 
 //ROUTES-------------------------
 app.get('/repos/:repoOwner/:repoName/commits', commitsController.getCommits);
+app.get('/tree/:commitSha', treeController.getTree);
 //app.get('/repos/:repoOwner/:repoName', reposController.getRepo);
 //app.get('/:user/repos/:repo', reposController.getRepo); //get a user's repo with possible filters
 //app.get('/:user/repos', reposController.getRepos) //get a list of user's repos
