@@ -33,8 +33,55 @@ var Visualize = React.createClass({
     }.bind(this));
   },
 
+  addFile: function (filePath) {
+    var path = filePath.split('/');
+    var currentFolder = this.state.fileTree;
+    var folderMatch, folder;
+    while (path.length > 1) {
+      folderMatch = false;
+      for (folder in currentFolder) {
+        if (folder === path[0]) {
+          currentFolder = currentFolder[folder];
+          folderMatch = true;
+        }
+      }
+      if (!folderMatch) {
+        currentFolder[path[0]] = {isFolder: true};
+        currentFolder = currentFolder[path[0]];
+      }
+      path.shift();
+    }
+    currentFolder[path[0]] = {isFolder: false};
+  },
+
+  removeFile: function (filePath) {
+    var path = filePath.split('/');
+    var currentFolder = this.state.fileTree;
+    var folderMatch, folder;
+    while (path.length > 1) {
+      folderMatch = false;
+      for (folder in currentFolder) {
+        if (folder === path[0]) {
+          currentFolder = currentFolder[folder];
+          folderMatch = true;
+        }
+      }
+      if (!folderMatch) {
+        console.log('Folder not found');
+        return;
+      }
+      path.shift();
+    }
+    delete currentFolder[path[0]];
+  },
+
   componentDidMount: function() {
     this.getCommits();
+    var files = this.state.currentCommit.files;
+    for (var i = 0; i < files.length; i++) {
+      this.addFile(files[i].filename);
+    }
+    console.dir(this.state.fileTree);
   },
 
   updateCommitIndex: function (index) {
@@ -46,7 +93,7 @@ var Visualize = React.createClass({
   },
 
   getInitialState: function() {
-    return {commits: [], commitIndex: 0, currentCommit: fred, currentPath: ['client', 'app', 'auth']};
+    return {commits: [], commitIndex: 0, currentCommit: fred, currentPath: ['client', 'app', 'auth'], fileTree: {}};
   },
 
   render: function () {
@@ -61,7 +108,7 @@ var Visualize = React.createClass({
 
         <Row className='show-grid'>
           <Col xs={4} md={4}>
-            <Directory currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+            <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
           </Col>
           <Col xs={8} md={8}>
             <Folder currentCommit={this.state.currentCommit} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
