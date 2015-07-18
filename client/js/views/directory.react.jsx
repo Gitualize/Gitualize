@@ -1,13 +1,7 @@
 var ReactBootstrap = require('react-bootstrap');
 var React = require('react');
-var ProgressBar = ReactBootstrap.ProgressBar;
-var Tooltip = ReactBootstrap.Tooltip;
-var OverlayTrigger = ReactBootstrap.OverlayTrigger;
 var Button = ReactBootstrap.Button;
 var Glyphicon = ReactBootstrap.Glyphicon;
-var Grid = ReactBootstrap.Grid;
-var Row = ReactBootstrap.Row;
-var Col = ReactBootstrap.Col;
 var Well = ReactBootstrap.Well;
 
 var exampleDirectory = {
