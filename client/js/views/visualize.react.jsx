@@ -1,16 +1,17 @@
 var React = require('react');
 var Navigation = require('react-router').Navigation;
 var $ = require('jquery');
-
 var ReactBootstrap = require('react-bootstrap');
+var Grid = ReactBootstrap.Grid;
+var Row = ReactBootstrap.Row;
+var Col = ReactBootstrap.Col;
+
 var Path = require('./path.react.jsx');
 var Directory = require('./directory.react.jsx');
 var File = require('./file.react.jsx');
 var Folder = require('./folder.react.jsx');
 var Playbar = require('./playbar.react.jsx');
-var Grid = ReactBootstrap.Grid;
-var Row = ReactBootstrap.Row;
-var Col = ReactBootstrap.Col;
+var Tree = require('../fileTreeUtils');
 
 var Visualize = React.createClass({
   mixins : [Navigation],
@@ -40,45 +41,11 @@ var Visualize = React.createClass({
   },
 
   addFile: function (filePath) {
-    var path = filePath.split('/');
-    var currentFolder = this.state.fileTree;
-    var folderMatch, folder;
-    while (path.length > 1) {
-      folderMatch = false;
-      for (folder in currentFolder) {
-        if (folder === path[0]) {
-          currentFolder = currentFolder[folder];
-          folderMatch = true;
-        }
-      }
-      if (!folderMatch) {
-        currentFolder[path[0]] = {isFolder: true};
-        currentFolder = currentFolder[path[0]];
-      }
-      path.shift();
-    }
-    currentFolder[path[0]] = {isFolder: false};
+    return Tree.addFile(this.state.fileTree, filePath);
   },
 
   removeFile: function (filePath) {
-    var path = filePath.split('/');
-    var currentFolder = this.state.fileTree;
-    var folderMatch, folder;
-    while (path.length > 1) {
-      folderMatch = false;
-      for (folder in currentFolder) {
-        if (folder === path[0]) {
-          currentFolder = currentFolder[folder];
-          folderMatch = true;
-        }
-      }
-      if (!folderMatch) {
-        console.log('Folder not found');
-        return;
-      }
-      path.shift();
-    }
-    delete currentFolder[path[0]];
+    Tree.removeFile(this.state.fileTree, filePath);
   },
 
   componentDidMount: function() {
