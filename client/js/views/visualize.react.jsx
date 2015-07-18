@@ -612,5 +612,100 @@ var fred = {
   ]
 }
 
+var commitWithDelete = {
+  "sha": "a47fb452b1fb20ed61ff397cecf6f709ad6b2391",
+  "commit": {
+    "author": {
+      "name": "Devon Harvey",
+      "email": "devonharvey@gmail.com",
+      "date": "2015-07-18T19:04:24Z"
+    },
+    "committer": {
+      "name": "Devon Harvey",
+      "email": "devonharvey@gmail.com",
+      "date": "2015-07-18T19:04:24Z"
+    },
+    "message": "Merge pull request #139 from ardsouza/reactViews\n\n(fix) made path cleaner",
+    "tree": {
+      "sha": "acf5e47df2242951a39b4a27ce77584b46cbd480",
+      "url": "https://api.github.com/repos/IncognizantDoppelganger/gitpun/git/trees/acf5e47df2242951a39b4a27ce77584b46cbd480"
+    },
+    "url": "https://api.github.com/repos/IncognizantDoppelganger/gitpun/git/commits/a47fb452b1fb20ed61ff397cecf6f709ad6b2391",
+    "comment_count": 0
+  },
+  "url": "https://api.github.com/repos/IncognizantDoppelganger/gitpun/commits/a47fb452b1fb20ed61ff397cecf6f709ad6b2391",
+  "html_url": "https://github.com/IncognizantDoppelganger/gitpun/commit/a47fb452b1fb20ed61ff397cecf6f709ad6b2391",
+  "comments_url": "https://api.github.com/repos/IncognizantDoppelganger/gitpun/commits/a47fb452b1fb20ed61ff397cecf6f709ad6b2391/comments",
+  "author": {
+    "login": "devonharvey",
+    "id": 9685632,
+    "avatar_url": "https://avatars.githubusercontent.com/u/9685632?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/devonharvey",
+    "html_url": "https://github.com/devonharvey",
+    "followers_url": "https://api.github.com/users/devonharvey/followers",
+    "following_url": "https://api.github.com/users/devonharvey/following{/other_user}",
+    "gists_url": "https://api.github.com/users/devonharvey/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/devonharvey/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/devonharvey/subscriptions",
+    "organizations_url": "https://api.github.com/users/devonharvey/orgs",
+    "repos_url": "https://api.github.com/users/devonharvey/repos",
+    "events_url": "https://api.github.com/users/devonharvey/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/devonharvey/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "devonharvey",
+    "id": 9685632,
+    "avatar_url": "https://avatars.githubusercontent.com/u/9685632?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/devonharvey",
+    "html_url": "https://github.com/devonharvey",
+    "followers_url": "https://api.github.com/users/devonharvey/followers",
+    "following_url": "https://api.github.com/users/devonharvey/following{/other_user}",
+    "gists_url": "https://api.github.com/users/devonharvey/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/devonharvey/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/devonharvey/subscriptions",
+    "organizations_url": "https://api.github.com/users/devonharvey/orgs",
+    "repos_url": "https://api.github.com/users/devonharvey/repos",
+    "events_url": "https://api.github.com/users/devonharvey/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/devonharvey/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "7a7d2e8e69766f15d360a200ad4dfe845fdfbe8c",
+      "url": "https://api.github.com/repos/IncognizantDoppelganger/gitpun/commits/7a7d2e8e69766f15d360a200ad4dfe845fdfbe8c",
+      "html_url": "https://github.com/IncognizantDoppelganger/gitpun/commit/7a7d2e8e69766f15d360a200ad4dfe845fdfbe8c"
+    },
+    {
+      "sha": "84dceb34186d241eaded31ab41302e2181f91439",
+      "url": "https://api.github.com/repos/IncognizantDoppelganger/gitpun/commits/84dceb34186d241eaded31ab41302e2181f91439",
+      "html_url": "https://github.com/IncognizantDoppelganger/gitpun/commit/84dceb34186d241eaded31ab41302e2181f91439"
+    }
+  ],
+  "stats": {
+    "total": 3,
+    "additions": 1,
+    "deletions": 2
+  },
+  "files": [
+    {
+      "sha": "000ba5b55b2e76a8c80fc5459c79f2a2efbe1382",
+      "filename": "client/js/views/path.react.jsx",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 2,
+      "changes": 3,
+      "blob_url": "https://github.com/IncognizantDoppelganger/gitpun/blob/a47fb452b1fb20ed61ff397cecf6f709ad6b2391/client/js/views/path.react.jsx",
+      "raw_url": "https://github.com/IncognizantDoppelganger/gitpun/raw/a47fb452b1fb20ed61ff397cecf6f709ad6b2391/client/js/views/path.react.jsx",
+      "contents_url": "https://api.github.com/repos/IncognizantDoppelganger/gitpun/contents/client/js/views/path.react.jsx?ref=a47fb452b1fb20ed61ff397cecf6f709ad6b2391",
+      "patch": "@@ -11,16 +11,15 @@ var Path = React.createClass({\n     var fullPath = this.props.currentPath.map(function(folder, index) {\n       return (\n           <span>\n+            <Button bsSize=\"xsmall\" bsStyle=\"link\" onClick={this.handleClick.bind(this,index-1)}>/</Button>\n             <Button bsSize=\"xsmall\" bsStyle=\"link\" onClick={this.handleClick.bind(this,index)}>\n               {folder}\n             </Button>\n-            <Button bsSize=\"xsmall\" bsStyle=\"link\">/</Button>\n           </span>\n         )\n     }.bind(this));\n     return (\n         <div>Path: \n-          <Button bsSize=\"xsmall\" bsStyle=\"link\" onClick={this.handleClick.bind(this,-1)}>/</Button>\n           {fullPath}\n         </div>\n       )"
+    }
+  ]
+}
+
 module.exports = Visualize;
 
