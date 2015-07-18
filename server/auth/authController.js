@@ -79,4 +79,3 @@ var gitHubLogin = function(req, res, callback) {
 
 module.exports = {gitHubLogin: gitHubLogin, passport: passport};
 
-
