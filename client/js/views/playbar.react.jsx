@@ -70,6 +70,7 @@ var Playbar = React.createClass({
     var now = this.state.now + 1;
     this.setState( {now} );
     if (now % 10 === 0) {
+      this.props.updateCommitIndex(this.props.commitIndex + 1);
       if (now % (commitLength*10) === 0) this.end();
       this.time.add(1);
       var date = this.time.toString();
