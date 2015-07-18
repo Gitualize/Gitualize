@@ -8,7 +8,8 @@ var morgan = require('morgan'), // used for logging incoming request
   commitsController = require('./commits/commitsController'),
   authController = require('./auth/authController.js'),
   request = require('request'),
-  fs = require('fs');
+  fs = require('fs'),
+  passport = require('./auth/authController').passport;
 
 var app = express();
 
@@ -29,14 +30,38 @@ var server = app.listen(process.env.PORT || 3000, function(){
   console.log('listening to port: ' + 3000);
 });
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 //ROUTES-------------------------
-app.get('/repos/:repoOwner/:repoName/commits', commitsController.getCommits);
+app.get('/getAccessToken',
+  passport.authenticate('github', { failureRedirect: '/pageNotFound' }),
+  function(req, res){
+    repoFullName = req.query.repoFullName;
+    console.log(repoFullName);
+    res.redirect('/');
+  }
+);
+
+app.get('/repos/:repoOwner/:repoName/commits',
+  function(req, res, next) {
+    // console.log(req.session);
+
+    authController.gitHubLogin(req, res, next);
+    // req.session.redirect = req.query.redirect
+    // next();
+  },
+  passport.authenticate('github', function(req, res){})
+);
+
+//commitsController.getCommits);
 //app.get('/repos/:repoOwner/:repoName', reposController.getRepo);
 //app.get('/:user/repos/:repo', reposController.getRepo); //get a user's repo with possible filters
 //app.get('/:user/repos', reposController.getRepos) //get a list of user's repos
 //app.get('/:user', usersController.getUser); //get a user
-app.get('/auth', authController.gitHubLogin);
-app.get('/getAccessToken', authController.getAccessToken);
+
+// app.get('/auth', authController.gitHubLogin);
+// app.get('/getAccessToken', authController.getAccessToken);
 //-------------------------------
 
 //app.use('/users', usersRouter);
