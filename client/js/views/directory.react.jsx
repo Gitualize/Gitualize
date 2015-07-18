@@ -4,27 +4,13 @@ var Button = ReactBootstrap.Button;
 var Glyphicon = ReactBootstrap.Glyphicon;
 var Well = ReactBootstrap.Well;
 
-var exampleDirectory = {
-  aaa: {
-    bbb: {
-      ccc: 'aaabbbccc',
-      ddd: 'aaabbbddd'
-    },
-    eee: {
-      fff: 'aaaeeefff',
-      ggg: 'aaaeeeggg'
-    },
-    hhh: 'aaahhh'
-  },
-  iii: 'iii',
-  jjj: 'jjj'
-}
-
 var Directory = React.createClass({
   map: function(obj, callback) {
-    var array = []
+    var array = [];
     for (var key in obj) {
-      array.push(callback(obj[key], key))
+      if (key !== 'isFolder') {
+        array.push(callback(obj[key], key));
+      }
     }
     return array;
   },
@@ -33,22 +19,22 @@ var Directory = React.createClass({
     var style = {
       paddingLeft: (depth*10) + 'px'
     }
-    return this.map(obj,function(value, index) {
-      if (typeof value === 'object') {
+    return this.map(obj,function(value, key) {
+      if (value.isFolder) {
         return (
           <div>
-            <div style={style}><Glyphicon glyph="folder-open" /><Button bsSize="xsmall" bsStyle="link">{index}</Button></div>
-            <div>{ this.buildDirectory(value, depth+1) }</div>
+            <div style={style}><Glyphicon glyph="folder-open" /><Button bsSize="xsmall" bsStyle="link">{key}</Button></div>
+            <div>{this.buildDirectory(value, depth+1) }</div>
           </div>
         )
       } else {
-        return <div style={style}><Glyphicon glyph="file" /><Button bsSize="xsmall" bsStyle="link">{index}</Button></div>
+        return <div style={style}><Glyphicon glyph="file" /><Button bsSize="xsmall" bsStyle="link">{key}</Button></div>
       }
     }.bind(this));
   },
 
   render: function () {
-    var path = this.buildDirectory(exampleDirectory, 0);
+    var path = this.buildDirectory(this.props.fileTree, 0);
 
     return (
         <Well bsSize='small'>{ path }</Well>
