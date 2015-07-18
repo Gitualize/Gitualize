@@ -17,8 +17,9 @@ module.exports = {
       //commits not in db, go to github
       //TODO oauth token here
       if (!accessToken) { //redjrect to /auth with original repo request info
-        return res.redirect('/auth?repoFullName='+repoFullName); //whyy
-        res.end();
+        return res.json({msg: 'auth required', authUrl: '/auth?repoFullName='+repoFullName});
+        //return res.redirect('/auth?repoFullName='+repoFullName); //don't let server redirect, client should
+        //res.end();
         //next();
       }
       utils.getCommitsFromGithub(repoFullName, 100)
