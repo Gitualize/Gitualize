@@ -15,12 +15,18 @@ var Col = ReactBootstrap.Col;
 var Visualize = React.createClass({
   mixins : [Navigation],
   getCommits: function () {
+    //console.log('accessToken now: ', this.props.query.accessToken);
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
-    $.getJSON('repos/'+repoFullName+'/commits', {accessToken: this.props.query.accessToken}, function(commits) {
+    $.getJSON('repos/'+repoFullName+'/commits', {accessToken: this.props.query.accessToken})
+   .success(function(commits) {
       if (commits.msg === 'auth required') {
         window.location = commits.authUrl; //transitionTo doesn't work for external urls
-        return;
       }
+      //if (commits.msg === 'accessToken required') {
+        //$.getJSON(commits.authUrl
+        //window.location = commits.authUrl; //transitionTo doesn't work for external urls
+        //return;
+      //}
       this.setState({commits: commits});
     }.bind(this));
   },
