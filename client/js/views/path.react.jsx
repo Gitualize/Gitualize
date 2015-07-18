@@ -20,7 +20,7 @@ var Path = React.createClass({
     }.bind(this));
     return (
         <div>Path: 
-          <Button bsSize="xsmall" bsStyle="link" onClick={function () {context.handleClick(-1)}}>/</Button>
+          <Button bsSize="xsmall" bsStyle="link" onClick={this.handleClick.bind(this,-1)}>/</Button>
           {fullPath}
         </div>
       )
