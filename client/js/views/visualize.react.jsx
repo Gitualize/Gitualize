@@ -33,6 +33,15 @@ var Visualize = React.createClass({
     }.bind(this));
   },
 
+  addFile: function (filePath) {
+    var path = filePath.split('/');
+
+  },
+
+  removeFile: function (filePath) {
+    var path = filePath.split('/');
+  },
+
   componentDidMount: function() {
     this.getCommits();
   },
@@ -46,7 +55,7 @@ var Visualize = React.createClass({
   },
 
   getInitialState: function() {
-    return {commits: [], commitIndex: 0, currentCommit: fred, currentPath: ['client', 'app', 'auth']};
+    return {commits: [], commitIndex: 0, currentCommit: fred, currentPath: ['client', 'app', 'auth'], fileTree: []};
   },
 
   render: function () {
