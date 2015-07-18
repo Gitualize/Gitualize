@@ -35,9 +35,8 @@ var Visualize = React.createClass({
 
   addFile: function (filePath) {
     var path = filePath.split('/');
-    var currentFolder = fileTree;
+    var currentFolder = this.state.fileTree;
     var folderMatch, folder;
-    var fileTree = this.state.fileTree;
     while (path.length > 1) {
       folderMatch = false;
       for (folder in currentFolder) {
@@ -57,9 +56,8 @@ var Visualize = React.createClass({
 
   removeFile: function (filePath) {
     var path = filePath.split('/');
-    var currentFolder = fileTree;
+    var currentFolder = this.state.fileTree;
     var folderMatch, folder;
-    var fileTree = this.state.fileTree;
     while (path.length > 1) {
       folderMatch = false;
       for (folder in currentFolder) {
@@ -79,6 +77,11 @@ var Visualize = React.createClass({
 
   componentDidMount: function() {
     this.getCommits();
+    var files = this.state.currentCommit.files;
+    for (var i = 0; i < files.length; i++) {
+      this.addFile(files[i].filename);
+    }
+    console.dir(this.state.fileTree);
   },
 
   updateCommitIndex: function (index) {
@@ -90,7 +93,7 @@ var Visualize = React.createClass({
   },
 
   getInitialState: function() {
-    return {commits: [], commitIndex: 0, currentCommit: fred, currentPath: ['client', 'app', 'auth'], fileTree: []};
+    return {commits: [], commitIndex: 0, currentCommit: fred, currentPath: ['client', 'app', 'auth'], fileTree: {}};
   },
 
   render: function () {
@@ -105,7 +108,7 @@ var Visualize = React.createClass({
 
         <Row className='show-grid'>
           <Col xs={4} md={4}>
-            <Directory currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+            <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
           </Col>
           <Col xs={8} md={8}>
             <Folder currentCommit={this.state.currentCommit} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
