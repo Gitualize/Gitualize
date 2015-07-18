@@ -11,8 +11,11 @@ var File = React.createClass({
 var Folder = React.createClass({
   render: function () {
     var context = this;
-    var allFiles = this.props.currentCommit.files.filter(function (file) {
+    var allFiles = this.props.currentCommit.files && this.props.currentCommit.files.filter(function (file) {
       var path = context.props.currentPath.join('/');
+      if (path === '') {
+        return true;
+      }
       if (file.filename.slice(0, path.length) !== path) {
         return false;
       }

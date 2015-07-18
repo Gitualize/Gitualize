@@ -12,7 +12,9 @@ var Path = React.createClass({
         {folder}
       </button>
     }.bind(this));
-    return <div>Path: {fullPath}
+    return <div>Path: 
+      <button onClick={function () {context.handleClick(-1)}}> / </button>
+      {fullPath}
     </div>
   }
 });
