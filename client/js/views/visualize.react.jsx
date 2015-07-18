@@ -2,11 +2,15 @@ var React = require('react');
 var Navigation = require('react-router').Navigation;
 var $ = require('jquery');
 
+var ReactBootstrap = require('react-bootstrap');
 var Path = require('./path.react.jsx');
 var Directory = require('./directory.react.jsx');
 var File = require('./file.react.jsx');
 var Folder = require('./folder.react.jsx');
 var Playbar = require('./playbar.react.jsx');
+var Grid = ReactBootstrap.Grid;
+var Row = ReactBootstrap.Row;
+var Col = ReactBootstrap.Col;
 
 var Visualize = React.createClass({
   mixins : [Navigation],
@@ -47,13 +51,31 @@ var Visualize = React.createClass({
 
   render: function () {
     
-    return <div>
-      <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-      <Directory currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-      <Folder currentCommit={this.state.currentCommit} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-      {this.state.commits}
-      <Playbar numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
-    </div>
+    return (
+      <Grid>
+        <Row className='show-grid'>
+          <Col xs={12} md={12}>
+            <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+          </Col>
+        </Row>
+
+        <Row className='show-grid'>
+          <Col xs={4} md={4}>
+            <Directory currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+          </Col>
+          <Col xs={8} md={8}>
+            <Folder currentCommit={this.state.currentCommit} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+            {this.state.commits}
+          </Col>
+        </Row>
+
+        <Row className='show-grid'>
+          <Col xs={12} md={12}>
+            <Playbar numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
+          </Col>
+        </Row>
+      </Grid>
+    )
   }
 });
 
