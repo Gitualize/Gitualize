@@ -1,6 +1,6 @@
 var React = require('react');
 
-var Commit = React.createClass({
+var File = React.createClass({
   render: function () {
     return <li>
       {this.props.children}
@@ -9,23 +9,28 @@ var Commit = React.createClass({
 });
 
 var Folder = React.createClass({
-  getFiles: function() {
-  },
-
-  getInitialState: function() {
-    return {files: []};
-  },
-  
   render: function () {
-    var commits = this.props.commits.map(function(commit) {
-      return <Commit>
-        {commit}
-      </Commit>
-    });
+    var context = this;
+    var allFiles = this.props.currentCommit.files && this.props.currentCommit.files.filter(function (file) {
+      var path = context.props.currentPath.join('/');
+      if (path === '') {
+        return true;
+      }
+      if (file.filename.slice(0, path.length) !== path) {
+        return false;
+      }
+      return true;
+      })
+      .map(function (file) {
+        return <File>
+          {file.filename}
+        </File>
+      });
+
     return <div>
       <h2>Folder view</h2>
       <ul>
-        {commits[this.props.currentCommit]}
+        {allFiles}
       </ul>
     </div>
   }
