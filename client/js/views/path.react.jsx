@@ -11,16 +11,15 @@ var Path = React.createClass({
     var fullPath = this.props.currentPath.map(function(folder, index) {
       return (
           <span>
+            <Button bsSize="xsmall" bsStyle="link" onClick={this.handleClick.bind(this,index-1)}>/</Button>
             <Button bsSize="xsmall" bsStyle="link" onClick={this.handleClick.bind(this,index)}>
               {folder}
             </Button>
-            <Button bsSize="xsmall" bsStyle="link">/</Button>
           </span>
         )
     }.bind(this));
     return (
         <div>Path: 
-          <Button bsSize="xsmall" bsStyle="link" onClick={this.handleClick.bind(this,-1)}>/</Button>
           {fullPath}
         </div>
       )
