@@ -51,6 +51,7 @@ var Visualize = React.createClass({
       <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
       <Directory currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
       <Folder currentCommit={this.state.currentCommit} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+      {this.state.commits}
       <Playbar numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
     </div>
   }
