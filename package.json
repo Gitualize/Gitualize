@@ -55,6 +55,7 @@
     "jshint-stylish": "^2.0.1",
     "jwt-simple": "^0.3.0",
     "passport": "^0.2.2",
-    "passport-github": "^0.1.5"
+    "passport-github": "^0.1.5",
+    "request-promise": "^0.4.2"
   }
 }
