@@ -8,11 +8,10 @@ var Path = React.createClass({
   },
 
   render: function () {
-    var context = this;
     var fullPath = this.props.currentPath.map(function(folder, index) {
       return (
           <span>
-            <Button bsSize="xsmall" bsStyle="link" onClick={function () {context.handleClick(index)}}>
+            <Button bsSize="xsmall" bsStyle="link" onClick={this.handleClick.bind(this,index)}>
               {folder}
             </Button>
             <Button bsSize="xsmall" bsStyle="link">/</Button>
