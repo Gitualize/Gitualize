@@ -87,7 +87,6 @@ var Visualize = React.createClass({
     for (var i = 0; i < files.length; i++) {
       this.addFile(files[i].filename);
     }
-    console.dir(this.state.fileTree);
   },
 
   updateCommitIndex: function (index) {
