@@ -28,7 +28,7 @@ var getAccessToken = function(req, res) { //redirects back to our client page
   request.post({
     url: 'https://github.com/login/oauth/access_token?client_id=' + client_id +'&client_secret=' + client_secret + '&code=' + code
   }, function(err, response, body){
-    console.log('github body: ', body);
+    // console.log('github body: ', body);
     var accessToken = body.slice(body.indexOf('=') + 1, body.indexOf('&'));
     console.log('got access token');
     //TODO horrible

@@ -53,6 +53,7 @@
     "gulp-watch": "^4.2.4",
     "jasmine": "^2.3.1",
     "jshint": "^2.8.0",
-    "jshint-stylish": "^2.0.1"
+    "jshint-stylish": "^2.0.1",
+    "mock-browser": "^0.90.33"
   }
 }
