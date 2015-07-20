@@ -1,9 +1,14 @@
 var utils = require('./commitsUtils');
+//var authUtils = require('./auth/authUtils');
 var Promise = require('bluebird');
 module.exports = {
   getCommits: function(req, res) {
     var accessToken = req.query.accessToken; //TODO use sessions to save this instead of pass around
-    console.log('get Commits accessToken: ', accessToken);
+    if (accessToken) {
+      console.log('get Commits accessToken: ', accessToken);
+      //authUtils.setAccessToken(accessToken); //TODO so every controllr has access (like trees)
+      utils.setAccessToken(accessToken);
+    }
     var repoOwner = req.params.repoOwner;
     var repoName = req.params.repoName;
     var repoFullName = repoOwner + '/' + repoName;
@@ -14,11 +19,13 @@ module.exports = {
       //commits not in db, go to github
       //TODO oauth token here
       if (!accessToken) { //redjrect to /auth with original repo request info
-        return res.redirect('/auth?repoFullName='+repoFullName); //whyy
-        res.end(); 
+        return res.json({msg: 'auth required', authUrl: '/auth?repoFullName='+repoFullName});
+        //return res.redirect('/auth?repoFullName='+repoFullName); //don't let server redirect, client should
+        //res.end();
         //next();
       }
-      utils.getCommitsFromGithub(repoFullName, 100)
+      //100 is the max # of things we can pull at a time
+      utils.getCommitsFromGithub(repoFullName)
       .then(function(commits) {
         console.log('got commits from github'); //, commits);
         res.json(commits);

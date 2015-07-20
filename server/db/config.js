@@ -1,14 +1,15 @@
+var connection = process.env.IS_DOCKER_CONTAINER ? {
+  host: process.env.DB_PORT_5432_TCP_ADDR,
+  user: 'docker',
+  password: 'docker',
+  database: 'docker',
+  charset: 'utf8'
+} : 'postgres://127.0.0.1:5432/gitpun';
+
 var knex = require('knex')({
   client: 'pg',
-  connection: 'postgres://127.0.0.1:5432/gitpun' || {
-      host: process.env.DB_PORT_5432_TCP_ADDR,
-      user: 'docker',
-      password: 'docker',
-      database: 'docker',
-      charset: 'utf8'
-    }
+  connection: connection
 });
-
 
 var bookshelf = require('bookshelf')(knex);
 bookshelf.plugin('registry');
@@ -38,10 +39,10 @@ bookshelf.knex.schema.hasTable('user').then(function(exists) {
             bookshelf.knex.schema.hasTable('commit').then(function (exists) {
               if (!exists) {
                 bookshelf.knex.schema.createTable('commit', function (commit) {
-                  commit.increments('id').primary();
+                  commit.increments('id').primary(); //TODO specify storage bytes
                   commit.string('sha', 255).unique();
-                  commit.text('diff', 20000); //JSON diff/patch
-                  commit.text('files', 5000); //files changed. json array of urls
+                  //commit.text('diff', 20000); //JSON diff/patch
+                  commit.text('files', 20000); //files changed. json obj containing urls and patches
                   commit.integer('repo_id').notNullable().references('repo.id');
                   commit.string('committer').notNullable(); //.references('user')
                   commit.string('date');

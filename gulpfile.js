@@ -34,7 +34,7 @@ gulp.task('min', function(){
 });
 
 gulp.task('test', function(){
-  gulp.src(['./spec/unit/backend.js', './spec/unit/frontend.js'])
+  gulp.src(['./spec/unit/backend.js', './spec/unit/frontend.js', './spec/integration/backend.js'])
   .pipe(jasmine());
 });
 
@@ -45,7 +45,7 @@ gulp.task('browserify', function() {
     debug: true, // Gives us sourcemapping
     cache: {}, packageCache: {}, fullPaths: true // Requirement of watchify
   });
-  var watcher  = watchify(bundler);
+  var watcher = watchify(bundler);
 
   return watcher
   .on('update', function () { // When any files update
