@@ -3,14 +3,14 @@ var request = require('request');
 var fs = require('fs');
 
 var accessToken;
-(function getAccessToken() {
-  if (accessToken) return;
-  fs.readFile('client/secret.json', function(err, data) {
-    data = JSON.parse(data.toString());
-    //console.log('data: ', data);
-    accessToken = data.github_token;
-  });
-})();
+// (function getAccessToken() {
+//   if (accessToken) return;
+//   fs.readFile('client/secret.json', function(err, data) {
+//     data = JSON.parse(data.toString());
+//     //console.log('data: ', data);
+//     accessToken = data.github_token;
+//   });
+// })();
 module.exports = {
   getRepo: function(req, res) {
     var user = req.params.repoOwner;
