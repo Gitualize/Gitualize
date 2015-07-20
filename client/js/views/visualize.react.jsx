@@ -15,11 +15,25 @@ var Tree = require('../fileTreeUtils');
 
 var Visualize = React.createClass({
   mixins : [Navigation],
-  getCommits: function () {
+  getInitialTree: function () {
+    var firstSha = this.state.commits[this.state.commits.length-1].sha;
+    var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
+    $.getJSON('repos/'+repoFullName+'/trees/'+firstSha, {accessToken: this.props.query.accessToken})
+    .success(function(tree) {
+      if (tree.msg === 'truncated') { //shouldn't happen much
+        this.transitionTo('/');
+        return console.log('Tree is too big, please try another repo.');
+      }
+      console.log('initial tree: ', tree);
+      this.setState({initialTree: tree});
+    }.bind(this));
+    //var tree = $.getJSON('tree/'+firstSha,{accessToken: this.props.query.accessToken});
+  },
+  getCommitsThenInitialTree: function () {
     //console.log('accessToken now: ', this.props.query.accessToken);
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
     $.getJSON('repos/'+repoFullName+'/commits', {accessToken: this.props.query.accessToken})
-   .success(function(commits) {
+    .success(function(commits) {
       if (commits.msg === 'auth required') {
         window.location = commits.authUrl; //transitionTo doesn't work for external urls
       }
@@ -29,15 +43,17 @@ var Visualize = React.createClass({
         //return;
       //}
       this.setState({commits: commits});
+      this.getInitialTree();
     }.bind(this));
   },
 
   getCurrentCommit: function () {
     var repoFullName = this.props.params.repoName + '/' + this.props.params.repoOwner;
-    var sha = this.state.commits[this.state.commitIndex].sha;
-    $.getJSON('/repos/' + fullRepoName + '/commits/' + sha, function(commit) {
-      this.setState({currentCommit: commit});
-    }.bind(this));
+    //var sha = this.state.commits[this.state.commitIndex].sha;
+    this.setState({currentCommit: this.state.commits[this.state.commitIndex]});
+    //$.getJSON('/repos/' + fullRepoName + '/commits/' + sha, function(commit) {
+      //this.setState({currentCommit: commit});
+    //}.bind(this));
   },
 
   addFile: function (filePath) {
@@ -49,7 +65,7 @@ var Visualize = React.createClass({
   },
 
   componentDidMount: function() {
-    this.getCommits();
+    this.getCommitsThenInitialTree();
     var files = this.state.currentCommit.files;
     for (var i = 0; i < files.length; i++) {
       this.addFile(files[i].filename);
@@ -73,23 +89,23 @@ var Visualize = React.createClass({
     return (
       <Grid>
         <Row className='show-grid'>
-          <Col xs={12} md={12}>
+          <Col xs=12 md=12>
             <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
           </Col>
         </Row>
 
         <Row className='show-grid'>
-          <Col xs={4} md={4}>
+          <Col xs=4 md=4>
             <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
           </Col>
-          <Col xs={8} md={8}>
+          <Col xs=8 md=8>
             <Folder currentCommit={this.state.currentCommit} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
             {this.state.commits}
           </Col>
         </Row>
 
         <Row className='show-grid'>
-          <Col xs={12} md={12}>
+          <Col xs=12 md=12>
             <Playbar numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
           </Col>
         </Row>
@@ -576,7 +592,7 @@ var fred = {
       "patch": "@@ -0,0 +1,48 @@\n+describe('ShortenController', function () {\n+  var $scope, $rootScope, $location, createController, $httpBackend, Links;\n+\n+  // using angular mocks, we can inject the injector\n+  // to retrieve our dependencies\n+  beforeEach(module('shortly'));\n+  beforeEach(inject(function($injector) {\n+\n+    // mock out our dependencies\n+    $rootScope = $injector.get('$rootScope');\n+    $httpBackend = $injector.get('$httpBackend');\n+    Links = $injector.get('Links');\n+    $location = $injector.get('$location');\n+\n+    $scope = $rootScope.$new();\n+\n+    var $controller = $injector.get('$controller');\n+\n+    createController = function () {\n+      return $controller('ShortenController', {\n+        $scope: $scope,\n+        Links: Links,\n+        $location: $location\n+      });\n+    };\n+\n+    createController();\n+  }));\n+\n+  afterEach(function() {\n+    $httpBackend.verifyNoOutstandingExpectation();\n+    $httpBackend.verifyNoOutstandingRequest();\n+  });\n+\n+  it('should have a link property on the $scope', function() {\n+    expect($scope.link).to.be.an('object');\n+  });\n+\n+  it('should have a addLink method on the $scope', function () {\n+    expect($scope.addLink).to.be.a('function');\n+  });\n+\n+  it('should be able to create new links with addLink()', function () {\n+    $httpBackend.expectPOST(\"/api/links\").respond(201, '');\n+    $scope.addLink();\n+    $httpBackend.flush();\n+  });\n+});"
     }
   ]
-}
+};
 
 var commitWithDelete = {
   "sha": "a47fb452b1fb20ed61ff397cecf6f709ad6b2391",
@@ -671,7 +687,7 @@ var commitWithDelete = {
       "patch": "@@ -11,16 +11,15 @@ var Path = React.createClass({\n     var fullPath = this.props.currentPath.map(function(folder, index) {\n       return (\n           <span>\n+            <Button bsSize=\"xsmall\" bsStyle=\"link\" onClick={this.handleClick.bind(this,index-1)}>/</Button>\n             <Button bsSize=\"xsmall\" bsStyle=\"link\" onClick={this.handleClick.bind(this,index)}>\n               {folder}\n             </Button>\n-            <Button bsSize=\"xsmall\" bsStyle=\"link\">/</Button>\n           </span>\n         )\n     }.bind(this));\n     return (\n         <div>Path: \n-          <Button bsSize=\"xsmall\" bsStyle=\"link\" onClick={this.handleClick.bind(this,-1)}>/</Button>\n           {fullPath}\n         </div>\n       )"
     }
   ]
-}
+};
 
 module.exports = Visualize;
 
