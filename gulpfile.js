@@ -38,6 +38,15 @@ gulp.task('test', function(){
   .pipe(jasmine());
 });
 
+gulp.task('browserifyWatchless', function(){
+  var b = browserify();
+  b.transform(reactify); // use the reactify transform
+  b.add('./client/js/app.js');
+  return b.bundle()
+    .pipe(source('./client/js/app.js'))
+    .pipe(gulp.dest('./client/build'));
+});
+
 gulp.task('browserify', function() {
   var bundler = browserify({
     entries: ['./client/js/app.js'],
