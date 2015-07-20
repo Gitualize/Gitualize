@@ -77,7 +77,7 @@ var Visualize = React.createClass({
   },
 
   updateCurrentPath: function (path) {
-    if (typeof path === 'string') path = path.split('/');
+    if (typeof path === 'string') path = path.split('/')
     this.setState({currentPath: path});
   },
 
@@ -99,7 +99,7 @@ var Visualize = React.createClass({
     else {
       return (
           <Col xs={9} md={9}>
-            <File key={current.raw_url} currentCommit={this.state.currentCommit} currentPath={this.state.currentPath}/>
+            <File key={this.state.currentPath} currentCommit={this.state.currentCommit} currentPath={this.state.currentPath}/>
           </Col>
         )
     }
