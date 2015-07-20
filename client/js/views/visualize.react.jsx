@@ -15,11 +15,21 @@ var Tree = require('../fileTreeUtils');
 
 var Visualize = React.createClass({
   mixins : [Navigation],
-  getCommits: function () {
+  getInitialTree: function () {
+    var firstSha = this.state.commits[this.state.commits.length-1].sha;
+    var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
+    $.getJSON('repos/'+repoFullName+'/trees/'+firstSha, {accessToken: this.props.query.accessToken})
+    .success(function(tree) {
+      console.log('initial tree: ', tree);
+      this.setState({initialTree: tree});
+    });
+    //var tree = $.getJSON('tree/'+firstSha,{accessToken: this.props.query.accessToken});
+  },
+  getCommitsThenInitialTree: function () {
     //console.log('accessToken now: ', this.props.query.accessToken);
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
     $.getJSON('repos/'+repoFullName+'/commits', {accessToken: this.props.query.accessToken})
-   .success(function(commits) {
+    .success(function(commits) {
       if (commits.msg === 'auth required') {
         window.location = commits.authUrl; //transitionTo doesn't work for external urls
       }
@@ -29,15 +39,17 @@ var Visualize = React.createClass({
         //return;
       //}
       this.setState({commits: commits});
+      this.getInitialTree();
     }.bind(this));
   },
 
   getCurrentCommit: function () {
     var repoFullName = this.props.params.repoName + '/' + this.props.params.repoOwner;
-    var sha = this.state.commits[this.state.commitIndex].sha;
-    $.getJSON('/repos/' + fullRepoName + '/commits/' + sha, function(commit) {
-      this.setState({currentCommit: commit});
-    }.bind(this));
+    //var sha = this.state.commits[this.state.commitIndex].sha;
+    this.setState({currentCommit: this.state.commits[this.state.commitIndex]});
+    //$.getJSON('/repos/' + fullRepoName + '/commits/' + sha, function(commit) {
+      //this.setState({currentCommit: commit});
+    //}.bind(this));
   },
 
   addFile: function (filePath) {
@@ -49,7 +61,7 @@ var Visualize = React.createClass({
   },
 
   componentDidMount: function() {
-    this.getCommits();
+    this.getCommitsThenInitialTree();
     var files = this.state.currentCommit.files;
     for (var i = 0; i < files.length; i++) {
       this.addFile(files[i].filename);

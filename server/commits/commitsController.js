@@ -1,10 +1,12 @@
 var utils = require('./commitsUtils');
+//var authUtils = require('./auth/authUtils');
 var Promise = require('bluebird');
 module.exports = {
   getCommits: function(req, res) {
     var accessToken = req.query.accessToken; //TODO use sessions to save this instead of pass around
     if (accessToken) {
       console.log('get Commits accessToken: ', accessToken);
+      //authUtils.setAccessToken(accessToken); //TODO so every controllr has access (like trees)
       utils.setAccessToken(accessToken);
     }
     var repoOwner = req.params.repoOwner;
