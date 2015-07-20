@@ -6,6 +6,7 @@ var morgan = require('morgan'), // used for logging incoming request
   db = require('./db/config'),
   reposController = require('./repos/reposController'),
   commitsController = require('./commits/commitsController'),
+  treeController = require('./tree/treeController'),
   authController = require('./auth/authController.js'),
   request = require('request'),
   fs = require('fs');
@@ -31,6 +32,7 @@ var server = app.listen(process.env.PORT || 3000, function(){
 
 //ROUTES-------------------------
 app.get('/repos/:repoOwner/:repoName/commits', commitsController.getCommits);
+app.get('/repos/:repoOwner/:repoName/trees/:commitSha', treeController.getTree);
 //app.get('/repos/:repoOwner/:repoName', reposController.getRepo);
 //app.get('/:user/repos/:repo', reposController.getRepo); //get a user's repo with possible filters
 //app.get('/:user/repos', reposController.getRepos) //get a list of user's repos

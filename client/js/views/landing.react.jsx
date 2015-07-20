@@ -1,8 +1,8 @@
-var ReactBootstrap = require('react-bootstrap');
 var React = require('react');
+var Navigation = require('react-router').Navigation;
+var ReactBootstrap = require('react-bootstrap');
 var Input = ReactBootstrap.Input;
 var ButtonInput = ReactBootstrap.ButtonInput;
-var Navigation = require('react-router').Navigation;
 
 var Landing = React.createClass({
   mixins : [Navigation],

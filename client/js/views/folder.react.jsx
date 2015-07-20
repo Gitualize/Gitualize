@@ -1,7 +1,6 @@
 var React = require('react');
-var $ = require('jquery');
 
-var Commit = React.createClass({
+var File = React.createClass({
   render: function () {
     return <li>
       {this.props.children}
@@ -10,38 +9,28 @@ var Commit = React.createClass({
 });
 
 var Folder = React.createClass({
-  getCommits: function(fullRepoName) {
-    $.getJSON('/repos/'+fullRepoName+'/commits', function(commits) {
-      this.setState({commits: commits});
-    }.bind(this));
-  },
-
-  //getLastCommitTime: function(commits) { //helper
-    //return commits.length > 0 && commits[commits.length-1].commit.committer.date;
-  //},
-
-  getFiles: function() {
-  },
-
-  componentDidMount: function() {
-    this.getCommits(this.props.fullRepoName); //NUM/30 requests
-  },
-
-  getInitialState: function() {
-    return {commits: [], files: []};
-  },
-  
   render: function () {
-    var commits = this.state.commits.map(function(commit) {
-      return <Commit>
-        {commit}
-      </Commit>
-    });
+    var context = this;
+    var allFiles = this.props.currentCommit.files && this.props.currentCommit.files.filter(function (file) {
+      var path = context.props.currentPath.join('/');
+      if (path === '') {
+        return true;
+      }
+      if (file.filename.slice(0, path.length) !== path) {
+        return false;
+      }
+      return true;
+      })
+      .map(function (file) {
+        return <File>
+          {file.filename}
+        </File>
+      });
+
     return <div>
       <h2>Folder view</h2>
-      {this.props.fullRepoName}
       <ul>
-        {commits[this.props.currentCommit]}
+        {allFiles}
       </ul>
     </div>
   }
