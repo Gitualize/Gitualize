@@ -20,26 +20,69 @@ var currentFileCommit = {
 
 var File = React.createClass({
   getInitialState: function() {
-    setTimeout(this.getFileContent, 10);
     return {
-      data : ''
+      html : ''
     };
   },
 
-  getFileContent: function() {
-    $.get(currentFileCommit.raw_url, function(data) {
-      this.setState( {data} );
+  componentDidMount: function() {
+    var path = this.props.currentPath.join('/');
+    this.path = path;
+    var url = '';
+    var data = '';
+    for (var i = 0; i < this.props.currentCommit.files.length; i++) {
+      if (this.props.currentCommit.files[i].filename === path) {
+        url = this.props.currentCommit.files[i].raw_url.split('/');
+        url[2] = 'cdn.rawgit.com';
+        url.splice(5,1);
+        url = url.join('/');
+        this.setState ( {url} );
+        break;
+      }
+    }
+    $.get(url, function(success) {
+      data = success;
+      this.setState ( {html: this.codeOr(data, url, path)})
+    }.bind(this))
+    .fail(function(error) {
+      data = error.responseText;
+      this.setState ( {html: this.codeOr(data, url, path)})
     }.bind(this))
   },
 
-  render: function () {
-    var style = {
-      wordWrap: 'break-word; white-space; pre-wrap'
+  codeOr: function(data, url, path) {
+    var fileType = path.split('.').pop();
+    if (fileType === 'png' || fileType === 'gif' || fileType === 'jpg' || fileType === 'jpeg') {
+      return (
+          <Well bsSize='small'>
+            <img src={url}/>
+          </Well>
+        )
+    } else  {
+      var style = {
+        wordWrap: 'break-word; white-space; pre-wrap'
+      }
+      if (fileType !== 'json') {
+        return (
+          <pre style={style}>
+            {data}
+          </pre>
+        )
+      } else {
+        return (
+          <pre style={style}>
+            {JSON.stringify(data)}
+          </pre>
+        )
+      }
     }
+  },
+
+  render: function () {
     return (
-        <pre style={style}>
-          {this.state.data}
-        </pre>
+        <div>
+          {this.state.html}
+        </div>
       )
   }
 });
