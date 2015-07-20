@@ -77,14 +77,35 @@ var Visualize = React.createClass({
   },
 
   updateCurrentPath: function (path) {
-    this.setState({currentPath: path});
+    this.setState({currentPath: path.split('/')});
   },
 
   getInitialState: function() {
-    return {commits: [], commitIndex: 0, currentCommit: fred, currentPath: ['client', 'app', 'auth'], fileTree: {}};
+    return {commits: [], commitIndex: 0, currentCommit: fred, currentPath: [], fileTree: {}};
+  },
+
+  fileOrFolder: function() {
+    var current = this.state.fileTree;
+    for (var i = 0; i < this.state.currentPath.length; i++) current = current[this.state.currentPath[i]];
+    if (current.isFolder) {
+      return (
+          <Col xs={9} md={9}>
+            <Folder currentCommit={this.state.currentCommit} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+            {this.state.commits}
+          </Col>
+        )
+    }
+    else {
+      return (
+          <Col xs={9} md={9}>
+            <File key={this.state.currentPath} currentCommit={this.state.currentCommit} currentPath={this.state.currentPath}/>
+          </Col>
+        )
+    }
   },
 
   render: function () {
+    var maindisplay = this.fileOrFolder();
     
     return (
       <Grid>
@@ -95,13 +116,10 @@ var Visualize = React.createClass({
         </Row>
 
         <Row className='show-grid'>
-          <Col xs=4 md=4>
+          <Col xs={3} md={3}>
             <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
           </Col>
-          <Col xs=8 md=8>
-            <Folder currentCommit={this.state.currentCommit} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-            {this.state.commits}
-          </Col>
+          {maindisplay}
         </Row>
 
         <Row className='show-grid'>
