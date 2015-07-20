@@ -77,7 +77,8 @@ var Visualize = React.createClass({
   },
 
   updateCurrentPath: function (path) {
-    this.setState({currentPath: path.split('/')});
+    if (typeof path === 'string') path = path.split('/')
+    this.setState({currentPath: path});
   },
 
   getInitialState: function() {
@@ -110,7 +111,7 @@ var Visualize = React.createClass({
     return (
       <Grid>
         <Row className='show-grid'>
-          <Col xs=12 md=12>
+          <Col xs={12} md={12}>
             <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
           </Col>
         </Row>
@@ -123,7 +124,7 @@ var Visualize = React.createClass({
         </Row>
 
         <Row className='show-grid'>
-          <Col xs=12 md=12>
+          <Col xs={12} md={12}>
             <Playbar numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
           </Col>
         </Row>
