@@ -46,11 +46,13 @@ describe('test db', function(){
 
 });
 
+
 describe('Repo model', function(){
 
   it('should have Repo defined', function(){
     expect(Repo).toBeDefined();
   });
+
 
   var r = new Repo();
   it('should be a model class', function(){
@@ -73,10 +75,10 @@ describe('Repo model', function(){
 
   it('should add a model to the database', function(done){
 
-    new Repo({name: 'test'}).save().then(function(repo) {
+    new Repo({fullName: 'test'}).save().then(function(repo) {
       var attr = repo.attributes;
 
-      expect(attr.name).toBe('test');
+      expect(attr.fullName).toBe('test');
 
       repo.destroy();
       done();
@@ -85,6 +87,7 @@ describe('Repo model', function(){
   });
   
 });
+
 
 describe('Commit model', function(){
 
@@ -113,19 +116,30 @@ describe('Commit model', function(){
   
   it('should add a model to the database', function(done){
 
-    new Commit({sha: 1234, user: 'test'}).save().then(function(commit) {
-      var attr = commit.attributes;
+    // create a repo for a foreign key
+    new Repo({fullName: 'test'}).save().then(function(repo){
 
-      expect(attr.sha).toBe(1234);
-      expect(attr.user).toBe('test');
+      var repoId = repo.attributes.id;
 
-      commit.destroy();
-      done();
+      new Commit({sha: 1234, committer: 'test', repo_id: repoId}).save().then(function(commit) {
+        var attr = commit.attributes;
+
+        expect(attr.sha).toBe(1234);
+        expect(attr.committer).toBe('test');
+
+        commit.destroy();
+        repo.destroy();
+
+        done();
+      });
+
     });
+
     
   });
 
 });
+
 
 describe('User model', function(){
 
@@ -167,6 +181,7 @@ describe('User model', function(){
 
 });
 
+
 describe('Repos Collection', function(){
   // var rs = Repos.forge([{name1: 'terry'},{name2: 'terrance'}])
 
@@ -177,6 +192,7 @@ describe('Repos Collection', function(){
 
 });
 
+
 describe('Commits Collection', function(){
 
   it('should have Commits defined', function(){
@@ -186,6 +202,7 @@ describe('Commits Collection', function(){
 
 });
 
+
 describe('Users Collection', function(){
 
   it('should have Users defined', function(){
@@ -194,6 +211,7 @@ describe('Users Collection', function(){
   });
 
 });
+
 
 describe('Server', function(){
   // console.log(server.server.address());
