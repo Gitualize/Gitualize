@@ -18,6 +18,8 @@ var getInitialTreeFromGithub = Promise.promisify(function(commitSha, repoFullNam
     if (error) return callback(error, null);
     var tree = JSON.parse(body);
     callback(null, tree);
+  });
+});
 
 module.exports = {
   setAccessToken: setAccessToken,
