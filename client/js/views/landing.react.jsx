@@ -6,12 +6,7 @@ var ButtonInput = ReactBootstrap.ButtonInput;
 
 var Landing = React.createClass({
   mixins : [Navigation],
-  componentDidMount: function() {
-    if (access_token) return; //set the access token here so folder view has it
-    $.getJSON('/secret.json', function(data) { //need some kind of angular factory
-      access_token = access_token || data.github_token;
-    });
-  },
+  
   handleSubmit: function(e) {
     console.log('submitted');
     e.preventDefault();
