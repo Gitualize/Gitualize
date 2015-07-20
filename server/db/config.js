@@ -1,14 +1,15 @@
+var connection = process.env.IS_DOCKER_CONTAINER ? {
+  host: process.env.DB_PORT_5432_TCP_ADDR,
+  user: 'docker',
+  password: 'docker',
+  database: 'docker',
+  charset: 'utf8'
+} : 'postgres://127.0.0.1:5432/gitpun';
+
 var knex = require('knex')({
   client: 'pg',
-  connection: 'postgres://127.0.0.1:5432/gitpun' || {
-      host: process.env.DB_PORT_5432_TCP_ADDR,
-      user: 'docker',
-      password: 'docker',
-      database: 'docker',
-      charset: 'utf8'
-    }
+  connection: connection
 });
-
 
 var bookshelf = require('bookshelf')(knex);
 bookshelf.plugin('registry');
