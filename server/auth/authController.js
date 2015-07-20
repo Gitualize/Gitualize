@@ -3,7 +3,7 @@ var request = require('request');
 
 var client_id; //client key
 var client_secret; //client secret
-
+var base_URL = process.env.PRODUCTION ? 'http://gitualize.com' : 'http://localhost:3000';
 
 var gitHubLogin = function(req, res) { //redirects to github login
   console.log('auth controller login');
@@ -13,7 +13,7 @@ var gitHubLogin = function(req, res) { //redirects to github login
     var body = JSON.parse(data);
     client_id = body.client_id;
     client_secret = body.client_secret;
-    var redirectUrl = 'http://localhost:3000/getAccessToken?repoFullName='+req.query.repoFullName;
+    var redirectUrl = base_URL + '/getAccessToken?repoFullName='+req.query.repoFullName;
     //TODO fix this horribleness, even worse cuz https doesn't work
     console.log('going to github/oauth/authorize');
     res.redirect('https://github.com/login/oauth/authorize?client_id=' + client_id + '&redirect_uri=' + redirectUrl);
@@ -37,7 +37,7 @@ var getAccessToken = function(req, res) { //redirects back to our client page
 
     //but also don't redirect on the server!!
    //res.redirect('http://google.com');
-   res.redirect('http://localhost:3000/#/repo/' + req.query.repoFullName + '?accessToken=' + accessToken);
+   res.redirect(base_URL + '/#/repo/' + req.query.repoFullName + '?accessToken=' + accessToken);
     //res.redirect('/repos/' + req.query.repoFullName + '/commits?accessToken=' + accessToken);
   });
 };//, commitsController.getCommits);
