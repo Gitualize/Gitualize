@@ -114,10 +114,10 @@ var visitEachCommit = function(shas, options) { //visit each commit, update comm
   //console.log('pomirses: ', commitsDetailed);
   return Promise.all(commitsDetailed);
 };
-var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, callback) {
+var getCommitsFromGithub = Promise.promisify(function(repoFullName, callback) {
   console.log('trying to go to github');
   //var localLastCommitTime = Date.now(), pulledLastCommitTime, githubCommits = [];
-  var options = { url: 'https://api.github.com/repos/' + repoFullName + '/commits', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken, per_page: maxCommits} };
+  var options = { url: 'https://api.github.com/repos/' + repoFullName + '/commits', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken, per_page: 100} };
   //page param also avail for pagination
   request(options, function(error, response, commitsOverview) { //TODO promisify
     if (error) return callback(error, null);
