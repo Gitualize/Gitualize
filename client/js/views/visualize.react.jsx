@@ -77,7 +77,8 @@ var Visualize = React.createClass({
   },
 
   updateCurrentPath: function (path) {
-    this.setState({currentPath: path.split('/')});
+    if (typeof path === 'string') path = path.split('/');
+    this.setState({currentPath: path});
   },
 
   getInitialState: function() {
