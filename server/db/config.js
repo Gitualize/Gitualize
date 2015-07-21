@@ -40,11 +40,13 @@ bookshelf.knex.schema.hasTable('user').then(function(exists) {
               if (!exists) {
                 bookshelf.knex.schema.createTable('commit', function (commit) {
                   commit.increments('id').primary(); //TODO specify storage bytes
-                  commit.string('sha', 255).unique();
+                  commit.string('sha', 50).unique();
                   commit.text('files', 20000); //files changed. json obj containing urls and patches
                   commit.integer('repo_id').notNullable().references('repo.id');
-                  commit.string('committer').notNullable(); //.references('user')
-                  commit.string('date');
+                  commit.text('committer').notNullable(); //.references('user')
+                  commit.string('avatarUrl', 60);
+                  commit.text('message', 200); //truncate if too long
+                  commit.string('date', 20);
                   commit.timestamps();
                 }).then(function (table) {
                   console.log('Created table: commit');

@@ -25,7 +25,7 @@ module.exports = {
         //next();
       }
       //100 is the max # of things we can pull at a time
-      utils.getCommitsFromGithub(repoFullName)
+      utils.getCommitsFromGithub(repoFullName, 500)
       .then(function(commits) {
         console.log('got commits from github'); //, commits);
         res.json(commits);
