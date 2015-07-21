@@ -11,6 +11,7 @@ var Directory = require('./directory.react.jsx');
 var File = require('./file.react.jsx');
 var Folder = require('./folder.react.jsx');
 var Playbar = require('./playbar.react.jsx');
+var CommitInfo = require('./commit_info.react.jsx');
 var Tree = require('../fileTreeUtils');
 
 var Visualize = React.createClass({
@@ -133,6 +134,11 @@ var Visualize = React.createClass({
           <Row className='show-grid'>
             <Col xs={12} md={12}>
               <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
+            </Col>
+          </Row>
+          <Row className='show-grid'>
+            <Col xs={12} md={12}>
+              <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
             </Col>
           </Row>
         </Grid>
