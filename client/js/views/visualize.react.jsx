@@ -92,7 +92,7 @@ var Visualize = React.createClass({
       if (this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder) {
         return (
             <Col xs={9} md={9}>
-              <File key={this.state.currentPath} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath}/>
+              <File key={this.state.currentPath} currentCommit={this.state.commits[this.state.commitIndex]} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
             </Col>
           )
       }
