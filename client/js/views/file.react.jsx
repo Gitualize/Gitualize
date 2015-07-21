@@ -4,6 +4,7 @@ var Button = ReactBootstrap.Button;
 var Glyphicon = ReactBootstrap.Glyphicon;
 var Well = ReactBootstrap.Well;
 var $ = require('jquery');
+var jsDiff = require('diff');
 
 //var currentFileCommit = {
   //"sha": "000ba5b55b2e76a8c80fc5459c79f2a2efbe1382",
@@ -53,12 +54,41 @@ var File = React.createClass({
 
     $.get(url, function(success) {
       data = success;
-      this.setState ( {html: this.codeOr(data, url)})
+      if (this.props.filePaths[this.props.currentPath].commitIndex === this.props.currentIndex && !!this.props.filePaths[this.props.currentPath].last_url) {
+        this.secondaryMount(data,url);
+      } else {
+        this.setState ( {html: this.codeOr(data, url)} )
+      }
     }.bind(this))
     .fail(function(error) {
       data = error.responseText;
-      this.setState ( {html: this.codeOr(data, url)})
+      if (this.props.filePaths[this.props.currentPath].commitIndex === this.props.currentIndex && !!this.props.filePaths[this.props.currentPath].last_url) {
+        this.secondaryMount(data,url);
+      } else {
+        this.setState ( {html: this.codeOr(data, url)} )
+      }
     }.bind(this))
+  },
+
+  secondaryMount: function(data, url) {
+    var previousUrl = this.props.filePaths[this.props.currentPath].last_url.split('/');
+    previousUrl[2] = 'cdn.rawgit.com';
+    previousUrl.splice(5,1);
+    previousUrl = previousUrl.join('/');
+    var previousData = '';
+    $.get(previousUrl, function(previousSuccess) {
+      previousData = previousSuccess;
+      this.diff(data,previousData,url);
+    }.bind(this))
+    .fail(function(previousError) {
+      previousData = previousError.responseText;
+      this.diff(data,previousData,url);
+    }.bind(this))
+  },
+
+  diff: function(data, pdata, url) {
+    var diff = jsDiff.diffWords(pdata, data);
+    this.setState ( {html: this.codeOr(diff, url)} );
   },
 
   codeOr: function(data, url) {
@@ -74,17 +104,40 @@ var File = React.createClass({
         wordWrap: 'break-word; white-space; pre-wrap'
       }
       if (fileType !== 'json') {
-        return (
-          <pre style={style}>
-            {data}
-          </pre>
-        )
+        if (typeof data === 'string') {
+          return (
+              <pre style={style}>
+                {data}
+              </pre>
+            )
+        } else {
+          return (
+              <pre style={style}>
+                {data.map(function(part) {
+                  var colorStyle = {
+                    color : part.added ? 'green' : part.removed ? 'red' : 'grey'
+                  }
+                  return (
+                      <span style={colorStyle}>{part.value}</span>
+                    )
+                })}
+              </pre>
+            )
+        }
       } else {
-        return (
-          <pre style={style}>
-            {JSON.stringify(data)}
-          </pre>
-        )
+        if (typeof data === 'string') {
+          return (
+              <pre style={style}>
+                {JSON.stringify(data)}
+              </pre>
+            )
+        } else {
+          return (
+              <pre style={style}>
+                {JSON.stringify(data)}
+              </pre>
+            )
+        }
       }
     }
   },
