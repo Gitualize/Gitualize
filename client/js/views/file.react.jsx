@@ -26,36 +26,43 @@ var File = React.createClass({
   },
 
   componentDidMount: function() {
-    var path = this.props.currentPath;
-    this.path = path;
-    var url = '';
-    var data = '';
-    var files = [];
-    if (this.props.currentCommit && this.props.currentCommit.files) {
-      var files = JSON.parse(this.props.currentCommit.files);
-    }
-    for (var i = 0; i < files.length; i++) {
-      if (files[i].filename === path) {
-        url = files[i].raw_url.split('/');
-        url[2] = 'cdn.rawgit.com';
-        url.splice(5,1);
-        url = url.join('/');
-        this.setState ( {url} );
-        break;
-      }
-    }
+    // var path = this.props.currentPath;
+    // this.path = path;
+    // var url = '';
+    // var data = '';
+    // var files = [];
+    // if (this.props.currentCommit && this.props.currentCommit.files) {
+    //   var files = JSON.parse(this.props.currentCommit.files);
+    // }
+    // for (var i = 0; i < files.length; i++) {
+    //   if (files[i].filename === path) {
+    //     url = files[i].raw_url.split('/');
+    //     url[2] = 'cdn.rawgit.com';
+    //     url.splice(5,1);
+    //     url = url.join('/');
+    //     this.setState ( {url} );
+    //     break;
+    //   }
+    // }
+
+    var url = this.props.filePaths[this.props.currentPath].raw_url.split('/');
+    url[2] = 'cdn.rawgit.com';
+    url.splice(5,1);
+    url = url.join('/');
+    this.setState ( {url} );
+
     $.get(url, function(success) {
       data = success;
-      this.setState ( {html: this.codeOr(data, url, path)})
+      this.setState ( {html: this.codeOr(data, url)})
     }.bind(this))
     .fail(function(error) {
       data = error.responseText;
-      this.setState ( {html: this.codeOr(data, url, path)})
+      this.setState ( {html: this.codeOr(data, url)})
     }.bind(this))
   },
 
-  codeOr: function(data, url, path) {
-    var fileType = path.split('.').pop();
+  codeOr: function(data, url) {
+    var fileType = this.props.currentPath.split('.').pop();
     if (fileType === 'png' || fileType === 'gif' || fileType === 'jpg' || fileType === 'jpeg') {
       return (
           <Well bsSize='small'>
