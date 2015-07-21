@@ -47,15 +47,6 @@ var Visualize = React.createClass({
     }.bind(this));
   },
 
-  getCurrentCommit: function () {
-    var repoFullName = this.props.params.repoName + '/' + this.props.params.repoOwner;
-    //var sha = this.state.commits[this.state.commitIndex].sha;
-    this.setState({currentCommit: this.state.commits[this.state.commitIndex]});
-    //$.getJSON('/repos/' + fullRepoName + '/commits/' + sha, function(commit) {
-      //this.setState({currentCommit: commit});
-    //}.bind(this));
-  },
-
   addFile: function (filePath) {
     return Tree.addFile(this.state.fileTree, filePath);
   },
