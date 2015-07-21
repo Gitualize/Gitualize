@@ -43,6 +43,7 @@ var Visualize = React.createClass({
         //return;
       //}
       this.setState({commits: commits});
+      this.updateFiles;
     }.bind(this));
   },
 
@@ -63,6 +64,7 @@ var Visualize = React.createClass({
         this.removeFile(files[i].filename);
       } else {
         console.log('modified: ', files[i].filename);
+        this.addFile(files[i].filename);
       }
     }
   },
@@ -130,7 +132,7 @@ var Visualize = React.createClass({
 
           <Row className='show-grid'>
             <Col xs={12} md={12}>
-              <Playbar numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
+              <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
             </Col>
           </Row>
         </Grid>
