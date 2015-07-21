@@ -40,10 +40,6 @@ var removeFile = function (tree, filePath) {
   delete currentFolder[path[0]];
 };
 
-var getFiles = function(currentDir){
-  return ;
-};
-
 var getFileIcon = function(fileName){
   var images = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'svg'];
   var idx = fileName.lastIndexOf('.');
@@ -57,5 +53,4 @@ var getFileIcon = function(fileName){
 
 module.exports.addFile = addFile;
 module.exports.removeFile = removeFile;
-module.exports.getFiles = getFiles;
 module.exports.getFileIcon = getFileIcon;
