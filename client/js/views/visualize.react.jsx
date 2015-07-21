@@ -55,6 +55,10 @@ var Visualize = React.createClass({
     Tree.removeFile(this.state.fileTree, filePath);
   },
 
+  updateFiles: function () {
+
+  },
+
   componentDidMount: function() {
     this.getCommitsThenInitialTree();
     var files = this.state.currentCommit.files;
