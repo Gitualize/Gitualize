@@ -30,9 +30,13 @@ var File = React.createClass({
     this.path = path;
     var url = '';
     var data = '';
-    for (var i = 0; i < this.props.currentCommit.files.length; i++) {
-      if (this.props.currentCommit.files[i].filename === path) {
-        url = this.props.currentCommit.files[i].raw_url.split('/');
+    var files = [];
+    if (this.props.currentCommit && this.props.currentCommit.files) {
+      var files = JSON.parse(this.props.currentCommit.files);
+    }
+    for (var i = 0; i < files.length; i++) {
+      if (files[i].filename === path) {
+        url = files[i].raw_url.split('/');
         url[2] = 'cdn.rawgit.com';
         url.splice(5,1);
         url = url.join('/');
