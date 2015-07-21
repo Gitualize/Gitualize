@@ -2,6 +2,7 @@ var React = require('react');
 var ReactBootstrap = require('react-bootstrap');
 var Glyphicon = ReactBootstrap.Glyphicon;
 var Button = ReactBootstrap.Button;
+var Tree = require('../fileTreeUtils');
 
 var File = React.createClass({
   listStyle: {
@@ -36,16 +37,6 @@ var File = React.createClass({
 });
 
 var Folder = React.createClass({
-  getFileIcon: function(fileName){
-    var images = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'svg'];
-    var idx = fileName.lastIndexOf('.');
-    if(idx > -1) {
-      var format = (fileName.substring(idx + 1)).toLowerCase();
-      return images.indexOf(format) > -1? 'picture' : 'file';
-    } else {
-      return 'folder-close';
-    }
-  },
   render: function () {
     var context = this;
     var showFolders = {};
@@ -69,7 +60,6 @@ var Folder = React.createClass({
     }
 
     console.log(current)
-
     var allFiles = this.props.currentCommit.files && JSON.parse(this.props.currentCommit.files).filter(function (file) {
 
       var path = context.props.currentPath;
@@ -87,11 +77,13 @@ var Folder = React.createClass({
         return true;
       }
 
+      // console.log(filename);
+
       if (path === '') {
         return true;
       }
 
-      if (file.filename.slice(0, path.length) !== path) {
+      if (filename.slice(0, path.length) !== path) {
         return false;
       }
 
@@ -111,7 +103,7 @@ var Folder = React.createClass({
     allFiles = allFiles.map(function (file) {
       var fileName = file.filename;
 
-      return <File icon={context.getFileIcon(fileName)}>
+      return <File icon={Tree.getFileIcon(fileName)}>
         {fileName.slice(fileName.lastIndexOf('/') + 1)}
       </File>
     });
