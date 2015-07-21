@@ -99,7 +99,7 @@ var Visualize = React.createClass({
       else {
         return (
             <Col xs={9} md={9}>
-              <Folder currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+              <Folder fileTree={this.state.fileTree} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
             </Col>
           )
       }
