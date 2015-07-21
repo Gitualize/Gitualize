@@ -39,7 +39,7 @@ var File = React.createClass({
 var Folder = React.createClass({
   render: function () {
     var context = this;
-    var showFolders = {};
+    var showFiles = {};
     var showFiles = {};
     var fileTree = this.props.fileTree;
     var pathArray = this.props.currentPath.split('/');
@@ -50,57 +50,37 @@ var Folder = React.createClass({
     }
 
     for(var key in current) {
-      if(current[key].isFolder) {
-        showFolders[key] = {filename: key};
-      }
-
-      if(current[key].showFile) {
-
+      if(current[key].hasOwnProperty('isFolder')) {
+        showFiles[key] = {filename: key};
       }
     }
 
     console.log(current)
-    var allFiles = this.props.currentCommit.files && JSON.parse(this.props.currentCommit.files).filter(function (file) {
 
-      var path = context.props.currentPath;
-      var filename = file.filename;
+    // var allFiles = this.props.currentCommit.files && JSON.parse(this.props.currentCommit.files).filter(function (file) {
+      // var path = context.props.currentPath;
+      // var filename = file.filename;
       // var pathArray = context.props.currentPath;
       // var filePath = filename.split('/');
       // var path = pathArray.join('/');
       // var currentDir = pathArray[pathArray.length-1];
       // var prev = filePath[filePath.length-2]
 
-      // console.log(path, filePath);
-      console.log(filename)
-
-      if(filename in current) {
-        return true;
-      }
-
-      // console.log(filename);
-
-      if (path === '') {
-        return true;
-      }
-
-      if (filename.slice(0, path.length) !== path) {
-        return false;
-      }
-
-      // if(filePath[filePath.length-3] === currentDir) {
-      //   showFolders[prev] = {filename: prev}
-      //   return false;
-      // } else if (filePath[filePath.length-2] === currentDir) {
+      // if(filename in current) {
       //   return true;
       // }
 
-    });
+      // if (path === '') {
+      //   return true;
+      // }
 
-    // add showFolders to array of files
-    allFiles = Object.keys(showFolders).map(function(x){return showFolders[x]}).concat(allFiles)
+      // if (filename.slice(0, path.length) !== path) {
+      //   return false;
+      // }
+    // });
 
-    // change to react elements
-    allFiles = allFiles.map(function (file) {
+    showFiles = Object.keys(showFiles).map(function(x){return showFiles[x]});
+    showFiles = showFiles.map(function (file) {
       var fileName = file.filename;
 
       return <File icon={Tree.getFileIcon(fileName)}>
@@ -111,7 +91,7 @@ var Folder = React.createClass({
     return <div>
       <h2>Folder view</h2>
       <ul>
-        {allFiles}
+        {showFiles}
       </ul>
     </div>
   }
