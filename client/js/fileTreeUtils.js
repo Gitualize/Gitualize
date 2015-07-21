@@ -41,7 +41,6 @@ var removeFile = function (tree, filePath) {
 };
 
 var getFiles = function(currentDir){
-  
   return ;
 };
 
@@ -58,3 +57,5 @@ var getFileIcon = function(fileName){
 
 module.exports.addFile = addFile;
 module.exports.removeFile = removeFile;
+module.exports.getFiles = getFiles;
+module.exports.getFileIcon = getFileIcon;
