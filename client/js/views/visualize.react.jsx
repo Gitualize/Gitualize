@@ -97,7 +97,6 @@ var Visualize = React.createClass({
       return (
           <Col xs={9} md={9}>
             <Folder currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-            {this.state.commits}
           </Col>
         )
     }
