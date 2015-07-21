@@ -40,7 +40,6 @@ var Folder = React.createClass({
   render: function () {
     var context = this;
     var showFiles = {};
-    var showFiles = {};
     var fileTree = this.props.fileTree;
     var pathArray = this.props.currentPath.split('/');
     var current = fileTree;
@@ -65,15 +64,12 @@ var Folder = React.createClass({
       // var path = pathArray.join('/');
       // var currentDir = pathArray[pathArray.length-1];
       // var prev = filePath[filePath.length-2]
-
       // if(filename in current) {
       //   return true;
       // }
-
       // if (path === '') {
       //   return true;
       // }
-
       // if (filename.slice(0, path.length) !== path) {
       //   return false;
       // }
