@@ -58,20 +58,19 @@ var Visualize = React.createClass({
   updateFiles: function () {
     var files = JSON.parse(this.state.commits[this.state.commitIndex].files);
     for (var i = 0; i < files.length; i++) {
-      console.log(files[i]);
       if (files[i].status === 'added') {
-        console.log('added: ', files[i].filename)
+        this.addFile(files[i].filename);
       } else if (files[i].status === 'deleted') {
-        console.log('deleted: ', files[i].filename)
+        this.removeFile(files[i].filename);
       } else {
-        console.log('modified: ', files[i].filename)
+        console.log('modified: ', files[i].filename);
       }
     }
   },
 
   componentDidMount: function() {
     this.getCommitsThenInitialTree();
-    var files = this.state.currentCommit.files;
+    var files = JSON.parse(this.state.commits[this.state.commitIndex].files);
     for (var i = 0; i < files.length; i++) {
       this.addFile(files[i].filename);
     }
@@ -88,7 +87,7 @@ var Visualize = React.createClass({
   },
 
   getInitialState: function() {
-    return {commits: [], commitIndex: 0, currentCommit: fred, currentPath: [], fileTree: {}};
+    return {commits: [], commitIndex: 0, currentPath: [], fileTree: {}};
   },
 
   fileOrFolder: function() {
@@ -97,7 +96,7 @@ var Visualize = React.createClass({
     if (current.isFolder) {
       return (
           <Col xs={9} md={9}>
-            <Folder currentCommit={this.state.currentCommit} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+            <Folder currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
             {this.state.commits}
           </Col>
         )
@@ -105,7 +104,7 @@ var Visualize = React.createClass({
     else {
       return (
           <Col xs={9} md={9}>
-            <File key={this.state.currentPath} currentCommit={this.state.currentCommit} currentPath={this.state.currentPath}/>
+            <File key={this.state.currentPath} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath}/>
           </Col>
         )
     }
