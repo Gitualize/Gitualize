@@ -15,21 +15,7 @@ var Tree = require('../fileTreeUtils');
 
 var Visualize = React.createClass({
   mixins : [Navigation],
-  getInitialTree: function () {
-    var firstSha = this.state.commits[this.state.commits.length-1].sha;
-    var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
-    $.getJSON('repos/'+repoFullName+'/trees/'+firstSha, {accessToken: this.props.query.accessToken})
-    .success(function(tree) {
-      if (tree.msg === 'truncated') { //shouldn't happen much
-        this.transitionTo('/');
-        return console.log('Tree is too big, please try another repo.');
-      }
-      console.log('initial tree: ', tree);
-      this.setState({initialTree: tree});
-    }.bind(this));
-    //var tree = $.getJSON('tree/'+firstSha,{accessToken: this.props.query.accessToken});
-  },
-  getCommitsThenInitialTree: function () {
+  getCommits: function () {
     //console.log('accessToken now: ', this.props.query.accessToken);
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
     $.getJSON('repos/'+repoFullName+'/commits', {accessToken: this.props.query.accessToken})
@@ -37,13 +23,8 @@ var Visualize = React.createClass({
       if (commits.msg === 'auth required') {
         window.location = commits.authUrl; //transitionTo doesn't work for external urls
       }
-      //if (commits.msg === 'accessToken required') {
-        //$.getJSON(commits.authUrl
-        //window.location = commits.authUrl; //transitionTo doesn't work for external urls
-        //return;
-      //}
       this.setState({commits: commits});
-      this.updateFiles;
+      this.updateFiles();
     }.bind(this));
   },
 
@@ -70,7 +51,7 @@ var Visualize = React.createClass({
   },
 
   componentDidMount: function() {
-    this.getCommitsThenInitialTree();
+    this.getCommits();
     //add all the files, but after getCommits finishes
     // var files = JSON.parse(this.state.commits[this.state.commitIndex].files);
     // for (var i = 0; i < files.length; i++) {
@@ -84,7 +65,7 @@ var Visualize = React.createClass({
   },
 
   updateCurrentPath: function (path) {
-    if (typeof path === 'string') path = path.split('/')
+    if (typeof path === 'string') path = path.split('/');
     this.setState({currentPath: path});
   },
 
