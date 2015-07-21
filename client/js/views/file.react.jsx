@@ -26,7 +26,7 @@ var File = React.createClass({
   },
 
   componentDidMount: function() {
-    var path = this.props.currentPath.join('/');
+    var path = this.props.currentPath;
     this.path = path;
     var url = '';
     var data = '';

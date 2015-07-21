@@ -59,35 +59,53 @@ var Visualize = React.createClass({
     // }
   },
 
+  updatePaths: function () {
+    var filePaths = this.state.filePaths;
+    var files = JSON.parse(this.state.commits[this.state.commitIndex].files)
+    for (var index in files) {
+      filePaths[files[index].filename] = filePaths[files[index].filename] || {};
+      filePaths[files[index].filename].raw_url = files[index].raw_url;
+      filePaths[files[index].filename].commitIndex = this.state.commitIndex;
+      var pathArray = files[index].filename.split('/')
+      if (pathArray[pathArray.length-1] === '') filePaths[files[index].filename].isFolder = true;
+      else filePaths[files[index].filename].isFolder = false;
+    }
+    this.setState( {filePaths: filePaths} );
+  },
+
   updateCommitIndex: function (index) {
     this.setState({commitIndex: index});
+    this.updatePaths();
     this.updateFiles();
   },
 
   updateCurrentPath: function (path) {
-    if (typeof path === 'string') path = path.split('/');
     this.setState({currentPath: path});
   },
 
   getInitialState: function() {
-    return {commits: [], commitIndex: 0, currentPath: [], fileTree: {}};
+    return {commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}};
   },
 
   fileOrFolder: function() {
-    var current = this.state.fileTree;
-    for (var i = 0; i < this.state.currentPath.length; i++) current = current[this.state.currentPath[i]];
-    if (current.isFolder) {
+    if (this.state.currentPath !== '') {
+      if (this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder) {
+        return (
+            <Col xs={9} md={9}>
+              <File key={this.state.currentPath} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath}/>
+            </Col>
+          )
+      }
+      else {
+        return (
+            <Col xs={9} md={9}>
+              <Folder currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+            </Col>
+          )
+      }
+    } else {
       return (
-          <Col xs={9} md={9}>
-            <Folder currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-          </Col>
-        )
-    }
-    else {
-      return (
-          <Col xs={9} md={9}>
-            <File key={this.state.currentPath} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath}/>
-          </Col>
+          <div></div>
         )
     }
   },
