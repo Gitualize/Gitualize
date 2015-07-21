@@ -40,5 +40,17 @@ var removeFile = function (tree, filePath) {
   delete currentFolder[path[0]];
 };
 
+var getFileIcon = function(fileName){
+  var images = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'svg'];
+  var idx = fileName.lastIndexOf('.');
+  if(idx > -1) {
+    var format = (fileName.substring(idx + 1)).toLowerCase();
+    return images.indexOf(format) > -1? 'picture' : 'file';
+  } else {
+    return 'folder-close';
+  }
+};
+
 module.exports.addFile = addFile;
 module.exports.removeFile = removeFile;
+module.exports.getFileIcon = getFileIcon;
