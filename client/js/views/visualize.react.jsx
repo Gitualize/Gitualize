@@ -56,7 +56,17 @@ var Visualize = React.createClass({
   },
 
   updateFiles: function () {
-
+    var files = JSON.parse(this.state.commits[this.state.commitIndex].files);
+    for (var i = 0; i < files.length; i++) {
+      console.log(files[i]);
+      if (files[i].status === 'added') {
+        console.log('added: ', files[i].filename)
+      } else if (files[i].status === 'deleted') {
+        console.log('deleted: ', files[i].filename)
+      } else {
+        console.log('modified: ', files[i].filename)
+      }
+    }
   },
 
   componentDidMount: function() {
@@ -69,6 +79,7 @@ var Visualize = React.createClass({
 
   updateCommitIndex: function (index) {
     this.setState({commitIndex: index});
+    this.updateFiles();
   },
 
   updateCurrentPath: function (path) {
