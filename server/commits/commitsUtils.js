@@ -15,14 +15,6 @@ var accessToken;
 var setAccessToken = function(token) {
   accessToken = token;
 };
-//(function getAccessToken() {
-  //if (accessToken) return;
-  //fs.readFile('client/secret.json', function(err, data) {
-    //data = JSON.parse(data.toString());
-    ////console.log('data: ', data);
-    //accessToken = data.github_token;
-  //});
-//})();
 
 //var github = new Github({token: access_token, auth: 'oauth'});
 //var repo = github.getRepo(repoOwner, repoName);
