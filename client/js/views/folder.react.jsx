@@ -2,6 +2,7 @@ var React = require('react');
 var ReactBootstrap = require('react-bootstrap');
 var Glyphicon = ReactBootstrap.Glyphicon;
 var Button = ReactBootstrap.Button;
+var Tree = require('../fileTreeUtils');
 
 var File = React.createClass({
   listStyle: {
@@ -36,41 +37,61 @@ var File = React.createClass({
 });
 
 var Folder = React.createClass({
-  getFileIcon: function(fileName){
-    var images = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'svg'];
-    var idx = fileName.lastIndexOf('.');
-    if(idx > -1) {
-      var format = (fileName.substring(idx + 1)).toLowerCase();
-      console.log(format);
-      return images.indexOf(format) > -1? 'picture' : 'file';
-    } else {
-      return 'folder-close';
-    }
-  },
   render: function () {
     var context = this;
-    var allFiles = this.props.currentCommit.files && JSON.parse(this.props.currentCommit.files).filter(function (file) {
-      var path = context.props.currentPath;
-      if (path === '') {
-        return true;
-      }
-      if (file.filename.slice(0, path.length) !== path) {
-        return false;
-      }
-      return true;
-      })
-      .map(function (file) {
-        var fileName = file.filename;
+    var showFiles = {};
+    var showFiles = {};
+    var fileTree = this.props.fileTree;
+    var pathArray = this.props.currentPath.split('/');
+    var current = fileTree;
 
-        return <File icon={context.getFileIcon(fileName)}>
-          {fileName.slice(fileName.lastIndexOf('/') + 1)}
-        </File>
-      });
+    for(var i=0, len = pathArray.length; i < len; i++) {
+      current = current[pathArray[i]];
+    }
+
+    for(var key in current) {
+      if(current[key].hasOwnProperty('isFolder')) {
+        showFiles[key] = {filename: key};
+      }
+    }
+
+    console.log(current)
+
+    // var allFiles = this.props.currentCommit.files && JSON.parse(this.props.currentCommit.files).filter(function (file) {
+      // var path = context.props.currentPath;
+      // var filename = file.filename;
+      // var pathArray = context.props.currentPath;
+      // var filePath = filename.split('/');
+      // var path = pathArray.join('/');
+      // var currentDir = pathArray[pathArray.length-1];
+      // var prev = filePath[filePath.length-2]
+
+      // if(filename in current) {
+      //   return true;
+      // }
+
+      // if (path === '') {
+      //   return true;
+      // }
+
+      // if (filename.slice(0, path.length) !== path) {
+      //   return false;
+      // }
+    // });
+
+    showFiles = Object.keys(showFiles).map(function(x){return showFiles[x]});
+    showFiles = showFiles.map(function (file) {
+      var fileName = file.filename;
+
+      return <File icon={Tree.getFileIcon(fileName)}>
+        {fileName.slice(fileName.lastIndexOf('/') + 1)}
+      </File>
+    });
 
     return <div>
       <h2>Folder view</h2>
       <ul>
-        {allFiles}
+        {showFiles}
       </ul>
     </div>
   }
