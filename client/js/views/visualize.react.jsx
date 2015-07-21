@@ -111,29 +111,36 @@ var Visualize = React.createClass({
 
   render: function () {
     var maindisplay = this.fileOrFolder();
-    
-    return (
-      <Grid>
-        <Row className='show-grid'>
-          <Col xs={12} md={12}>
-            <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-          </Col>
-        </Row>
 
-        <Row className='show-grid'>
-          <Col xs={3} md={3}>
-            <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-          </Col>
-          {maindisplay}
-        </Row>
+    if (this.state.commits.length > 0) {
+      return (
+        <Grid>
+          <Row className='show-grid'>
+            <Col xs={12} md={12}>
+              <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+            </Col>
+          </Row>
 
-        <Row className='show-grid'>
-          <Col xs={12} md={12}>
-            <Playbar numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
-          </Col>
-        </Row>
-      </Grid>
-    )
+          <Row className='show-grid'>
+            <Col xs={3} md={3}>
+              <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+            </Col>
+            {maindisplay}
+          </Row>
+
+          <Row className='show-grid'>
+            <Col xs={12} md={12}>
+              <Playbar numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
+            </Col>
+          </Row>
+        </Grid>
+      )
+    } else {
+      return (
+          <div>
+          </div>
+        )
+    }
   }
 });
 
