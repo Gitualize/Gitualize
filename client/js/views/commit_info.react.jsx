@@ -4,7 +4,7 @@ var CommitInfo = React.createClass({
   render: function () {
     return (
       <div>
-
+        Commit Info
       </div>
       )
   }
