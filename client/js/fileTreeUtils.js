@@ -2,7 +2,7 @@ var updateFiles = function(currentCommit, fileTree) {
   var filepath;
   currentCommit.files.forEach(function(file) {
     filepath = file.filename;
-    file.status === 'deleted' ? removeFile(fileTree, filepath) : addFile(fileTree, filepath);
+    file.status === 'removed' ? removeFile(fileTree, filepath) : addFile(fileTree, filepath);
   });
 };
 var addFile = function (tree, filePath) {
