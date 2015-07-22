@@ -45,7 +45,7 @@ var Folder = React.createClass({
     var fileTree = this.props.fileTree;
     var pathArray = this.props.currentPath.split('/');
     var current = fileTree;
-    var animation = {'renamed': 'slateblue', 'added': 'yellowgreen', 'modified': 'gold', 'deleted': 'red'};
+    var animation = {'renamed': 'slateblue', 'added': 'yellowgreen', 'modified': 'gold', 'removed': 'red'};
     var currentCommit = this.props.currentCommit.files;
     var commitLength = currentCommit.length;
 
