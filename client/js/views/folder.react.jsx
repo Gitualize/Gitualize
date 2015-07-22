@@ -58,44 +58,35 @@ var Folder = React.createClass({
       current = current[pathArray[i]];
     }
 
-    console.log(currentCommit);
-
     // add file to list of files to show
     for(var key in current) {
-      if(current[key].hasOwnProperty('isFolder')) {
+      var currentDir = current[key];
+      if(currentDir.hasOwnProperty('isFolder')) {
         showFiles[key] = {filename: key};
-        showFiles[key].style = current[key].style || {'background-color': 'white'};
+        showFiles[key].style = currentDir.style || {'background-color': 'white'};
 
-        if(current[key].path && changes[current[key].path]){
+        if(currentDir.path && changes[currentDir.path]){
 
-          showFiles[key].style = {'background-color': animation[changes[current[key].path]]};
-          console.log('ANIMATION');
+          showFiles[key].style = {'background-color': animation[changes[currentDir.path]]};
         }
         
-        if(current[key].isFolder) {
+        if(currentDir.isFolder) {
           for(var i=0; i<commitLength; i++) {
-            // console.log(current[key].path)
-            // console.log(currentCommit[i].filename.substring(0, current[key].path.length))
-            var slicedPath = currentCommit[i].filename.substring(0, current[key].path.length)
-            if(current[key].path === slicedPath) {
+            var slicedPath = currentCommit[i].filename.substring(0, currentDir.path.length)
+            if(currentDir.path === slicedPath) {
               showFiles[key].style = {'background-color': 'orange'};
             }
           }
         }
 
-        // folder animation on child change
-        console.log(current[key]);
-
       }
     }
 
-    console.log(fileTree);
     console.log(showFiles);
 
     showFiles = Object.keys(showFiles).map(function(x){return showFiles[x]});
     showFiles = showFiles.map(function (file) {
       var fileName = file.filename;
-      // var style = file.style || {'background-color': 'white'};
 
       return <File icon={Tree.getFileType(fileName)} animation={file.style} onClick={function(){this.props.updateCurrentPath(this.props.currentPath + '/' + fileName)}.bind(context)}>
         {fileName.slice(fileName.lastIndexOf('/') + 1)}
