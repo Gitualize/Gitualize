@@ -124,21 +124,22 @@ var Visualize = React.createClass({
           </Row>
 
           <Row className='show-grid'>
-            <Col xs={3} md={3}>
-              <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-            </Col>
-            {maindisplay}
-          </Row>
-
-          <Row className='show-grid'>
             <Col xs={12} md={12}>
               <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
             </Col>
           </Row>
+          
           <Row className='show-grid'>
             <Col xs={12} md={12}>
               <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
             </Col>
+          </Row>
+
+          <Row className='show-grid'>
+            <Col xs={3} md={3}>
+              <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+            </Col>
+            {maindisplay}
           </Row>
         </Grid>
       )
