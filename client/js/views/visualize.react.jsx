@@ -39,16 +39,16 @@ var Visualize = React.createClass({
   updatePaths: function () {
     var filePaths = this.state.filePaths;
     var files = this.state.commits[this.state.commitIndex].files;
-    for (var index in files) {
-      filePaths[files[index].filename] = filePaths[files[index].filename] || {};
-      if (filePaths[files[index].filename].raw_url) filePaths[files[index].filename].last_url = filePaths[files[index].filename].raw_url;
-      filePaths[files[index].filename].raw_url = files[index].raw_url;
-      filePaths[files[index].filename].commitIndex = this.state.commitIndex;
-      var pathArray = files[index].filename.split('/')
-      if (pathArray[pathArray.length-1] === '') filePaths[files[index].filename].isFolder = true;
-      else filePaths[files[index].filename].isFolder = false;
-    }
-    this.setState( {filePaths: filePaths} );
+    files.forEach(function(file) {
+      var path = file.filename;
+      filePaths[path] = filePaths[path] || {};
+      if (filePaths[path].raw_url) filePaths[path].last_url = filePaths[path].raw_url;
+      filePaths[path].raw_url = file.raw_url;
+      filePaths[path].commitIndex = this.state.commitIndex; //last updated commitIndex
+      var pathArray = path.split('/');
+      filePaths[path].isFolder = pathArray[pathArray.length-1] === '';
+    }.bind(this));
+    this.setState( {filePaths} );
   },
 
   updateCommitIndex: function (index) {
