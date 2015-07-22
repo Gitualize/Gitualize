@@ -22,7 +22,7 @@ var Visualize = React.createClass({
     $.getJSON('repos/'+repoFullName+'/commits', {accessToken: this.props.query.accessToken})
     .success(function(commits) {
       if (commits.msg === 'auth required') return window.location = commits.authUrl;
-      if (!Array.isArray(commits) && commits.length > 0) this.transitionTo('/'); //TODO show error msg first
+      if (!Array.isArray(commits)) this.transitionTo('/'); //TODO show error msg first
       commits.forEach(function(commit) {
         commit.files = JSON.parse(commit.files);
       });
