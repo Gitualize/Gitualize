@@ -11,6 +11,7 @@ var Directory = require('./directory.react.jsx');
 var File = require('./file.react.jsx');
 var Folder = require('./folder.react.jsx');
 var Playbar = require('./playbar.react.jsx');
+var CommitInfo = require('./commit_info.react.jsx');
 var Tree = require('../fileTreeUtils');
 
 var Visualize = React.createClass({
@@ -44,7 +45,6 @@ var Visualize = React.createClass({
       } else if (files[i].status === 'deleted') {
         this.removeFile(files[i].filename);
       } else {
-        console.log('modified: ', files[i].filename);
         this.addFile(files[i].filename);
       }
     }
@@ -124,16 +124,22 @@ var Visualize = React.createClass({
           </Row>
 
           <Row className='show-grid'>
+            <Col xs={12} md={12}>
+              <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
+            </Col>
+          </Row>
+          
+          <Row className='show-grid'>
+            <Col xs={12} md={12}>
+              <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
+            </Col>
+          </Row>
+
+          <Row className='show-grid'>
             <Col xs={3} md={3}>
               <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
             </Col>
             {maindisplay}
-          </Row>
-
-          <Row className='show-grid'>
-            <Col xs={12} md={12}>
-              <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
-            </Col>
           </Row>
         </Grid>
       )
