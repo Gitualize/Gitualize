@@ -18,7 +18,9 @@ var addFile = function (tree, filePath) {
       }
     }
     if (!folderMatch) {
-      currentFolder[path[0]] = {isFolder: true};
+      var index = filePath.lastIndexOf('/');
+      var folderPath = filePath.slice(0, index > -1? index : filePath.length);
+      currentFolder[path[0]] = {isFolder: true, path: folderPath};
       currentFolder = currentFolder[path[0]];
     }
     path.shift();
