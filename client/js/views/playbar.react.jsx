@@ -10,9 +10,6 @@ var Row = ReactBootstrap.Row;
 var Col = ReactBootstrap.Col;
 var Well = ReactBootstrap.Well;
 
-var commitLength = 20; // fake data
-var staticMath = 9.9/(commitLength);
-
 var Playbar = React.createClass({
   clock: function(seconds) {
     var time = {};
@@ -39,7 +36,8 @@ var Playbar = React.createClass({
 
   getInitialState: function() {
     this.time = this.clock(0);
-    this.totalTime = this.clock(commitLength);
+    this.staticMath = 9.9/(this.props.numberOfCommits);
+    this.totalTime = this.clock(this.props.numberOfCommits);
     return {
       date: this.time.toString(),
       now: 0,
@@ -71,7 +69,7 @@ var Playbar = React.createClass({
     this.setState( {now} );
     if (now % 10 === 0) {
       this.props.updateCommitIndex(this.props.commitIndex + 1);
-      if (now % (commitLength*10) === 0) this.end();
+      if (now % (this.props.numberOfCommits*10) === 0) this.end();
       this.time.add(1);
       var date = this.time.toString();
       this.setState( {date} );
@@ -103,7 +101,7 @@ var Playbar = React.createClass({
       <div>
         <OverlayTrigger placement='top' overlay={tooltip}>
           <ProgressBar striped>
-            <ProgressBar bsStyle='info' now={this.state.now*staticMath} key={1}/>
+            <ProgressBar bsStyle='info' now={this.state.now*this.staticMath} key={1}/>
             <ProgressBar onClick={this.pause} onDrag={this.move} bsStyle='success' now={1} key={2} />
           </ProgressBar>
         </OverlayTrigger>
@@ -111,7 +109,6 @@ var Playbar = React.createClass({
           <Row className='show-grid'>
             <Col xs={3} md={3}><Button onClick={this.handleClick}><Glyphicon glyph={this.state.glyphicon} /></Button></Col>
             <Col xs={3} md={3} className='text-center'><Well bsSize='small'>{this.state.date} / {this.totalTime.toString()}</Well></Col>
-            <Col xs={3} md={3} className='text-center'><Well bsSize='small'>some commit data?</Well></Col>
             <Col xs={3} md={3}></Col>
           </Row>
         </Grid>

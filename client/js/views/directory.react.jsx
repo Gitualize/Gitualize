@@ -19,7 +19,7 @@ var Directory = React.createClass({
     var style = {
       paddingLeft: (depth*10) + 'px'
     }
-    return this.map(obj,function(value, key) {
+    return this.map(obj,function(value, key) { //TODO refactor
       if (value.isFolder) {
         return (
           <div>
