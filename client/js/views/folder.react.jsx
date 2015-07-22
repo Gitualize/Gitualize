@@ -45,41 +45,59 @@ var Folder = React.createClass({
     var fileTree = this.props.fileTree;
     var pathArray = this.props.currentPath.split('/');
     var current = fileTree;
-    var animation = {'renamed': 'green', 'added': 'green', 'modified': 'green', 'deleted': 'red'};
-
+    var animation = {'renamed': 'slateblue', 'added': 'yellowgreen', 'modified': 'gold', 'deleted': 'red'};
     var currentCommit = this.props.currentCommit.files;
-    for(var j=0, len2=currentCommit.length; j < len2; j++) {
-      //console.log(currentCommit[j]);
+    var commitLength = currentCommit.length;
+
+    for(var j=0; j < commitLength; j++) {
       changes[currentCommit[j].filename] = currentCommit[j].status;
     }
-
-    console.log(changes)
 
     // move to current directory
     for(var i=0, len = pathArray.length; i < len; i++) {
       current = current[pathArray[i]];
     }
 
+    console.log(currentCommit);
+
     // add file to list of files to show
     for(var key in current) {
       if(current[key].hasOwnProperty('isFolder')) {
         showFiles[key] = {filename: key};
+        showFiles[key].style = current[key].style || {'background-color': 'white'};
 
         if(current[key].path && changes[current[key].path]){
+
           showFiles[key].style = {'background-color': animation[changes[current[key].path]]};
           console.log('ANIMATION');
         }
+        
+        if(current[key].isFolder) {
+          for(var i=0; i<commitLength; i++) {
+            // console.log(current[key].path)
+            // console.log(currentCommit[i].filename.substring(0, current[key].path.length))
+            var slicedPath = currentCommit[i].filename.substring(0, current[key].path.length)
+            if(current[key].path === slicedPath) {
+              showFiles[key].style = {'background-color': 'orange'};
+            }
+          }
+        }
+
+        // folder animation on child change
+        console.log(current[key]);
+
       }
     }
 
+    console.log(fileTree);
     console.log(showFiles);
 
     showFiles = Object.keys(showFiles).map(function(x){return showFiles[x]});
     showFiles = showFiles.map(function (file) {
       var fileName = file.filename;
-      var style = file.style || {'background-color': 'white'};
+      // var style = file.style || {'background-color': 'white'};
 
-      return <File icon={Tree.getFileType(fileName)} animation={style} onClick={function(){this.props.updateCurrentPath(this.props.currentPath + '/' + fileName)}.bind(context)}>
+      return <File icon={Tree.getFileType(fileName)} animation={file.style} onClick={function(){this.props.updateCurrentPath(this.props.currentPath + '/' + fileName)}.bind(context)}>
         {fileName.slice(fileName.lastIndexOf('/') + 1)}
       </File>
     });
