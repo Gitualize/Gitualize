@@ -60,7 +60,7 @@ var getFileType = function(fileName){
 };
 
 
-module.exports = {addFile: addFile, removeFile: removeFile, updateFiles: updateFiles, getFileIcon: getFileIcon};
+module.exports = {addFile: addFile, removeFile: removeFile, updateFiles: updateFiles, getFileType: getFileType};
 module.exports.addFile = addFile;
 module.exports.removeFile = removeFile;
 module.exports.getFileType = getFileType;
