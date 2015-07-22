@@ -130,11 +130,11 @@ var Playbar = React.createClass({
         </OverlayTrigger>
         <Grid>
           <Row className='show-grid'>
-            <Col xs={1} md={1}><Button onClick={this.slowDown} bsSize='large'><Glyphicon glyph='backward' /></Button></Col>
-            <Col xs={1} md={1}><Button onClick={this.handleClick} bsSize='large'><Glyphicon glyph={this.state.glyphicon} /></Button></Col>
-            <Col xs={1} md={1}><Button onClick={this.speedUp} bsSize='large'><Glyphicon glyph='forward' /></Button></Col>
-            <Col xs={3} md={3} className='text-center'><Well bsSize='small'>{this.props.commitIndex}/{this.props.numberOfCommits} Commits</Well></Col>
-            <Col xs={3} md={3}></Col>
+            <Col xs={2} sm={1} md={1}><Button onClick={this.slowDown} bsSize='large'><Glyphicon glyph='backward' /></Button></Col>
+            <Col xs={2} sm={1} md={1}><Button onClick={this.handleClick} bsSize='large'><Glyphicon glyph={this.state.glyphicon} /></Button></Col>
+            <Col xs={2} sm={1} md={1}><Button onClick={this.speedUp} bsSize='large'><Glyphicon glyph='forward' /></Button></Col>
+            <Col xs={6} sm={3} md={3} className='text-center'><Well bsSize='small'>{this.props.commitIndex}/{this.props.numberOfCommits} Commits</Well></Col>
+            <Col xs={0} sm={6} md={6}></Col>
           </Row>
         </Grid>
       </div>
