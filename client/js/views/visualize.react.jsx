@@ -29,8 +29,9 @@ var Visualize = React.createClass({
         this.updateFiles();
         console.log('Repository fetched');
       } else {
-        //TODO: display error message to user, redirect to landing
+        //TODO: display error message to user
         console.log('Failed to fetch repository');
+        this.transitionTo('/');
       }
     }.bind(this));
   },
