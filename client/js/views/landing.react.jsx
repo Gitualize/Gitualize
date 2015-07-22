@@ -6,8 +6,7 @@ var ButtonInput = ReactBootstrap.ButtonInput;
 
 var Landing = React.createClass({
   mixins : [Navigation],
-  componentDidMount: function() {
-  },
+
   handleSubmit: function(e) {
     console.log('submitted');
     e.preventDefault();
