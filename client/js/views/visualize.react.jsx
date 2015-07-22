@@ -24,8 +24,15 @@ var Visualize = React.createClass({
       if (commits.msg === 'auth required') {
         window.location = commits.authUrl; //transitionTo doesn't work for external urls
       }
-      this.setState({commits: commits});
-      this.updateFiles();
+      if (Array.isArray(commits)) { //commits were fetched successfully
+        this.setState({commits: commits});
+        this.updateFiles();
+        console.log('Repository fetched');
+      } else {
+        //TODO: display error message to user
+        console.log('Failed to fetch repository');
+        this.transitionTo('/');
+      }
     }.bind(this));
   },
 
@@ -128,7 +135,7 @@ var Visualize = React.createClass({
               <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
             </Col>
           </Row>
-          
+
           <Row className='show-grid'>
             <Col xs={12} md={12}>
               <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
