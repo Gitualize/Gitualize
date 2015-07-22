@@ -7,8 +7,8 @@ var _ = require('underscore');
 
 var File = React.createClass({
   listStyle: { //TODO to styles.css
-    'list-style-type': 'none',
-    display: 'inline-block',
+    'listStyleType': 'none',
+    display: 'inlineBlock',
     margin: '3px',
     float: 'left'
   },
@@ -18,12 +18,12 @@ var File = React.createClass({
   },
   buttonStyle: {
     'display': 'block',
-    'margin-left': 'auto',
-    'margin-right': 'auto'
+    'marginLeft': 'auto',
+    'marginRight': 'auto'
   },
   textStyle: {
-    'text-align': 'center',
-    'word-wrap': 'break-word'
+    'textAlign': 'center',
+    'wordWrap': 'break-word'
   },
   render: function () {
     return <li style={this.listStyle}>
@@ -54,8 +54,10 @@ var Folder = React.createClass({
     }
 
     // move to current directory
-    for(var i=0, len = pathArray.length; i < len; i++) {
-      current = current[pathArray[i]];
+    if (pathArray[0] !== '') {
+      for(var i=0, len = pathArray.length; i < len; i++) {
+        current = current[pathArray[i]];
+      }
     }
 
     // add file to list of files to show
@@ -63,26 +65,24 @@ var Folder = React.createClass({
       var currentDir = current[key];
       if(currentDir.hasOwnProperty('isFolder')) {
         showFiles[key] = {filename: key};
-        showFiles[key].style = currentDir.style || {'background-color': 'white'};
+        showFiles[key].style = currentDir.style || {'backgroundColor': 'white'};
 
         if(currentDir.path && changes[currentDir.path]){
 
-          showFiles[key].style = {'background-color': animation[changes[currentDir.path]]};
+          showFiles[key].style = {'backgroundColor': animation[changes[currentDir.path]]};
         }
         
         if(currentDir.isFolder) {
           for(var i=0; i<commitLength; i++) {
             var slicedPath = currentCommit[i].filename.substring(0, currentDir.path.length)
             if(currentDir.path === slicedPath) {
-              showFiles[key].style = {'background-color': 'orange'};
+              showFiles[key].style = {'backgroundColor': 'orange'};
             }
           }
         }
 
       }
     }
-
-    console.log(showFiles);
 
     showFiles = Object.keys(showFiles).map(function(x){return showFiles[x]});
     showFiles = showFiles.map(function (file) {
