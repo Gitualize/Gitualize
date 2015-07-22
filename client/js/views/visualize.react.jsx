@@ -11,7 +11,7 @@ var Directory = require('./directory.react.jsx');
 var File = require('./file.react.jsx');
 var Folder = require('./folder.react.jsx');
 var Playbar = require('./playbar.react.jsx');
-var CommitInfo = require('./commit_info.react.jsx');
+var CommitInfo = require('./commitInfo.react.jsx');
 var Tree = require('../fileTreeUtils');
 
 var Visualize = React.createClass({
@@ -21,54 +21,24 @@ var Visualize = React.createClass({
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
     $.getJSON('repos/'+repoFullName+'/commits', {accessToken: this.props.query.accessToken})
     .success(function(commits) {
-      if (commits.msg === 'auth required') {
-        window.location = commits.authUrl; //transitionTo doesn't work for external urls
-      }
-      if (Array.isArray(commits)) { //commits were fetched successfully
-        this.setState({commits: commits});
-        this.updateFiles();
-        console.log('Repository fetched');
-      } else {
-        //TODO: display error message to user
-        console.log('Failed to fetch repository');
-        this.transitionTo('/');
-      }
+      if (commits.msg === 'auth required') return window.location = commits.authUrl;
+      if (!Array.isArray(commits)) this.transitionTo('/'); //TODO show error msg first
+      commits.forEach(function(commit) {
+        commit.files = JSON.parse(commit.files);
+      });
+      this.setState({commits: commits});
+      Tree.updateFiles(this.state.commits[this.state.commitIndex], this.state.fileTree);
+      this.setState({fileTree: this.state.fileTree});
     }.bind(this));
-  },
-
-  addFile: function (filePath) {
-    return Tree.addFile(this.state.fileTree, filePath);
-  },
-
-  removeFile: function (filePath) {
-    Tree.removeFile(this.state.fileTree, filePath);
-  },
-
-  updateFiles: function () {
-    var files = JSON.parse(this.state.commits[this.state.commitIndex].files);
-    for (var i = 0; i < files.length; i++) {
-      if (files[i].status === 'added') {
-        this.addFile(files[i].filename);
-      } else if (files[i].status === 'deleted') {
-        this.removeFile(files[i].filename);
-      } else {
-        this.addFile(files[i].filename);
-      }
-    }
   },
 
   componentDidMount: function() {
     this.getCommits();
-    //add all the files, but after getCommits finishes
-    // var files = JSON.parse(this.state.commits[this.state.commitIndex].files);
-    // for (var i = 0; i < files.length; i++) {
-    //   this.addFile(files[i].filename);
-    // }
   },
 
   updatePaths: function () {
     var filePaths = this.state.filePaths;
-    var files = JSON.parse(this.state.commits[this.state.commitIndex].files)
+    var files = this.state.commits[this.state.commitIndex].files;
     for (var index in files) {
       filePaths[files[index].filename] = filePaths[files[index].filename] || {};
       if (filePaths[files[index].filename].raw_url) filePaths[files[index].filename].last_url = filePaths[files[index].filename].raw_url;
@@ -84,7 +54,7 @@ var Visualize = React.createClass({
   updateCommitIndex: function (index) {
     this.setState({commitIndex: index});
     this.updatePaths();
-    this.updateFiles();
+    Tree.updateFiles(this.state.commits[this.state.commitIndex], this.state.fileTree);
   },
 
   updateCurrentPath: function (path) {
@@ -99,22 +69,22 @@ var Visualize = React.createClass({
     if (this.state.currentPath !== '') {
       if (this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder) {
         return (
-            <Col xs={9} md={9}>
-              <File key={this.state.currentPath + '/' + this.state.filePaths[this.state.currentPath].commitIndex} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
-            </Col>
-          )
+          <Col xs={9} md={9}>
+            <File key={this.state.currentPath + '/' + this.state.filePaths[this.state.currentPath].commitIndex} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
+          </Col>
+        )
       }
       else {
         return (
-            <Col xs={9} md={9}>
-              <Folder fileTree={this.state.fileTree} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-            </Col>
-          )
+          <Col xs={9} md={9}>
+            <Folder fileTree={this.state.fileTree} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+          </Col>
+        )
       }
     } else {
       return (
-          <div></div>
-        )
+        <div></div>
+      )
     }
   },
 
@@ -152,9 +122,9 @@ var Visualize = React.createClass({
       )
     } else {
       return (
-          <div>
-          </div>
-        )
+        <div>
+        </div>
+      )
     }
   }
 });
