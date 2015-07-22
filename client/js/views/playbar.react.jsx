@@ -91,6 +91,7 @@ var Playbar = React.createClass({
       this.time.reset();
       var date = this.time.toString();
       this.setState( {glyphicon, now, date} );
+      this.props.reset();
     }
   },
 
