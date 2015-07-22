@@ -8,7 +8,7 @@ var Directory = React.createClass({
   map: function(obj, callback) {
     var array = [];
     for (var key in obj) {
-      if (key !== 'isFolder') {
+      if (key !== 'isFolder' && key !== 'path') {
         array.push(callback(obj[key], key));
       }
     }
