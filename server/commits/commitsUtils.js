@@ -112,7 +112,7 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, 
         var msg = 'Repo ' + repoFullName + ' does not exist.';
         return callback(msg, null);
       }
-      console.log('commitsOverview.length = ', commitsOverview.length);
+      //console.log('commitsOverview.length = ', commitsOverview.length);
       //TODO handle if commitsOverview is empty
       totalCommits = totalCommits.concat(commitsOverview);
       if (commitsOverview.length === 100 && totalCommits.length < maxCommits) {
