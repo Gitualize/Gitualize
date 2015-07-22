@@ -47,7 +47,8 @@ var removeFile = function (tree, filePath) {
   delete currentFolder[path[0]];
 };
 
-var getFileIcon = function(fileName){
+// TODO-CLEANUP: return json type but keep the boostrap icon name; handle folders with dot in name
+var getFileType = function(fileName){
   var images = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'svg'];
   var idx = fileName.lastIndexOf('.');
   if(idx > -1) {
@@ -58,4 +59,9 @@ var getFileIcon = function(fileName){
   }
 };
 
+
 module.exports = {addFile: addFile, removeFile: removeFile, updateFiles: updateFiles, getFileIcon: getFileIcon};
+module.exports.addFile = addFile;
+module.exports.removeFile = removeFile;
+module.exports.getFileType = getFileType;
+
