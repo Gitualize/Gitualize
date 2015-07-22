@@ -1,15 +1,25 @@
 var React = require('react');
+var ReactBootstrap = require('react-bootstrap');
+var Well = ReactBootstrap.Well;
+var Grid = ReactBootstrap.Grid;
+var Row = ReactBootstrap.Row;
+var Col = ReactBootstrap.Col;
 
 var CommitInfo = React.createClass({
+  styles: {
+    imgStyle : {'height': 48+'px', 'width': 48+'px'}
+  },
+
   render: function () {
-    var size = 48;
-    var message = this.props.currentCommit.message;
-    var imageURL = this.props.currentCommit.avatarUrl + '&s=' + size;
     return (
-      <div>
-        <img style={{'height': size+'px', 'width': size+'px'}} src={imageURL}/>
-        {message}
-      </div>
+        <Well bsSize='small'>
+          <Grid>
+            <Row className='show-grid'>
+              <Col xs={2} sm={2} md={1}><img style={this.styles.imgStyle} src={this.props.currentCommit.avatarUrl + '&s=' + 48}/></Col>
+              <Col xs={10} sm={10} md={11}>{this.props.currentCommit.message}</Col>
+            </Row>
+          </Grid>
+        </Well>
       )
   }
 });
