@@ -1,15 +1,13 @@
 var fs = require('fs');
 var request = require('request');
 
-var client_id; //client key
-var client_secret; //client secret
+var client_id;
+var client_secret;
 var base_URL = process.env.PRODUCTION ? 'http://gitualize.com' : 'http://localhost:3000';
 
 var gitHubLogin = function(req, res) { //redirects to github login
   console.log('auth controller login');
-  // console.log('req.params.repoFullName: ', req.params);
-  //console.log('req.query.repoFullName: ', req.query.repoFullName);
-  fs.readFile('./client/secret.json', function(err, data){
+  fs.readFile('./client/secret.json', function(err, data){ //TODO refactor to use process.env vars
     var body = JSON.parse(data);
     client_id = body.client_id;
     client_secret = body.client_secret;
@@ -22,23 +20,15 @@ var gitHubLogin = function(req, res) { //redirects to github login
   });
 };
 
-//if we moved this to a route on our client it would prolly work as expected
 var getAccessToken = function(req, res) { //redirects back to our client page
   var code = req.query.code;
   request.post({
     url: 'https://github.com/login/oauth/access_token?client_id=' + client_id +'&client_secret=' + client_secret + '&code=' + code
   }, function(err, response, body){
-    // console.log('github body: ', body);
     var accessToken = body.slice(body.indexOf('=') + 1, body.indexOf('&'));
     console.log('got access token');
     //TODO horrible
-    //res.json({msg: 'authed', accessToken: accessToken, msg2: 'please go to /#/repo/' + req.query.repoFullName + '?accessToken=' + accessToken});
-    //res.json({msg: 'authed', accessToken: accessToken, msg2: 'please go to /#/repo/' + req.query.repoFullName + '?accessToken=' + accessToken});
-
-    //but also don't redirect on the server!!
-   //res.redirect('http://google.com');
    res.redirect(base_URL + '/#/repo/' + req.query.repoFullName + '?accessToken=' + accessToken);
-    //res.redirect('/repos/' + req.query.repoFullName + '/commits?accessToken=' + accessToken);
   });
 };//, commitsController.getCommits);
 
