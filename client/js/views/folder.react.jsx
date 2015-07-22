@@ -44,14 +44,12 @@ var Folder = React.createClass({
     var showFiles = {};
     var fileTree = this.props.fileTree;
     var pathArray = this.props.currentPath.split('/');
-    var fileTree = this.props.fileTree;
     var current = fileTree;
     var animation = {'renamed': 'green', 'added': 'green', 'modified': 'green', 'deleted': 'red'};
 
-    var currentCommit = JSON.parse(this.props.currentCommit.files);
-    console.log(currentCommit)
+    var currentCommit = this.props.currentCommit.files;
     for(var j=0, len2=currentCommit.length; j < len2; j++) {
-      console.log(currentCommit[j]);
+      //console.log(currentCommit[j]);
       changes[currentCommit[j].filename] = currentCommit[j].status;
     }
 
@@ -74,28 +72,7 @@ var Folder = React.createClass({
       }
     }
 
-
-    // var allFiles = this.props.currentCommit.files && JSON.parse(this.props.currentCommit.files).filter(function (file) {
-      // var path = context.props.currentPath;
-      // var filename = file.filename;
-      // var pathArray = context.props.currentPath;
-      // var filePath = filename.split('/');
-      // var path = pathArray.join('/');
-      // var currentDir = pathArray[pathArray.length-1];
-      // var prev = filePath[filePath.length-2]
-      // if(filename in current) {
-      //   return true;
-      // }
-      // if (path === '') {
-      //   return true;
-      // }
-      // if (filename.slice(0, path.length) !== path) {
-      //   return false;
-      // }
-    // });
-
     console.log(showFiles);
-
 
     showFiles = Object.keys(showFiles).map(function(x){return showFiles[x]});
     showFiles = showFiles.map(function (file) {
