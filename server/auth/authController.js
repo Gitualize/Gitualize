@@ -7,10 +7,19 @@ var base_URL = process.env.PRODUCTION ? 'http://gitualize.com' : 'http://localho
 
 var gitHubLogin = function(req, res) { //redirects to github login
   console.log('auth controller login');
-  fs.readFile('./client/secret.json', function(err, data){ //TODO refactor to use process.env vars
-    var body = JSON.parse(data);
-    client_id = body.client_id;
-    client_secret = body.client_secret;
+  // console.log('req.params.repoFullName: ', req.params);
+  //console.log('req.query.repoFullName: ', req.query.repoFullName);
+  fs.readFile('./client/secret.json', function(err, data){
+    if (data) {
+      // local environment
+      var body = JSON.parse(data);
+      client_id = body.client_id;
+      client_secret = body.client_secret;
+    } else {
+      // production environment
+      client_id = process.env.CLIENT_ID;
+      client_secret = process.env.CLIENT_SECRET;
+    }
     var redirectUrl = base_URL + '/getAccessToken?repoFullName='+req.query.repoFullName;
     //TODO fix this horribleness, even worse cuz https doesn't work
     console.log('going to github/oauth/authorize');
