@@ -64,6 +64,7 @@ var Visualize = React.createClass({
     var files = JSON.parse(this.state.commits[this.state.commitIndex].files)
     for (var index in files) {
       filePaths[files[index].filename] = filePaths[files[index].filename] || {};
+      if (filePaths[files[index].filename].raw_url) filePaths[files[index].filename].last_url = filePaths[files[index].filename].raw_url;
       filePaths[files[index].filename].raw_url = files[index].raw_url;
       filePaths[files[index].filename].commitIndex = this.state.commitIndex;
       var pathArray = files[index].filename.split('/')
@@ -92,7 +93,7 @@ var Visualize = React.createClass({
       if (this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder) {
         return (
             <Col xs={9} md={9}>
-              <File key={this.state.currentPath} currentCommit={this.state.commits[this.state.commitIndex]} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
+              <File key={this.state.currentPath + '/' + this.state.filePaths[this.state.currentPath].commitIndex} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
             </Col>
           )
       }
