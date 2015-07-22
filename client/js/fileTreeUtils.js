@@ -23,7 +23,7 @@ var addFile = function (tree, filePath) {
     }
     path.shift();
   }
-  currentFolder[path[0]] = {isFolder: false};
+  currentFolder[path[0]] = {isFolder: false, path: filePath};
 };
 
 var removeFile = function (tree, filePath) {
