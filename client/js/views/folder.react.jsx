@@ -3,6 +3,7 @@ var ReactBootstrap = require('react-bootstrap');
 var Glyphicon = ReactBootstrap.Glyphicon;
 var Button = ReactBootstrap.Button;
 var Tree = require('../fileTreeUtils');
+var _ = require('underscore');
 
 var File = React.createClass({
   listStyle: { //TODO to styles.css
@@ -27,7 +28,7 @@ var File = React.createClass({
   render: function () {
     return <li style={this.listStyle}>
       <div style={this.containerStyle}>
-        <Button style={this.buttonStyle} bsSize='large' ><Glyphicon glyph={this.props.icon}/></Button>
+        <Button style={_.extend(this.buttonStyle, this.props.animation)} bsSize='large' onClick={this.props.onClick}><Glyphicon glyph={this.props.icon}/></Button>
         <div>
           <p style={this.textStyle}>{this.props.children}</p>
         </div>
@@ -39,22 +40,40 @@ var File = React.createClass({
 var Folder = React.createClass({
   render: function () {
     var context = this;
+    var changes = {};
     var showFiles = {};
     var fileTree = this.props.fileTree;
     var pathArray = this.props.currentPath.split('/');
+    var fileTree = this.props.fileTree;
     var current = fileTree;
+    var animation = {'renamed': 'green', 'added': 'green', 'modified': 'green', 'deleted': 'red'};
 
+    var currentCommit = JSON.parse(this.props.currentCommit.files);
+    console.log(currentCommit)
+    for(var j=0, len2=currentCommit.length; j < len2; j++) {
+      console.log(currentCommit[j]);
+      changes[currentCommit[j].filename] = currentCommit[j].status;
+    }
+
+    console.log(changes)
+
+    // move to current directory
     for(var i=0, len = pathArray.length; i < len; i++) {
       current = current[pathArray[i]];
     }
 
+    // add file to list of files to show
     for(var key in current) {
       if(current[key].hasOwnProperty('isFolder')) {
         showFiles[key] = {filename: key};
+
+        if(current[key].path && changes[current[key].path]){
+          showFiles[key].style = {'background-color': animation[changes[current[key].path]]};
+          console.log('ANIMATION');
+        }
       }
     }
 
-    console.log(current)
 
     // var allFiles = this.props.currentCommit.files && JSON.parse(this.props.currentCommit.files).filter(function (file) {
       // var path = context.props.currentPath;
@@ -75,11 +94,15 @@ var Folder = React.createClass({
       // }
     // });
 
+    console.log(showFiles);
+
+
     showFiles = Object.keys(showFiles).map(function(x){return showFiles[x]});
     showFiles = showFiles.map(function (file) {
       var fileName = file.filename;
+      var style = file.style || {'background-color': 'white'};
 
-      return <File icon={Tree.getFileIcon(fileName)}>
+      return <File icon={Tree.getFileType(fileName)} animation={style} onClick={function(){this.props.updateCurrentPath(this.props.currentPath + '/' + fileName)}.bind(context)}>
         {fileName.slice(fileName.lastIndexOf('/') + 1)}
       </File>
     });
