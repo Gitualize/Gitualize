@@ -1,4 +1,4 @@
-//master view file for now
+//routes
 var $ = require('jquery');
 var React = require('react');
 //var Github = require('github-api');

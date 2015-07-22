@@ -1,3 +1,10 @@
+var updateFiles = function(currentCommit, fileTree) {
+  var filepath;
+  currentCommit.files.forEach(function(file) {
+    filepath = file.filename;
+    file.status === 'deleted' ? removeFile(fileTree, filepath) : addFile(fileTree, filepath);
+  });
+};
 var addFile = function (tree, filePath) {
   var path = filePath.split('/');
   var currentFolder = tree;
@@ -51,6 +58,4 @@ var getFileIcon = function(fileName){
   }
 };
 
-module.exports.addFile = addFile;
-module.exports.removeFile = removeFile;
-module.exports.getFileIcon = getFileIcon;
+module.exports = {addFile: addFile, removeFile: removeFile, updateFiles: updateFiles, getFileIcon: getFileIcon};

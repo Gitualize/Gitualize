@@ -5,7 +5,7 @@ var Button = ReactBootstrap.Button;
 var Tree = require('../fileTreeUtils');
 
 var File = React.createClass({
-  listStyle: {
+  listStyle: { //TODO to styles.css
     'list-style-type': 'none',
     display: 'inline-block',
     margin: '3px',
