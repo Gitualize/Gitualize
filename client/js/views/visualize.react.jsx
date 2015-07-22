@@ -29,6 +29,7 @@ var Visualize = React.createClass({
       this.setState({commits: commits});
       Tree.updateFiles(this.state.commits[this.state.commitIndex], this.state.fileTree);
       this.setState({fileTree: this.state.fileTree});
+      this.updatePaths();
     }.bind(this));
   },
 
@@ -53,12 +54,19 @@ var Visualize = React.createClass({
 
   updateCommitIndex: function (index) {
     this.setState({commitIndex: index});
-    this.updatePaths();
     Tree.updateFiles(this.state.commits[this.state.commitIndex], this.state.fileTree);
+    this.updatePaths();
   },
 
   updateCurrentPath: function (path) {
     this.setState({currentPath: path});
+  },
+
+  reset: function() {
+    var fileTree = {};
+    Tree.updateFiles(this.state.commits[0], fileTree);
+    this.setState( {commitIndex: 0, currentPath: '', fileTree: fileTree, filePaths : {}} );
+    this.updatePaths();
   },
 
   getInitialState: function() {
@@ -102,7 +110,7 @@ var Visualize = React.createClass({
 
           <Row className='show-grid'>
             <Col xs={12} md={12}>
-              <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
+              <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset}/>
             </Col>
           </Row>
 
@@ -114,7 +122,7 @@ var Visualize = React.createClass({
 
           <Row className='show-grid'>
             <Col xs={3} md={3}>
-              <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+              <Directory key={this.state.commitIndex} fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
             </Col>
             {maindisplay}
           </Row>
