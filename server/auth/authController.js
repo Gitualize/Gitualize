@@ -10,9 +10,16 @@ var gitHubLogin = function(req, res) { //redirects to github login
   // console.log('req.params.repoFullName: ', req.params);
   //console.log('req.query.repoFullName: ', req.query.repoFullName);
   fs.readFile('./client/secret.json', function(err, data){
-    var body = JSON.parse(data);
-    client_id = body.client_id;
-    client_secret = body.client_secret;
+    if (data) {
+      // local environment
+      var body = JSON.parse(data);
+      client_id = body.client_id;
+      client_secret = body.client_secret;
+    } else {
+      // production environment
+      client_id = process.env.CLIENT_ID;
+      client_secret = process.env.CLIENT_SECRET;
+    }
     var redirectUrl = base_URL + '/getAccessToken?repoFullName='+req.query.repoFullName;
     //TODO fix this horribleness, even worse cuz https doesn't work
     console.log('going to github/oauth/authorize');
