@@ -45,7 +45,6 @@ var Visualize = React.createClass({
       } else if (files[i].status === 'deleted') {
         this.removeFile(files[i].filename);
       } else {
-        console.log('modified: ', files[i].filename);
         this.addFile(files[i].filename);
       }
     }
