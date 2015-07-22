@@ -13,6 +13,7 @@ var Well = ReactBootstrap.Well;
 var Playbar = React.createClass({
   clock: function(seconds) {
     var time = {};
+    this.total = seconds;
     time.hours = Math.floor(seconds/3600);
     time.minutes = Math.floor(seconds/60) - time.hours*60;
     time.seconds = seconds - time.hours*3600 - time.minutes*60;
@@ -38,6 +39,7 @@ var Playbar = React.createClass({
     this.time = this.clock(0);
     this.staticMath = 9.9/(this.props.numberOfCommits);
     this.totalTime = this.clock(this.props.numberOfCommits);
+    this.speed = 100;
     return {
       date: this.time.toString(),
       now: 0,
@@ -47,7 +49,7 @@ var Playbar = React.createClass({
   },
 
   play: function() {
-    this.timer = setInterval(this.tick, 100);
+    this.timer = setInterval(this.tick, this.speed);
     var glyphicon = 'pause';
     this.setState( {glyphicon} );
   },
@@ -56,6 +58,26 @@ var Playbar = React.createClass({
     clearInterval(this.timer);
     var glyphicon = 'play';
     this.setState( {glyphicon} );
+  },
+
+  speedUp: function() {
+    if (this.state.glyphicon !== 'refresh') {
+      if (this.speed > 100) this.speed -= 50;
+      if (this.state.glyphicon === 'pause') {
+        clearInterval(this.timer);
+        this.timer = setInterval(this.tick, this.speed);
+      }
+    }
+  },
+
+  slowDown: function() {
+    if (this.state.glyphicon !== 'refresh') {
+      if (this.speed < 250) this.speed += 50;
+      if (this.state.glyphicon === 'pause') {
+        clearInterval(this.timer);
+        this.timer = setInterval(this.tick, this.speed);
+      }
+    }
   },
 
   end: function() {
@@ -96,7 +118,7 @@ var Playbar = React.createClass({
   },
 
   render: function () {
-    var tooltip = <Tooltip>{this.state.date}</Tooltip>;
+    var tooltip = <Tooltip>{this.state.date} / {this.totalTime.toString()}</Tooltip>;
 
     return (
       <div>
@@ -108,9 +130,11 @@ var Playbar = React.createClass({
         </OverlayTrigger>
         <Grid>
           <Row className='show-grid'>
-            <Col xs={3} md={3}><Button onClick={this.handleClick}><Glyphicon glyph={this.state.glyphicon} /></Button></Col>
-            <Col xs={3} md={3} className='text-center'><Well bsSize='small'>{this.state.date} / {this.totalTime.toString()}</Well></Col>
-            <Col xs={3} md={3}></Col>
+            <Col xs={2} sm={1} md={1}><Button onClick={this.slowDown} bsSize='large'><Glyphicon glyph='backward' /></Button></Col>
+            <Col xs={2} sm={1} md={1}><Button onClick={this.handleClick} bsSize='large'><Glyphicon glyph={this.state.glyphicon} /></Button></Col>
+            <Col xs={2} sm={1} md={1}><Button onClick={this.speedUp} bsSize='large'><Glyphicon glyph='forward' /></Button></Col>
+            <Col xs={6} sm={3} md={3} className='text-center'><Well bsSize='small'>{this.props.commitIndex}/{this.props.numberOfCommits} Commits</Well></Col>
+            <Col xs={0} sm={6} md={6}></Col>
           </Row>
         </Grid>
       </div>
