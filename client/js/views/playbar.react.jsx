@@ -109,7 +109,6 @@ var Playbar = React.createClass({
           <Row className='show-grid'>
             <Col xs={3} md={3}><Button onClick={this.handleClick}><Glyphicon glyph={this.state.glyphicon} /></Button></Col>
             <Col xs={3} md={3} className='text-center'><Well bsSize='small'>{this.state.date} / {this.totalTime.toString()}</Well></Col>
-            <Col xs={3} md={3} className='text-center'><Well bsSize='small'>some commit data?</Well></Col>
             <Col xs={3} md={3}></Col>
           </Row>
         </Grid>
