@@ -1,10 +1,11 @@
 var Promise = require('bluebird');
 var db = require('../db/config');
 var fs = require('fs');
+var url = require('url');
 var _ = require('underscore');
 var Commit = require('../db/models/commit');
 var Repo = require('../db/models/repo');
-var Github = require('github-api');
+//var Github = require('github-api');
 
 var request = require('request');
 var rp = require('request-promise');
@@ -72,6 +73,15 @@ var getShas = function(commits) {
   if (commits === null) return;
   return _.pluck(commits, 'sha');
 };
+
+var rawgittify = function(githubUrl) { //helper to change raw_url to max cdn.rawgit.com
+  var u = url.parse(githubUrl);
+  u.host = 'cdn.rawgit.com';
+  u.pathname = u.pathname.split('/');
+  u.pathname.splice(3,1);
+  u.pathname = u.pathname.join('/');
+  return url.format(u);
+};
 var cleanCommitsDetailed = function(commits) {
   if (commits === null) return;
   var committer, avatarUrl, message;
@@ -85,6 +95,9 @@ var cleanCommitsDetailed = function(commits) {
     message = commit.commit.message;
     if (message.length > 195) message = message.substr(0,195) + '...';
     //if (avatarUrl.length > 250) debugger;
+    _.each(commit.files, function(file) {
+      file.raw_url = rawgittify(file.raw_url);
+    });
     return {sha: commit.sha, committer: committer, avatarUrl: avatarUrl, message: message, date: commit.commit.committer.date, files: JSON.stringify(commit.files)}; //omg
   });
   return c;
