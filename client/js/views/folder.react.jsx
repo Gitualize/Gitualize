@@ -27,7 +27,7 @@ var File = React.createClass({
   render: function () {
     return <li style={this.listStyle}>
       <div style={this.containerStyle}>
-        <Button style={this.buttonStyle} bsSize='large' ><Glyphicon glyph={this.props.icon}/></Button>
+        <Button style={this.buttonStyle} bsSize='large' onClick={this.props.onClick}><Glyphicon glyph={this.props.icon}/></Button>
         <div>
           <p style={this.textStyle}>{this.props.children}</p>
         </div>
@@ -42,6 +42,7 @@ var Folder = React.createClass({
     var showFiles = {};
     var fileTree = this.props.fileTree;
     var pathArray = this.props.currentPath.split('/');
+    var fileTree = this.props.fileTree;
     var current = fileTree;
 
     for(var i=0, len = pathArray.length; i < len; i++) {
@@ -79,7 +80,7 @@ var Folder = React.createClass({
     showFiles = showFiles.map(function (file) {
       var fileName = file.filename;
 
-      return <File icon={Tree.getFileIcon(fileName)}>
+      return <File icon={Tree.getFileType(fileName)} onClick={function(){this.props.updateCurrentPath(this.props.currentPath + '/' + fileName)}.bind(context)}>
         {fileName.slice(fileName.lastIndexOf('/') + 1)}
       </File>
     });
