@@ -14,11 +14,7 @@ var File = React.createClass({
   },
 
   componentDidMount: function() {
-    var url = this.props.filePaths[this.props.currentPath].raw_url.split('/');
-    url[2] = 'cdn.rawgit.com';
-    url.splice(5,1);
-    url = url.join('/');
-    this.setState ( {url} );
+    var url = this.props.filePaths[this.props.currentPath].raw_url;
 
     $.get(url, function(success) {
       data = success;
@@ -39,10 +35,7 @@ var File = React.createClass({
   },
 
   secondaryMount: function(data, url) {
-    var previousUrl = this.props.filePaths[this.props.currentPath].last_url.split('/');
-    previousUrl[2] = 'cdn.rawgit.com';
-    previousUrl.splice(5,1);
-    previousUrl = previousUrl.join('/');
+    var previousUrl = this.props.filePaths[this.props.currentPath].last_url; //.split('/');
     var previousData = '';
     $.get(previousUrl, function(previousSuccess) {
       previousData = previousSuccess;

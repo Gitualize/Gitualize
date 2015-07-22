@@ -3,9 +3,10 @@ var ReactBootstrap = require('react-bootstrap');
 var Glyphicon = ReactBootstrap.Glyphicon;
 var Button = ReactBootstrap.Button;
 var Tree = require('../fileTreeUtils');
+var _ = require('underscore');
 
 var File = React.createClass({
-  listStyle: {
+  listStyle: { //TODO to styles.css
     'list-style-type': 'none',
     display: 'inline-block',
     margin: '3px',
@@ -27,7 +28,7 @@ var File = React.createClass({
   render: function () {
     return <li style={this.listStyle}>
       <div style={this.containerStyle}>
-        <Button style={this.buttonStyle} bsSize='large' ><Glyphicon glyph={this.props.icon}/></Button>
+        <Button style={_.extend(this.buttonStyle, this.props.animation)} bsSize='large' onClick={this.props.onClick}><Glyphicon glyph={this.props.icon}/></Button>
         <div>
           <p style={this.textStyle}>{this.props.children}</p>
         </div>
@@ -39,47 +40,55 @@ var File = React.createClass({
 var Folder = React.createClass({
   render: function () {
     var context = this;
+    var changes = {};
     var showFiles = {};
     var fileTree = this.props.fileTree;
     var pathArray = this.props.currentPath.split('/');
     var current = fileTree;
+    var animation = {'renamed': 'slateblue', 'added': 'yellowgreen', 'modified': 'gold', 'deleted': 'red'};
+    var currentCommit = this.props.currentCommit.files;
+    var commitLength = currentCommit.length;
 
+    for(var j=0; j < commitLength; j++) {
+      changes[currentCommit[j].filename] = currentCommit[j].status;
+    }
+
+    // move to current directory
     for(var i=0, len = pathArray.length; i < len; i++) {
       current = current[pathArray[i]];
     }
 
+    // add file to list of files to show
     for(var key in current) {
-      if(current[key].hasOwnProperty('isFolder')) {
+      var currentDir = current[key];
+      if(currentDir.hasOwnProperty('isFolder')) {
         showFiles[key] = {filename: key};
+        showFiles[key].style = currentDir.style || {'background-color': 'white'};
+
+        if(currentDir.path && changes[currentDir.path]){
+
+          showFiles[key].style = {'background-color': animation[changes[currentDir.path]]};
+        }
+        
+        if(currentDir.isFolder) {
+          for(var i=0; i<commitLength; i++) {
+            var slicedPath = currentCommit[i].filename.substring(0, currentDir.path.length)
+            if(currentDir.path === slicedPath) {
+              showFiles[key].style = {'background-color': 'orange'};
+            }
+          }
+        }
+
       }
     }
 
-    console.log(current)
-
-    // var allFiles = this.props.currentCommit.files && JSON.parse(this.props.currentCommit.files).filter(function (file) {
-      // var path = context.props.currentPath;
-      // var filename = file.filename;
-      // var pathArray = context.props.currentPath;
-      // var filePath = filename.split('/');
-      // var path = pathArray.join('/');
-      // var currentDir = pathArray[pathArray.length-1];
-      // var prev = filePath[filePath.length-2]
-      // if(filename in current) {
-      //   return true;
-      // }
-      // if (path === '') {
-      //   return true;
-      // }
-      // if (filename.slice(0, path.length) !== path) {
-      //   return false;
-      // }
-    // });
+    console.log(showFiles);
 
     showFiles = Object.keys(showFiles).map(function(x){return showFiles[x]});
     showFiles = showFiles.map(function (file) {
       var fileName = file.filename;
 
-      return <File icon={Tree.getFileIcon(fileName)}>
+      return <File icon={Tree.getFileType(fileName)} animation={file.style} onClick={function(){this.props.updateCurrentPath(this.props.currentPath + '/' + fileName)}.bind(context)}>
         {fileName.slice(fileName.lastIndexOf('/') + 1)}
       </File>
     });

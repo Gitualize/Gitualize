@@ -1,8 +1,8 @@
 var fs = require('fs');
 var request = require('request');
 
-var client_id; //client key
-var client_secret; //client secret
+var client_id;
+var client_secret;
 var base_URL = process.env.PRODUCTION ? 'http://gitualize.com' : 'http://localhost:3000';
 
 var gitHubLogin = function(req, res) { //redirects to github login
@@ -29,23 +29,15 @@ var gitHubLogin = function(req, res) { //redirects to github login
   });
 };
 
-//if we moved this to a route on our client it would prolly work as expected
 var getAccessToken = function(req, res) { //redirects back to our client page
   var code = req.query.code;
   request.post({
     url: 'https://github.com/login/oauth/access_token?client_id=' + client_id +'&client_secret=' + client_secret + '&code=' + code
   }, function(err, response, body){
-    // console.log('github body: ', body);
     var accessToken = body.slice(body.indexOf('=') + 1, body.indexOf('&'));
     console.log('got access token');
     //TODO horrible
-    //res.json({msg: 'authed', accessToken: accessToken, msg2: 'please go to /#/repo/' + req.query.repoFullName + '?accessToken=' + accessToken});
-    //res.json({msg: 'authed', accessToken: accessToken, msg2: 'please go to /#/repo/' + req.query.repoFullName + '?accessToken=' + accessToken});
-
-    //but also don't redirect on the server!!
-   //res.redirect('http://google.com');
    res.redirect(base_URL + '/#/repo/' + req.query.repoFullName + '?accessToken=' + accessToken);
-    //res.redirect('/repos/' + req.query.repoFullName + '/commits?accessToken=' + accessToken);
   });
 };//, commitsController.getCommits);
 

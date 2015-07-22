@@ -1,3 +1,10 @@
+var updateFiles = function(currentCommit, fileTree) {
+  var filepath;
+  currentCommit.files.forEach(function(file) {
+    filepath = file.filename;
+    file.status === 'deleted' ? removeFile(fileTree, filepath) : addFile(fileTree, filepath);
+  });
+};
 var addFile = function (tree, filePath) {
   var path = filePath.split('/');
   var currentFolder = tree;
@@ -11,12 +18,14 @@ var addFile = function (tree, filePath) {
       }
     }
     if (!folderMatch) {
-      currentFolder[path[0]] = {isFolder: true};
+      var index = filePath.lastIndexOf('/');
+      var folderPath = filePath.slice(0, index > -1? index : filePath.length);
+      currentFolder[path[0]] = {isFolder: true, path: folderPath};
       currentFolder = currentFolder[path[0]];
     }
     path.shift();
   }
-  currentFolder[path[0]] = {isFolder: false};
+  currentFolder[path[0]] = {isFolder: false, path: filePath};
 };
 
 var removeFile = function (tree, filePath) {
@@ -40,7 +49,8 @@ var removeFile = function (tree, filePath) {
   delete currentFolder[path[0]];
 };
 
-var getFileIcon = function(fileName){
+// TODO-CLEANUP: return json type but keep the boostrap icon name; handle folders with dot in name
+var getFileType = function(fileName){
   var images = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'svg'];
   var idx = fileName.lastIndexOf('.');
   if(idx > -1) {
@@ -51,6 +61,9 @@ var getFileIcon = function(fileName){
   }
 };
 
+
+module.exports = {addFile: addFile, removeFile: removeFile, updateFiles: updateFiles, getFileType: getFileType};
 module.exports.addFile = addFile;
 module.exports.removeFile = removeFile;
-module.exports.getFileIcon = getFileIcon;
+module.exports.getFileType = getFileType;
+
