@@ -26,9 +26,9 @@ var Visualize = React.createClass({
       commits.forEach(function(commit) {
         commit.files = JSON.parse(commit.files);
       });
-      this.setState({commits: commits});
-      Tree.updateFiles(this.state.commits[this.state.commitIndex], this.state.fileTree);
-      this.setState({fileTree: this.state.fileTree});
+      var fileTree = {};
+      Tree.updateFiles(commits[0], fileTree);
+      this.setState({fileTree: fileTree, commits: commits});
       this.updatePaths();
     }.bind(this));
   },
@@ -74,32 +74,25 @@ var Visualize = React.createClass({
   },
 
   fileOrFolder: function() {
-    if (this.state.currentPath !== '') {
-      if (this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder) {
-        return (
-          <Col xs={9} md={9}>
-            <File key={this.state.currentPath + '/' + this.state.filePaths[this.state.currentPath].commitIndex} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
-          </Col>
-        )
-      }
-      else {
-        return (
-          <Col xs={9} md={9}>
-            <Folder fileTree={this.state.fileTree} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-          </Col>
-        )
-      }
-    } else {
+    if (this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder) {
       return (
-        <div></div>
+        <Col xs={9} md={9}>
+          <File key={this.state.currentPath + '/' + this.state.filePaths[this.state.currentPath].commitIndex} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
+        </Col>
+      )
+    }
+    else {
+      return (
+        <Col xs={9} md={9}>
+          <Folder fileTree={this.state.fileTree} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+        </Col>
       )
     }
   },
 
   render: function () {
-    var maindisplay = this.fileOrFolder();
-
     if (this.state.commits.length > 0) {
+      var maindisplay = this.fileOrFolder();
       return (
         <Grid>
           <Row className='show-grid'>
