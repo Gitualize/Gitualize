@@ -35,14 +35,6 @@ var File = React.createClass({
     var currentFile = this.props.filePaths[this.props.currentPath];
     var url = currentFile.raw_url;
     var prevUrl = currentFile.last_url || url;
-    // var current = $.get(url);
-    // var previous = $.get(prevUrl);
-    // $.when(current,previous)
-    // .always(function(data,prevData) {
-    //   prevData = prevData.responseText || prevData || '';
-    //   data = data.responseText || data;
-    //   this.compare(data,prevData,url);
-    // }.bind(this))
 
     $.get(prevUrl)
     .always(function(prevData) { //for each tick of commitIndex, we get the previous data again...why?? refactor
