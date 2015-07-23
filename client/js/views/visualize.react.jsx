@@ -17,11 +17,6 @@ var Tree = require('../fileTreeUtils');
 var $ = require('jquery');
 
 var Visualize = React.createClass({
-  getInitialState: function(){
-    return {
-      windowHeight: 0
-    };
-  },
   mixins : [Navigation],
   getCommits: function () {
     // have app adjust size whenever browser window is resized
@@ -83,7 +78,7 @@ var Visualize = React.createClass({
   },
 
   getInitialState: function() {
-    return {commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}};
+    return {windowHeight: $(window).height() - 285, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}};
   },
 
   fileOrFolder: function() {
@@ -124,11 +119,11 @@ var Visualize = React.createClass({
 
           <Row className='show-grid'>
             <Col xs={3} md={3}>
-              <div style={{backgroundColor: 'lightgray', height: this.state.windowHeight || $(window).height() - 285, overflow: 'scroll'}}>
+              <div style={{backgroundColor: 'lightgray', height: this.state.windowHeight, overflow: 'scroll'}}>
                 <Directory key={this.state.commitIndex} fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
               </div>
             </Col>
-            <div style={{height: this.state.windowHeight || $(window).height() - 285, overflow: 'scroll'}}>
+            <div style={{height: this.state.windowHeight, overflow: 'scroll'}}>
               {maindisplay}
             </div>
           </Row>
