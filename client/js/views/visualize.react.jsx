@@ -67,9 +67,9 @@ var Visualize = React.createClass({
   },
 
   updateCommitIndex: function (index) {
+    Tree.updateFiles(this.state.commits[index], this.state.fileTree);
     this.setState({commitIndex: index});
     this.updatePaths();
-    Tree.updateFiles(this.state.commits[this.state.commitIndex], this.state.fileTree);
   },
 
   updateCurrentPath: function (path) {
