@@ -63,6 +63,9 @@ var Folder = React.createClass({
     // add file to list of files to show
     for(var key in current) {
       var currentDir = current[key];
+      if(currentDir.deleted) {
+        delete current[key];
+      }
       if(currentDir.hasOwnProperty('isFolder')) {
         showFiles[key] = {filename: key};
         showFiles[key].style = currentDir.style || {'backgroundColor': 'white'};
