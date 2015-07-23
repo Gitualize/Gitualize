@@ -93,7 +93,7 @@ var Folder = React.createClass({
     showFiles = showFiles.map(function (file) {
       var fileName = file.filename;
 
-      return <File icon={Tree.getFileType(fileName)} animation={file.style} onClick={function(){this.props.updateCurrentPath(this.props.currentPath + '/' + fileName)}.bind(context)}>
+      return <File icon={Tree.getFileType(fileName)} animation={file.style} onClick={function(){this.props.updateCurrentPath(this.props.currentPath === ''? fileName: this.props.currentPath + '/' + fileName)}.bind(context)}>
         {fileName.slice(fileName.lastIndexOf('/') + 1)}
       </File>
     });
