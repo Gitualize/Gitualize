@@ -36,7 +36,7 @@ bookshelf.knex.schema.hasTable('repo').then(function (exists) {
             commit.string('avatarUrl', 60);
             commit.text('message', 200); //truncate if too long
             commit.string('date', 20);
-            commit.bool('merged', 1);
+            commit.bool('merge', 1);
             commit.timestamps();
           }).then(function (table) {
             console.log('Created table: commit');
