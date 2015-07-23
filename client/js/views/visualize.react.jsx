@@ -40,7 +40,6 @@ var Visualize = React.createClass({
   },
 
   updatePaths: function () { //this should be in another utils fn like the tree stuff
-    debugger;
     var filePaths = this.state.filePaths;
     var files = this.state.commits[this.state.commitIndex].files;
     files.forEach(function(file) {
