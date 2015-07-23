@@ -88,9 +88,10 @@ var Visualize = React.createClass({
 
   fileOrFolder: function() {
     if (this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder) {
+      //<File key={this.state.currentPath + '/' + this.state.filePaths[this.state.currentPath].commitIndex} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
       return (
         <Col xs={12} md={12}>
-        <File key={this.state.currentPath + '/' + this.state.filePaths[this.state.currentPath].commitIndex} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
+        <File key={this.state.currentPath} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
         </Col>
       )
     }
@@ -104,7 +105,7 @@ var Visualize = React.createClass({
   },
 
   render: function () {
-    if (Object.keys(this.state.fileTree).length > 0) { //commits loaded--this is bad, every commitIndex change this whole thing loads again inc file view
+    if (Object.keys(this.state.fileTree).length > 0) { //fileTree loads last. bandaidy render check
       var maindisplay = this.fileOrFolder();
 
       return (

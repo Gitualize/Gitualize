@@ -12,8 +12,26 @@ var File = React.createClass({
       diff : ''
     };
   },
+  componentWillReceiveProps: function(nextProps) { //TODO refactor DRY with componentWillMount
+    //var nextFile = nextProps.filePaths[this.props.currentPath];
+    var currFile = this.props.filePaths[this.props.currentPath];
+    var url = currFile.last_url;
+    var nextUrl = currFile.raw_url; //:( TODO I think nextFile is the same as the currFile since we are building the filepath as we go...convert to react niceness like below
+    //var nextUrl = nextFile.raw_url;
+    if (url === nextUrl) return;
+    $.get(url)
+    .always(function(data) { //for each tick of commitIndex, we get the previous data again...why?? refactor
+      //always is workaround for now, this goes to the .error if encounters JS (but data in responseText)
+      data = data.responseText || data || '';
+      $.get(nextUrl)
+      .always(function(nextData) {
+        nextData = nextData.responseText || nextData;
+        this.compare(nextData,data,url);
+      }.bind(this));
+    }.bind(this));
+  },
 
-  componentWillMount: function() {
+  componentWillMount: function() { //TODO i don't think this file should know about ALL the other files via filePaths
     var currentFile = this.props.filePaths[this.props.currentPath];
     var url = currentFile.raw_url;
     var prevUrl = currentFile.last_url || url;
