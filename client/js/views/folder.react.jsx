@@ -99,7 +99,6 @@ var Folder = React.createClass({
     });
 
     return <div>
-      <h2>Folder view</h2>
       <div>
         <ul>
           {showFiles}
