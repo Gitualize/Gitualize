@@ -7,8 +7,6 @@ var base_URL = process.env.PRODUCTION ? 'http://gitualize.com' : 'http://localho
 
 var gitHubLogin = function(req, res) { //redirects to github login
   console.log('auth controller login');
-  // console.log('req.params.repoFullName: ', req.params);
-  //console.log('req.query.repoFullName: ', req.query.repoFullName);
   fs.readFile('./client/secret.json', function(err, data){
     if (data) {
       // local environment
@@ -21,11 +19,8 @@ var gitHubLogin = function(req, res) { //redirects to github login
       client_secret = process.env.CLIENT_SECRET;
     }
     var redirectUrl = base_URL + '/getAccessToken?repoFullName='+req.query.repoFullName;
-    //TODO fix this horribleness, even worse cuz https doesn't work
     console.log('going to github/oauth/authorize');
     res.redirect('https://github.com/login/oauth/authorize?client_id=' + client_id + '&redirect_uri=' + redirectUrl);
-    //var githubOauthUrl = 'https://github.com/login/oauth/authorize?client_id=' + client_id + '&redirect_uri=' + redirectUrl;
-    //res.json({msg: 'accessToken required', authUrl: githubOauthUrl});
   });
 };
 
@@ -36,9 +31,8 @@ var getAccessToken = function(req, res) { //redirects back to our client page
   }, function(err, response, body){
     var accessToken = body.slice(body.indexOf('=') + 1, body.indexOf('&'));
     console.log('got access token');
-    //TODO horrible
-   res.redirect(base_URL + '/#/repo/' + req.query.repoFullName + '?accessToken=' + accessToken);
+    res.redirect(base_URL + '/#/repo/' + req.query.repoFullName + '?accessToken=' + accessToken);
   });
-};//, commitsController.getCommits);
+};
 
 module.exports = {gitHubLogin: gitHubLogin, getAccessToken: getAccessToken};
