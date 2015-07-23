@@ -40,10 +40,10 @@ var Visualize = React.createClass({
       });
 
       //build tree and flat path stuff before rendering
-      this.setState({commits: commits});
-      Tree.updateFiles(commits[this.state.commitIndex], this.state.fileTree);
+      var fileTree = {};
+      Tree.updateFiles(commits[0], fileTree);
+      this.setState({fileTree: fileTree, commits: commits});
       this.updatePaths();
-      this.setState({fileTree: this.state.fileTree});
     }.bind(this));
   },
 
@@ -112,7 +112,7 @@ var Visualize = React.createClass({
         <Grid>
           <Row className='show-grid'>
             <Col xs={12} md={12}>
-              <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+             <Path repoName={this.props.params.repoName} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
             </Col>
           </Row>
 
