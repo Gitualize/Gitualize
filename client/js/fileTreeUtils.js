@@ -54,15 +54,20 @@ var removeFile = function (tree, filePath) {
   }
 };
 
-// TODO-CLEANUP: return json type but keep the boostrap icon name; handle folders with dot in name
-var getFileType = function(fileName){
-  var images = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'svg'];
-  var idx = fileName.lastIndexOf('.');
-  if(idx > -1) {
-    var format = (fileName.substring(idx + 1)).toLowerCase();
-    return images.indexOf(format) > -1? 'picture' : 'file';
-  } else {
+// TODO-CLEANUP: return json type but keep the boostrap icon name
+var getFileType = function(fileName, isFolder){
+  if(isFolder) {
     return 'folder-close';
+  } else {
+    var images = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'svg'];
+    var idx = fileName.lastIndexOf('.');
+    var format = (fileName.substring(idx + 1)).toLowerCase();
+
+    if(idx > -1) {
+      return images.indexOf(format) > -1? 'picture' : 'file';
+    } else {
+      return 'file';
+    }
   }
 };
 

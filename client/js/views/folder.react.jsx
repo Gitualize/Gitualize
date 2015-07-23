@@ -78,6 +78,7 @@ var Folder = React.createClass({
         }
         
         if(currentDir.isFolder) {
+          showFiles[key].isFolder = true;
           for(var i=0; i<commitLength; i++) {
             var slicedPath = currentCommit[i].filename.substring(0, currentDir.path.length)
             if(currentDir.path === slicedPath) {
@@ -93,7 +94,7 @@ var Folder = React.createClass({
     showFiles = showFiles.map(function (file) {
       var fileName = file.filename;
 
-      return <File icon={Tree.getFileType(fileName)} animation={file.style} onClick={function(){this.props.updateCurrentPath(this.props.currentPath === ''? fileName: this.props.currentPath + '/' + fileName)}.bind(context)}>
+      return <File icon={Tree.getFileType(fileName, file.isFolder)} animation={file.style} onClick={function(){this.props.updateCurrentPath(this.props.currentPath === ''? fileName: this.props.currentPath + '/' + fileName)}.bind(context)}>
         {fileName.slice(fileName.lastIndexOf('/') + 1)}
       </File>
     });
