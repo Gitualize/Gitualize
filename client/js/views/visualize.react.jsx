@@ -63,6 +63,12 @@ var Visualize = React.createClass({
   updateCurrentPath: function (path) {
     this.setState({currentPath: path});
   },
+  reset: function() {
+    var fileTree = {};
+    Tree.updateFiles(this.state.commits[0], fileTree);
+    this.setState( {commitIndex: 0, currentPath: '', fileTree: fileTree, filePaths : {}} );
+    this.updatePaths();
+  },
 
   getInitialState: function() {
     return {commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}};
@@ -72,14 +78,14 @@ var Visualize = React.createClass({
     if (this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder) {
       return (
         <Col xs={9} md={9}>
-          <File key={this.state.currentPath + '/' + this.state.filePaths[this.state.currentPath].commitIndex} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
+        <File key={this.state.currentPath + '/' + this.state.filePaths[this.state.currentPath].commitIndex} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
         </Col>
       )
     }
     else {
       return (
         <Col xs={9} md={9}>
-          <Folder fileTree={this.state.fileTree} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+        <Folder fileTree={this.state.fileTree} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
         </Col>
       )
     }
@@ -90,29 +96,30 @@ var Visualize = React.createClass({
       var maindisplay = this.fileOrFolder();
       return (
         <Grid>
-          <Row className='show-grid'>
-            <Col xs={12} md={12}>
-              <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-            </Col>
-          </Row>
+        <Row className='show-grid'>
+        <Col xs={12} md={12}>
+        <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+        </Col>
+        </Row>
 
-          <Row className='show-grid'>
-            <Col xs={12} md={12}>
-              <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
-            </Col>
-          </Row>
+        <Row className='show-grid'>
+        <Col xs={12} md={12}>
+        <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset}/>
+        </Col>
+        </Row>
 
-          <Row className='show-grid'>
-            <Col xs={12} md={12}>
-              <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
-            </Col>
-          </Row>
-          <Row className='show-grid'>
-            <Col xs={3} md={3}>
-              <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-            </Col>
-            {maindisplay}
-          </Row>
+        <Row className='show-grid'>
+        <Col xs={12} md={12}>
+        <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
+        </Col>
+        </Row>
+        <Row className='show-grid'>
+        <Col xs={3} md={3}>
+
+        <Directory key={this.state.commitIndex} fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+        </Col>
+        {maindisplay}
+        </Row>
         </Grid>
       )
     } else {
