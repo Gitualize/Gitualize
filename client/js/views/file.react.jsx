@@ -17,12 +17,24 @@ var File = React.createClass({
     var currentFile = this.props.filePaths[this.props.currentPath];
     var url = currentFile.raw_url;
     var prevUrl = currentFile.last_url || url;
-    $.when($.get(prevUrl),$.get(url))
-    .always(function(prevData, data) { //for each tick of commitIndex, we get the previous data again...why?? refactor
+    // var current = $.get(url);
+    // var previous = $.get(prevUrl);
+    // $.when(current,previous)
+    // .always(function(data,prevData) {
+    //   prevData = prevData.responseText || prevData || '';
+    //   data = data.responseText || data;
+    //   this.compare(data,prevData,url);
+    // }.bind(this))
+
+    $.get(prevUrl)
+    .always(function(prevData) { //for each tick of commitIndex, we get the previous data again...why?? refactor
       //always is workaround for now, this goes to the .error if encounters JS (but data in responseText)
       prevData = prevData.responseText || prevData || '';
-      data = data.responseText || data;
-      this.compare(data,prevData,url);
+      $.get(url)
+      .always(function(data) {
+        data = data.responseText || data;
+        this.compare(data,prevData,url);
+      }.bind(this));
     }.bind(this));
   },
 
