@@ -99,40 +99,38 @@ var Visualize = React.createClass({
       var windowHeight = $(window).height() * .6;
 
       return (
-        <div>
-          <Grid>
-            <Row className='show-grid'>
-              <Col xs={12} md={12}>
-                  <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-              </Col>
-            </Row>
+        <Grid>
+        <Row className='show-grid'>
+        <Col xs={12} md={12}>
+        <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+        </Col>
+        </Row>
 
-            <Row className='show-grid'>
-              <Col xs={12} md={12}>
-                <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
-              </Col>
-            </Row>
+        <Row className='show-grid'>
+        <Col xs={12} md={12}>
+        <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
+        </Col>
+        </Row>
 
-            <Row className='show-grid'>
-              <Col xs={3} md={3}>
-                <div style={{backgroundColor: 'lightgray', height: windowHeight, overflow: 'scroll'}}>
-                  <Directory key={this.state.commitIndex} fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-                </div>
-              </Col>
-              <div style={{height: windowHeight, overflow: 'scroll'}}>
-                {maindisplay}
-              </div>
-            </Row>
-
-            <Row className='show-grid'>
-              <Col xs={12} md={12}>
-                <div style={{position: 'relative', bottom: '0'}}>
-                  <Playbar style={{'marginBottom': '0'}} currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset}/>
-                </div>
-              </Col>
-            </Row>
-          </Grid>
+        <Row className='show-grid'>
+        <Col xs={3} md={3}>
+          <div style={{backgroundColor: 'lightgray', height: windowHeight, overflow: 'scroll'}}>
+            <Directory key={this.state.commitIndex} fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+          </div>
+        </Col>
+        <div style={{height: windowHeight, overflow: 'scroll'}}>
+          {maindisplay}
         </div>
+        </Row>
+
+        <Row className='show-grid'>
+        <Col xs={12} md={12}>
+          <div style={{position: 'relative', bottom: '0'}}>
+            <Playbar style={{'marginBottom': '0'}} currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset}/>
+          </div>
+        </Col>
+        </Row>
+        </Grid>
       )
     } else {
       return (
