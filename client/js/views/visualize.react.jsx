@@ -26,18 +26,21 @@ var Visualize = React.createClass({
       commits.forEach(function(commit) {
         commit.files = JSON.parse(commit.files);
       });
-      var fileTree = {};
-      Tree.updateFiles(commits[0], fileTree);
-      this.setState({fileTree: fileTree, commits: commits});
+
+      //build tree and flat path stuff before rendering
+      this.setState({commits: commits});
+      Tree.updateFiles(commits[this.state.commitIndex], this.state.fileTree);
       this.updatePaths();
+      this.setState({fileTree: this.state.fileTree});
     }.bind(this));
   },
 
-  componentDidMount: function() {
+  componentWillMount: function() {
     this.getCommits();
   },
 
-  updatePaths: function () {
+  updatePaths: function () { //this should be in another utils fn like the tree stuff
+    debugger;
     var filePaths = this.state.filePaths;
     var files = this.state.commits[this.state.commitIndex].files;
     files.forEach(function(file) {
@@ -54,19 +57,12 @@ var Visualize = React.createClass({
 
   updateCommitIndex: function (index) {
     this.setState({commitIndex: index});
-    Tree.updateFiles(this.state.commits[this.state.commitIndex], this.state.fileTree);
     this.updatePaths();
+    Tree.updateFiles(this.state.commits[this.state.commitIndex], this.state.fileTree);
   },
 
   updateCurrentPath: function (path) {
     this.setState({currentPath: path});
-  },
-
-  reset: function() {
-    var fileTree = {};
-    Tree.updateFiles(this.state.commits[0], fileTree);
-    this.setState( {commitIndex: 0, currentPath: '', fileTree: fileTree, filePaths : {}} );
-    this.updatePaths();
   },
 
   getInitialState: function() {
@@ -91,7 +87,7 @@ var Visualize = React.createClass({
   },
 
   render: function () {
-    if (this.state.commits.length > 0) {
+    if (Object.keys(this.state.fileTree).length > 0) { //commits loaded--this is bad, every commitIndex change this whole thing loads again inc file view
       var maindisplay = this.fileOrFolder();
       return (
         <Grid>
@@ -103,7 +99,7 @@ var Visualize = React.createClass({
 
           <Row className='show-grid'>
             <Col xs={12} md={12}>
-              <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset}/>
+              <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex}/>
             </Col>
           </Row>
 
@@ -112,10 +108,9 @@ var Visualize = React.createClass({
               <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
             </Col>
           </Row>
-
           <Row className='show-grid'>
             <Col xs={3} md={3}>
-              <Directory key={this.state.commitIndex} fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+              <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
             </Col>
             {maindisplay}
           </Row>
