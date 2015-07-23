@@ -8,7 +8,7 @@ var Directory = React.createClass({
   map: function(obj, callback) {
     var array = [];
     for (var key in obj) {
-      if (key !== 'isFolder' && key !== 'path') {
+      if (key !== 'isFolder' && key !== 'path' && key !== 'deleted') {
         array.push(callback(obj[key], key));
       }
     }
@@ -20,6 +20,9 @@ var Directory = React.createClass({
       paddingLeft: (depth*10) + 'px'
     }
     return this.map(obj,function(value, key) { //TODO refactor
+      if (value.deleted) {
+        return;
+      }
       if (value.isFolder) {
         return (
           <div>
