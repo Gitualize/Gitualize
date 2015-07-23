@@ -98,7 +98,7 @@ var cleanCommitsDetailed = function(commits) {
     _.each(commit.files, function(file) {
       file.raw_url = rawgittify(file.raw_url);
     });
-    return {sha: commit.sha, committer: committer, avatarUrl: avatarUrl, message: message, date: commit.commit.committer.date, files: JSON.stringify(commit.files)}; //omg
+    return {sha: commit.sha, merged: commit.parents.length > 1, committer: committer, avatarUrl: avatarUrl, message: message, date: commit.commit.committer.date, files: JSON.stringify(commit.files)}; //omg
   });
   return c;
 };
