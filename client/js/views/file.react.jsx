@@ -9,117 +9,69 @@ var jsDiff = require('diff');
 var File = React.createClass({
   getInitialState: function() {
     return {
-      html : ''
+      diff : ''
     };
   },
 
-  componentDidMount: function() {
-    var url = this.props.filePaths[this.props.currentPath].raw_url;
-
-    $.get(url, function(success) {
-      data = success;
-      if (this.props.filePaths[this.props.currentPath].commitIndex === this.props.currentIndex && !!this.props.filePaths[this.props.currentPath].last_url) {
-        this.secondaryMount(data,url);
-      } else {
-        this.setState ( {html: this.codeOr(data, url)} )
-      }
-    }.bind(this))
-    .fail(function(error) {
-      data = error.responseText;
-      if (this.props.filePaths[this.props.currentPath].commitIndex === this.props.currentIndex && !!this.props.filePaths[this.props.currentPath].last_url) {
-        this.secondaryMount(data,url);
-      } else {
-        this.setState ( {html: this.codeOr(data, url)} )
-      }
-    }.bind(this))
+  componentWillMount: function() {
+    var currentFile = this.props.filePaths[this.props.currentPath];
+    var url = currentFile.raw_url;
+    var prevUrl = currentFile.last_url || url;
+    $.get(prevUrl)
+    .always(function(prevData) { //for each tick of commitIndex, we get the previous data again...why?? refactor
+      //always is workaround for now, this goes to the .error if encounters JS (but data in responseText)
+      prevData = prevData.responseText || prevData || '';
+      $.get(url)
+      .always(function(data) {
+        data = data.responseText || data;
+        this.compare(data,prevData,url);
+      }.bind(this));
+    }.bind(this));
   },
 
-  secondaryMount: function(data, url) {
-    var previousUrl = this.props.filePaths[this.props.currentPath].last_url; //.split('/');
-    var previousData = '';
-    $.get(previousUrl, function(previousSuccess) {
-      previousData = previousSuccess;
-      this.diff(data,previousData,url);
-    }.bind(this))
-    .fail(function(previousError) {
-      previousData = previousError.responseText;
-      this.diff(data,previousData,url);
-    }.bind(this))
-  },
-
-  diff: function(data, pdata, url) {
-    if (typeof data === 'object') {
+  compare: function(data, pdata, url) {
+    if (typeof data === 'object') { //when is it an obj? TODO
       data = JSON.stringify(data);
       pdata = JSON.stringify(pdata);
     }
-    var diff = jsDiff.diffWords(pdata, data);
-    this.setState ( {html: this.codeOr(diff, url)} );
+    var diff = jsDiff.diffWords(pdata, data); //try to diff, but may be noncode data
+    this.setState ( {diff} ); //can return and set in above fn
+    //this.setState ( {code: this.codeOr(diff, url)} );
   },
 
-  codeOr: function(data, url) {
+  formatFile: function(diff) { //html object to render surrounding the code or img
+    //if (typeof data === 'object') return JSON.stringify(data); //something something json
+    //if (typeof data === 'string' && fileType !== 'json') return data;
+    //
     var fileType = this.props.currentPath.split('.').pop();
     if (fileType === 'png' || fileType === 'gif' || fileType === 'jpg' || fileType === 'jpeg') {
+      var url = this.props.filePaths[this.props.currentPath].raw_url;
       return (
-          <Well bsSize='small'>
-            <img src={url}/>
-          </Well>
-        )
-    } else  {
-      var style = {
-        wordWrap: 'break-word; white-space; pre-wrap'
-      }
-      if (fileType !== 'json') {
-        if (typeof data === 'string') {
-          return (
-              <pre style={style}>
-                {data}
-              </pre>
-            )
-        } else {
-          return (
-              <pre style={style}>
-                {data.map(function(part) {
-                  var colorStyle = {
-                    color : part.added ? 'green' : part.removed ? 'red' : 'grey'
-                  }
-                  return (
-                      <span style={colorStyle}>{part.value}</span>
-                    )
-                })}
-              </pre>
-            )
-        }
-      } else {
-        if (typeof data === 'object') {
-          return (
-              <pre style={style}>
-                {JSON.stringify(data)}
-              </pre>
-            )
-        } else {
-          return (
-              <pre style={style}>
-                {data.map(function(part) {
-                  var colorStyle = {
-                    color : part.added ? 'green' : part.removed ? 'red' : 'grey'
-                  }
-                  return (
-                      <span style={colorStyle}>{part.value}</span>
-                    )
-                })}
-              </pre>
-            )
-        }
-      }
+        <Well bsSize='small'>
+        <img src={url}/>
+        </Well>
+      )
     }
-  },
+    if (typeof diff === 'string') return diff; //TODO ???only initial case?
 
+    function color(part) {
+      return {color: part.added ? 'green' : part.removed ? 'red' : 'grey'};
+    };
+    var style = {
+      wordWrap: 'break-word; white-space; pre-wrap'
+    }
+    return (<pre style={style}>
+            { diff.map(function(part) {
+                return (<span style={color(part)}>{part.value}</span>);
+              }) }
+            </pre>);
+  },
   render: function () {
     return (
-        <div>
-          {this.state.html}
-        </div>
-      )
+      <div>
+      {this.formatFile(this.state.diff)}
+      </div>
+    )
   }
 });
 
