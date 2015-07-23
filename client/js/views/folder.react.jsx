@@ -7,7 +7,7 @@ var _ = require('underscore');
 
 var File = React.createClass({
   listStyle: { //TODO to styles.css
-    'listStyleType': 'none',
+    listStyleType: 'none',
     display: 'inlineBlock',
     margin: '3px',
     float: 'left'
@@ -17,13 +17,13 @@ var File = React.createClass({
     height: '115px'
   },
   buttonStyle: {
-    'display': 'block',
-    'marginLeft': 'auto',
-    'marginRight': 'auto'
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
   textStyle: {
-    'textAlign': 'center',
-    'wordWrap': 'break-word'
+    textAlign: 'center',
+    wordWrap: 'break-word'
   },
   render: function () {
     return <li style={this.listStyle}>
@@ -95,9 +95,11 @@ var Folder = React.createClass({
 
     return <div>
       <h2>Folder view</h2>
-      <ul>
-        {showFiles}
-      </ul>
+      <div>
+        <ul>
+          {showFiles}
+        </ul>
+      </div>
     </div>
   }
 });

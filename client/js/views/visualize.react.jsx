@@ -14,6 +14,8 @@ var Playbar = require('./playbar.react.jsx');
 var CommitInfo = require('./commitInfo.react.jsx');
 var Tree = require('../fileTreeUtils');
 
+var $ = require('jquery');
+
 var Visualize = React.createClass({
   mixins : [Navigation],
   getCommits: function () {
@@ -77,14 +79,14 @@ var Visualize = React.createClass({
   fileOrFolder: function() {
     if (this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder) {
       return (
-        <Col xs={9} md={9}>
+        <Col xs={12} md={12}>
         <File key={this.state.currentPath + '/' + this.state.filePaths[this.state.currentPath].commitIndex} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
         </Col>
       )
     }
     else {
       return (
-        <Col xs={9} md={9}>
+        <Col xs={12} md={12}>
         <Folder fileTree={this.state.fileTree} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
         </Col>
       )
@@ -94,6 +96,8 @@ var Visualize = React.createClass({
   render: function () {
     if (Object.keys(this.state.fileTree).length > 0) { //commits loaded--this is bad, every commitIndex change this whole thing loads again inc file view
       var maindisplay = this.fileOrFolder();
+      var windowHeight = $(window).height() * .6;
+
       return (
         <div>
           <Grid>
@@ -111,11 +115,13 @@ var Visualize = React.createClass({
 
             <Row className='show-grid'>
               <Col xs={3} md={3}>
-                <div style={{'backgroundColor': 'lightgray', height: '450px', overflow: 'scroll', padding: '0'}}>
+                <div style={{backgroundColor: 'lightgray', height: windowHeight, overflow: 'scroll'}}>
                   <Directory key={this.state.commitIndex} fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
                 </div>
               </Col>
-              {maindisplay}
+              <div style={{height: windowHeight, overflow: 'scroll'}}>
+                {maindisplay}
+              </div>
             </Row>
 
             <Row className='show-grid'>
