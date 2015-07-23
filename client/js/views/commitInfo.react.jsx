@@ -19,7 +19,7 @@ var CommitInfo = React.createClass({
               <Col xs={10} sm={10} md={11}>{this.props.currentCommit.message}</Col>
             </Row>
             <Row className='show-grid'>
-              <Col xs={2} sm={2} md={1}>{this.props.currentCommit.committer}</Col>
+              <Col xs={2} sm={2} md={1}><a target="_blank" href={"https://github.com/" + this.props.currentCommit.committer}>{this.props.currentCommit.committer}</a></Col>
             </Row>
           </Grid>
         </Well>
