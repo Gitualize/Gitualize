@@ -19,14 +19,20 @@ var $ = require('jquery');
 var Visualize = React.createClass({
   mixins : [Navigation],
   getCommits: function () {
+    //save accesstoken to localStorage for future repo requests
+    if (!window.localStorage.gitHubAccessToken && this.props.query.accessToken) {
+      window.localStorage.gitHubAccessToken = this.props.query.accessToken;
+    }
+    //remove accesstoken from url
+    window.location.hash = window.location.hash.split('?')[0];
+
     // have app adjust size whenever browser window is resized
     window.onresize = function(){
       this.setState({windowHeight: $(window).height() - 285});
     }.bind(this);
 
-    //console.log('accessToken now: ', this.props.query.accessToken);
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
-    $.getJSON('repos/'+repoFullName+'/commits', {accessToken: this.props.query.accessToken})
+    $.getJSON('repos/'+repoFullName+'/commits', {accessToken: window.localStorage.gitHubAccessToken})
     .success(function(commits) {
       if (commits.msg === 'auth required') return window.location = commits.authUrl;
       if (!Array.isArray(commits)) this.transitionTo('/'); //TODO show error msg first
