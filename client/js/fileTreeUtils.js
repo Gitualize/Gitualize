@@ -47,6 +47,11 @@ var removeFile = function (tree, filePath) {
     path.shift();
   }
   delete currentFolder[path[0]];
+  // if the currentFolder is empty, delete the folder
+  if (Object.keys(currentFolder).length === 2) {
+    //TODO: actually delete the folder instead of setting the property deleted
+    currentFolder.deleted = true;
+  }
 };
 
 // TODO-CLEANUP: return json type but keep the boostrap icon name; handle folders with dot in name
