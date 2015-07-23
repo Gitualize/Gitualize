@@ -47,10 +47,10 @@ var File = React.createClass({
     if (fileType === 'png' || fileType === 'gif' || fileType === 'jpg' || fileType === 'jpeg') {
       var url = this.props.filePaths[this.props.currentPath].raw_url;
       return (
-        <Well bsSize='small'>
-        <img src={url}/>
-        </Well>
-      )
+          <Well bsSize='small'>
+            <img src={url}/>
+          </Well>
+        )
     }
     if (typeof diff === 'string') return diff; //TODO ???only initial case?
 
@@ -60,16 +60,18 @@ var File = React.createClass({
     var style = {
       wordWrap: 'break-word; white-space; pre-wrap'
     }
-    return (<pre style={style}>
-            { diff.map(function(part) {
-                return (<span style={color(part)}>{part.value}</span>);
-              }) }
-            </pre>);
+    return (
+        <pre style={style}>
+          { diff.map(function(part) {
+            return (<span style={color(part)}>{part.value}</span>);
+          })}
+        </pre>
+      )
   },
   render: function () {
     return (
       <div>
-      {this.formatFile(this.state.diff)}
+        {this.formatFile(this.state.diff)}
       </div>
     )
   }
