@@ -6,31 +6,33 @@ var Tree = require('../fileTreeUtils');
 var _ = require('underscore');
 
 var File = React.createClass({
-  listStyle: { //TODO to styles.css
-    listStyleType: 'none',
-    display: 'inlineBlock',
-    margin: '3px',
-    float: 'left'
-  },
-  containerStyle: {
-    width: '115px',
-    height: '115px'
-  },
-  buttonStyle: {
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto'
-  },
-  textStyle: {
-    textAlign: 'center',
-    wordWrap: 'break-word'
+  styles : {
+    listStyle: { //TODO to styles.css
+      listStyleType: 'none',
+      display: 'inlineBlock',
+      margin: '3px',
+      float: 'left'
+    },
+    containerStyle: {
+      width: '115px',
+      height: '115px'
+    },
+    buttonStyle: {
+      display: 'block',
+      marginLeft: 'auto',
+      marginRight: 'auto'
+    },
+    textStyle: {
+      textAlign: 'center',
+      wordWrap: 'break-word'
+    }
   },
   render: function () {
-    return <li style={this.listStyle}>
-      <div style={this.containerStyle}>
-        <Button style={_.extend(this.buttonStyle, this.props.animation)} bsSize='large' onClick={this.props.onClick}><Glyphicon glyph={this.props.icon}/></Button>
+    return <li style={this.styles.listStyle}>
+      <div style={this.styles.containerStyle}>
+        <Button style={_.extend(this.styles.buttonStyle, this.props.animation)} bsSize='large' onClick={this.props.onClick}><Glyphicon glyph={this.props.icon}/></Button>
         <div>
-          <p style={this.textStyle}>{this.props.children}</p>
+          <p style={this.styles.textStyle}>{this.props.children}</p>
         </div>
       </div>
     </li>
