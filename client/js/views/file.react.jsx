@@ -49,7 +49,7 @@ var File = React.createClass({
   },
 
   compare: function(data, pdata, url) {
-    debugger;
+    //debugger;
     if (typeof data === 'object') { //when is it an obj? TODO
       data = JSON.stringify(data);
       pdata = JSON.stringify(pdata);
