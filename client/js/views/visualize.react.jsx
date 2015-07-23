@@ -95,32 +95,38 @@ var Visualize = React.createClass({
     if (Object.keys(this.state.fileTree).length > 0) { //commits loaded--this is bad, every commitIndex change this whole thing loads again inc file view
       var maindisplay = this.fileOrFolder();
       return (
-        <Grid>
-        <Row className='show-grid'>
-        <Col xs={12} md={12}>
-        <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-        </Col>
-        </Row>
+        <div>
+          <Grid>
+            <Row className='show-grid'>
+              <Col xs={12} md={12}>
+                  <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+              </Col>
+            </Row>
 
-        <Row className='show-grid'>
-        <Col xs={12} md={12}>
-        <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset}/>
-        </Col>
-        </Row>
+            <Row className='show-grid'>
+              <Col xs={12} md={12}>
+                <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
+              </Col>
+            </Row>
 
-        <Row className='show-grid'>
-        <Col xs={12} md={12}>
-        <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
-        </Col>
-        </Row>
-        <Row className='show-grid'>
-        <Col xs={3} md={3}>
+            <Row className='show-grid'>
+              <Col xs={3} md={3}>
+                <div style={{'backgroundColor': 'lightgray', height: '450px', overflow: 'scroll', padding: '0'}}>
+                  <Directory key={this.state.commitIndex} fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+                </div>
+              </Col>
+              {maindisplay}
+            </Row>
 
-        <Directory key={this.state.commitIndex} fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
-        </Col>
-        {maindisplay}
-        </Row>
-        </Grid>
+            <Row className='show-grid'>
+              <Col xs={12} md={12}>
+                <div style={{position: 'relative', bottom: '0'}}>
+                  <Playbar style={{'marginBottom': '0'}} currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset}/>
+                </div>
+              </Col>
+            </Row>
+          </Grid>
+        </div>
       )
     } else {
       return (
