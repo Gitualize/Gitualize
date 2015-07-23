@@ -61,7 +61,7 @@ var File = React.createClass({
       data = JSON.stringify(data);
       pdata = JSON.stringify(pdata);
     }
-    var diff = jsDiff.diffWords(pdata, data); //try to diff, but may be noncode data
+    var diff = jsDiff.diffLines(pdata, data); //try to diff, but may be noncode data
     this.setState ( {diff} ); //can return and set in above fn
     //this.setState ( {code: this.codeOr(diff, url)} );
   },
