@@ -17,8 +17,18 @@ var Tree = require('../fileTreeUtils');
 var $ = require('jquery');
 
 var Visualize = React.createClass({
+  getInitialState: function(){
+    return {
+      windowHeight: 0
+    };
+  },
   mixins : [Navigation],
   getCommits: function () {
+    // have app adjust size whenever browser window is resized
+    window.onresize = function(){
+      this.setState({windowHeight: $(window).height() - 285});
+    }.bind(this);
+
     //console.log('accessToken now: ', this.props.query.accessToken);
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
     $.getJSON('repos/'+repoFullName+'/commits', {accessToken: this.props.query.accessToken})
@@ -96,13 +106,12 @@ var Visualize = React.createClass({
   render: function () {
     if (Object.keys(this.state.fileTree).length > 0) { //commits loaded--this is bad, every commitIndex change this whole thing loads again inc file view
       var maindisplay = this.fileOrFolder();
-      var windowHeight = $(window).height() * .6;
 
       return (
         <Grid>
           <Row className='show-grid'>
             <Col xs={12} md={12}>
-             <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+              <Path currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
             </Col>
           </Row>
 
@@ -114,11 +123,11 @@ var Visualize = React.createClass({
 
           <Row className='show-grid'>
             <Col xs={3} md={3}>
-              <div style={{backgroundColor: 'lightgray', height: windowHeight, overflow: 'scroll'}}>
+              <div style={{backgroundColor: 'lightgray', height: this.state.windowHeight || $(window).height() - 285, overflow: 'scroll'}}>
                 <Directory key={this.state.commitIndex} fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
               </div>
             </Col>
-            <div style={{height: windowHeight, overflow: 'scroll'}}>
+            <div style={{height: this.state.windowHeight || $(window).height() - 285, overflow: 'scroll'}}>
               {maindisplay}
             </div>
           </Row>
