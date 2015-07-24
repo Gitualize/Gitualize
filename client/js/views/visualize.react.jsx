@@ -90,6 +90,9 @@ var Visualize = React.createClass({
 
   closeFileGitualize: function() {
     this.setState( {showFileGitualize: false, urls: {form: '', to: ''}, help: 'Read up on tips and tricks!'} );
+
+  updatePlaybarDirection: function (direction) {
+    this.setState({playbarDirection: direction});
   },
 
   reset: function() {
@@ -100,7 +103,7 @@ var Visualize = React.createClass({
   },
 
   getInitialState: function() {
-    return {loading: true, windowHeight: $(window).height() - 305, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}, showFileGitualize: false, urls: {form: '', to: ''}, help: 'Read up on tips and tricks!'};
+    return {loading: true, windowHeight: $(window).height() - 305, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}, playbarDirection: 'forward', showFileGitualize: false, urls: {form: '', to: ''}, help: 'Read up on tips and tricks!'};
   },
 
   fileOrFolder: function() {
@@ -222,7 +225,7 @@ var Visualize = React.createClass({
               {maindisplay}
             </Row>
 
-            <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset} showFileGitualize={this.showFileGitualize} isFile={this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder}/>
+            <Playbar playbarDirection={this.state.playbarDirection} updatePlaybarDirection={this.updatePlaybarDirection} currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset} showFileGitualize={this.showFileGitualize} isFile={this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder}/>
           </Grid>
 
           <Modal show={this.state.showFileGitualize} onHide={this.closeFileGitualize}>
