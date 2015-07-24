@@ -12,7 +12,7 @@ var File = require('./file.react.jsx');
 var Folder = require('./folder.react.jsx');
 var Playbar = require('./playbar.react.jsx');
 var CommitInfo = require('./commitInfo.react.jsx');
-var Tree = require('../fileTreeUtils');
+var Tree = require('../utils/fileTreeUtils');
 
 var $ = require('jquery');
 
@@ -28,7 +28,7 @@ var Visualize = React.createClass({
 
     // have app adjust size whenever browser window is resized
     window.onresize = function(){
-      this.setState({windowHeight: $(window).height() - 285});
+      this.setState({windowHeight: $(window).height() - 305});
     }.bind(this);
 
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
@@ -84,7 +84,7 @@ var Visualize = React.createClass({
   },
 
   getInitialState: function() {
-    return {windowHeight: $(window).height() - 285, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}};
+    return {windowHeight: $(window).height() - 305, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}};
   },
 
   fileOrFolder: function() {
