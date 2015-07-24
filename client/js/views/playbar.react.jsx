@@ -94,12 +94,14 @@ var Playbar = React.createClass({
   },
 
   tick: function() {
-    var now = this.state.now + 1;
+    var incrementor = this.state.direction === 'forward' ? 1 : -1;
+    var now = this.state.now + incrementor;
     this.setState( {now} );
     if (now % 10 === 0) {
-      this.props.updateCommitIndex(this.props.commitIndex + 1);
+      if (this.props.commitIndex === 0 && this.state.direction === 'backward') return this.end();
+      this.props.updateCommitIndex(this.props.commitIndex + incrementor);
       if (now % (this.props.numberOfCommits*10) === 0) this.end();
-      this.time.add(1);
+      this.time.add(incrementor);
       var date = this.time.toString();
       this.setState( {date} );
     }
