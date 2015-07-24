@@ -45,13 +45,12 @@ var Playbar = React.createClass({
       now: 0,
       glyphicon: 'play',
       commit : 0,
-      speed : 100,
-      direction : 'forward'
+      speed : 100
     };
   },
 
   play: function() {
-    this.setState({direction: 'forward'});
+    this.props.updatePlaybarDirection('forward');
     this.timer = setInterval(this.tick, this.state.speed);
     var glyphicon = 'pause';
     this.setState( {glyphicon} );
@@ -84,7 +83,7 @@ var Playbar = React.createClass({
   },
 
   rewind: function() {
-    this.setState({direction: 'backward'});
+    this.props.updatePlaybarDirection('backward');
   },
 
   end: function() {
@@ -94,11 +93,11 @@ var Playbar = React.createClass({
   },
 
   tick: function() {
-    var incrementor = this.state.direction === 'forward' ? 1 : -1;
+    var incrementor = this.props.playbarDirection === 'forward' ? 1 : -1;
     var now = this.state.now + incrementor;
     this.setState( {now} );
     if (now % 10 === 0) {
-      if (this.props.commitIndex === 0 && this.state.direction === 'backward') return this.end();
+      if (this.props.commitIndex === 0 && this.props.playbarDirection === 'backward') return this.end();
       this.props.updateCommitIndex(this.props.commitIndex + incrementor);
       if (now % (this.props.numberOfCommits*10) === 0) this.end();
       this.time.add(incrementor);
