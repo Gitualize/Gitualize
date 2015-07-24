@@ -2,7 +2,7 @@ var React = require('react');
 var ReactBootstrap = require('react-bootstrap');
 var Glyphicon = ReactBootstrap.Glyphicon;
 var Button = ReactBootstrap.Button;
-var Tree = require('../fileTreeUtils');
+var FolderUtils = require('../utils/folderUtils');
 var _ = require('underscore');
 
 var File = React.createClass({
@@ -92,9 +92,10 @@ var Folder = React.createClass({
     }
 
     showFiles = Object.keys(showFiles).map(function(x){return showFiles[x]});
-    showFiles = showFiles.map(function (file) {
+    showFiles = FolderUtils.fileSort(showFiles, {method: 'changed', reverse: false});
+    showFiles = showFiles.map(function(file) {
       var fileName = file.filename;
-      var iconType = Tree.getFileType(fileName, file.isFolder);
+      var iconType = FolderUtils.getFileType(fileName, file.isFolder); 
 
       return <File icon={iconType} animation={file.style} onClick={function(){this.props.updateCurrentPath(this.props.currentPath === ''? fileName: this.props.currentPath + '/' + fileName)}.bind(context)}>
         {fileName.slice(fileName.lastIndexOf('/') + 1)}

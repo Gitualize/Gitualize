@@ -54,26 +54,5 @@ var removeFile = function (tree, filePath) {
   }
 };
 
-// TODO-CLEANUP: return json type but keep the boostrap icon name
-var getFileType = function(fileName, isFolder){
-  if(isFolder) {
-    return 'folder-close';
-  } else {
-    var images = ['jpg', 'jpeg', 'png', 'bmp', 'gif', 'svg'];
-    var idx = fileName.lastIndexOf('.');
-    var format = (fileName.substring(idx + 1)).toLowerCase();
-
-    if(idx > -1) {
-      return images.indexOf(format) > -1? 'picture' : 'file';
-    } else {
-      return 'file';
-    }
-  }
-};
-
-
-module.exports = {addFile: addFile, removeFile: removeFile, updateFiles: updateFiles, getFileType: getFileType};
-module.exports.addFile = addFile;
-module.exports.removeFile = removeFile;
-module.exports.getFileType = getFileType;
+module.exports = {addFile: addFile, removeFile: removeFile, updateFiles: updateFiles};
 
