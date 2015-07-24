@@ -5,7 +5,6 @@ var Button = ReactBootstrap.Button;
 var FolderUtils = require('../utils/folderUtils');
 var _ = require('underscore');
 var Well = ReactBootstrap.Well;
-var ButtonToolbar = ReactBootstrap.ButtonToolbar;
 
 var Folder = React.createClass({
   styles : {
@@ -13,10 +12,16 @@ var Folder = React.createClass({
       width: '115px',
       height: '115px',
       margin: '3px',
+      display: 'inline-block'
     },
     textStyle: {
       textAlign: 'center',
       wordWrap: 'break-word'
+    },
+    buttonStyle: {
+      display: 'block',
+      marginLeft: 'auto',
+      marginRight: 'auto'
     }
   },
 
@@ -77,19 +82,28 @@ var Folder = React.createClass({
       var iconType = FolderUtils.getFileType(fileName, file.isFolder); 
 
       return (
-          <Button style={_.extend(context.styles.containerStyle, file.style)} bsSize='large' onClick={function() {context.props.updateCurrentPath(context.props.currentPath === ''? fileName: context.props.currentPath + '/' + fileName)}}>
-            <Glyphicon glyph={iconType}/>
-            <p style={context.styles.textStyle}>{fileName.slice(fileName.lastIndexOf('/') + 1)}</p>
-          </Button>
+          <File iconType={iconType} fileName={fileName} animation={file.style} context={context}/>
         )
     });
 
     return (
-        <Well bsSize='small'>
-          <ButtonToolbar>{showFiles}</ButtonToolbar>
-        </Well>     
+        <Well bsSize='small'>{showFiles}</Well>     
       )
   }
 });
+
+var File = React.createClass({
+  render: function() {
+    var context = this.props.context;
+    return (
+        <div style={context.styles.containerStyle}>
+          <Button style={_.extend(context.styles.buttonStyle, this.props.animation)} bsSize='large' onClick={function() {context.props.updateCurrentPath(context.props.currentPath === ''? this.props.fileName: context.props.currentPath + '/' + this.props.fileName)}}>
+            <Glyphicon glyph={this.props.iconType}/>
+          </Button>
+          <p style={context.styles.textStyle}>{this.props.fileName.slice(this.props.fileName.lastIndexOf('/') + 1)}</p>
+        </div>
+      )
+  }
+})
 
 module.exports = Folder;
