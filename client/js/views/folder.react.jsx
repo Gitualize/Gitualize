@@ -102,7 +102,7 @@ var File = React.createClass({
             <Glyphicon glyph={this.props.iconType}/>
           </Button>
           
-            <p style={context.styles.textStyle}> {this.props.fileName.slice(this.props.fileName.lastIndexOf('/') + 1)} </p>
+          <p style={context.styles.textStyle}> {this.props.fileName.slice(this.props.fileName.lastIndexOf('/') + 1)} </p>
         </div>
       )
   }
