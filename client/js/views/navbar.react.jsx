@@ -14,7 +14,7 @@ var NavHead = React.createClass({
     return (
         <Navbar style={this.styles.navStyle} brand={<a href="#">Gitualize</a>}>
           <Nav right>
-            <NavItem href='https://github.com/'><img style={this.styles.imgStyle} src='../../pics/Github-Mark-64px.png'/></NavItem>
+            <NavItem href='https://github.com/incognizantdoppelganger/gitpun'><img style={this.styles.imgStyle} src='../pics/Github-Mark-64px.png'/></NavItem>
           </Nav>
         </Navbar>
       )
