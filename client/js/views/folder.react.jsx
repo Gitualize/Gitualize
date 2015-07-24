@@ -4,42 +4,22 @@ var Glyphicon = ReactBootstrap.Glyphicon;
 var Button = ReactBootstrap.Button;
 var FolderUtils = require('../utils/folderUtils');
 var _ = require('underscore');
+var Well = ReactBootstrap.Well;
+var ButtonToolbar = ReactBootstrap.ButtonToolbar;
 
-var File = React.createClass({
+var Folder = React.createClass({
   styles : {
-    listStyle: { //TODO to styles.css
-      listStyleType: 'none',
-      display: 'inlineBlock',
-      margin: '3px',
-      float: 'left'
-    },
     containerStyle: {
       width: '115px',
-      height: '115px'
-    },
-    buttonStyle: {
-      display: 'block',
-      marginLeft: 'auto',
-      marginRight: 'auto'
+      height: '115px',
+      margin: '3px',
     },
     textStyle: {
       textAlign: 'center',
       wordWrap: 'break-word'
     }
   },
-  render: function () {
-    return <li style={this.styles.listStyle}>
-      <div style={this.styles.containerStyle}>
-        <Button style={_.extend(this.styles.buttonStyle, this.props.animation)} bsSize='large' onClick={this.props.onClick}><Glyphicon glyph={this.props.icon}/></Button>
-        <div>
-          <p style={this.styles.textStyle}>{this.props.children}</p>
-        </div>
-      </div>
-    </li>
-  }
-});
 
-var Folder = React.createClass({
   render: function () {
     var context = this;
     var changes = {};
@@ -87,7 +67,6 @@ var Folder = React.createClass({
             }
           }
         }
-
       }
     }
 
@@ -97,18 +76,19 @@ var Folder = React.createClass({
       var fileName = file.filename;
       var iconType = FolderUtils.getFileType(fileName, file.isFolder); 
 
-      return <File icon={iconType} animation={file.style} onClick={function(){this.props.updateCurrentPath(this.props.currentPath === ''? fileName: this.props.currentPath + '/' + fileName)}.bind(context)}>
-        {fileName.slice(fileName.lastIndexOf('/') + 1)}
-      </File>
+      return (
+          <Button style={_.extend(context.styles.containerStyle, file.style)} bsSize='large' onClick={function() {context.props.updateCurrentPath(context.props.currentPath === ''? fileName: context.props.currentPath + '/' + fileName)}}>
+            <Glyphicon glyph={iconType}/>
+            <p style={context.styles.textStyle}>{fileName.slice(fileName.lastIndexOf('/') + 1)}</p>
+          </Button>
+        )
     });
 
-    return <div>
-      <div>
-        <ul>
-          {showFiles}
-        </ul>
-      </div>
-    </div>
+    return (
+        <Well bsSize='small'>
+          <ButtonToolbar>{showFiles}</ButtonToolbar>
+        </Well>     
+      )
   }
 });
 

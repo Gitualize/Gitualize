@@ -37,7 +37,6 @@ var Playbar = React.createClass({
 
   getInitialState: function() {
     this.time = this.clock(0);
-    this.staticMath = 9.9/(this.props.numberOfCommits);
     this.totalTime = this.clock(this.props.numberOfCommits);
     this.speeds = {'100': '1', '200': '.5', '300': '.33', '400': '.25'};
     return {
@@ -99,10 +98,6 @@ var Playbar = React.createClass({
     }
   },
 
-  move: function() {
-    if (this.state.glyphicon === 'play') console.log('can do something with drag');
-  },
-
   handleClick: function() {
     if (this.state.glyphicon === 'play') {
       this.play();
@@ -122,12 +117,7 @@ var Playbar = React.createClass({
     return (
       <Grid>
         <Row className='show-grid'>
-          <Col>
-            <ProgressBar striped>
-              <ProgressBar bsStyle='info' now={this.state.now*this.staticMath} key={1}/>
-              <ProgressBar onClick={this.pause} onDrag={this.move} bsStyle='success' now={1} key={2} />
-            </ProgressBar>
-          </Col>
+          <Col><ProgressBar bsStyle='danger' now={this.state.now*10/this.props.numberOfCommits}/></Col>
         </Row>
         <Row className='show-grid'>
           <Col xs={3} sm={3} md={2}>
