@@ -50,6 +50,7 @@ var Folder = React.createClass({
     var animation = {'renamed': 'slateblue', 'added': 'yellowgreen', 'modified': 'gold', 'removed': 'red'};
     var currentCommit = this.props.currentCommit.files;
     var commitLength = currentCommit.length;
+    var merge = this.props.currentCommit.merge;
 
     for(var j=0; j < commitLength; j++) {
       changes[currentCommit[j].filename] = currentCommit[j].status;
@@ -72,7 +73,7 @@ var Folder = React.createClass({
         showFiles[key] = {filename: key};
         showFiles[key].style = currentDir.style || {'backgroundColor': 'white'};
 
-        if(currentDir.path && changes[currentDir.path]){
+        if(!merge && currentDir.path && changes[currentDir.path]){
 
           showFiles[key].style = {'backgroundColor': animation[changes[currentDir.path]]};
         }
@@ -81,7 +82,7 @@ var Folder = React.createClass({
           showFiles[key].isFolder = true;
           for(var i=0; i<commitLength; i++) {
             var slicedPath = currentCommit[i].filename.substring(0, currentDir.path.length)
-            if(currentDir.path === slicedPath) {
+            if(!merge && currentDir.path === slicedPath) {
               showFiles[key].style = {'backgroundColor': 'orange'};
             }
           }
