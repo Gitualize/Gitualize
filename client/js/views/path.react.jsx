@@ -11,14 +11,13 @@ var Path = React.createClass({
     var fullPath = this.props.currentPath.split('/').map(function(folder, index) {
       return (
           <span>
-            <Button bsSize="xsmall" bsStyle="link" onClick={this.handleClick.bind(this,index-1)}>/</Button>
-            <Button bsSize="xsmall" bsStyle="link" onClick={this.handleClick.bind(this,index)}>{folder}</Button>
+            <Button bsSize="xsmall" bsStyle="link" className="path-folder" onClick={this.handleClick.bind(this,index)}>{'/ ' + folder}</Button>
           </span>
         )
     }.bind(this));
     return (
         <div>
-          <Button bsSize="xsmall" bsStyle="link" onClick={this.handleClick.bind(this,-1)}>{this.props.repoName}</Button> 
+          <Button bsSize="xsmall" bsStyle="link" className="path-root" onClick={this.handleClick.bind(this,-1)}>{this.props.repoName}</Button> 
           {fullPath}
         </div>
       )
