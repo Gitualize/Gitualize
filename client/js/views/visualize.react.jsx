@@ -132,13 +132,7 @@ var Visualize = React.createClass({
             {maindisplay}
           </Row>
 
-          <Row className='show-grid'>
-            <Col xs={12} md={12}>
-              <div style={{position: 'relative', bottom: '0'}}>
-                <Playbar style={{'marginBottom': '0'}} currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset}/>
-              </div>
-            </Col>
-          </Row>
+          <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset}/>
         </Grid>
       )
     } else {
