@@ -9,6 +9,10 @@ var Path = React.createClass({
 
   render: function () {
     var fullPath = this.props.currentPath.split('/').map(function(folder, index) {
+      if (folder === '') {
+        return;
+      }
+      
       return (
           <span>
             <Button bsSize="xsmall" bsStyle="link" className="path-folder" onClick={this.handleClick.bind(this,index)}>{'/ ' + folder}</Button>
