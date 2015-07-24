@@ -8,10 +8,8 @@ var Landing = React.createClass({
   mixins : [Navigation],
 
   handleSubmit: function(e) {
-    console.log('submitted');
     e.preventDefault();
     var repo = this.refs.repo.getValue().split('/');
-    //this.transitionTo('repos', {repoName: repo});
     this.transitionTo('repo', {repoOwner: repo[0], repoName: repo[1]});
   },
 
