@@ -46,7 +46,7 @@ var Visualize = React.createClass({
         this.setState({fileTree: fileTree, commits: commits});
         this.updatePaths();
       } else { //repo fetch failed
-        this.transitionTo('/', null, {error: 'badRepo'}); //TODO show error msg first
+        this.transitionTo('/', null, {error: 'badRepo'});
       }
     }.bind(this));
   },
