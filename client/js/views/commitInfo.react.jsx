@@ -7,22 +7,33 @@ var Col = ReactBootstrap.Col;
 
 var CommitInfo = React.createClass({
   styles: {
-    imgStyle : {'height': 48+'px', 'width': 48+'px'}
+    imgStyle : {
+      height: 48+'px',
+      width: 48+'px',
+      display: 'block',
+      marginLeft: 'auto',
+      marginRight: 'auto'
+    },
+    textStyle: {
+      textAlign: 'center',
+      display: 'block',
+      wordWrap: 'break-word',
+      marginLeft: 'auto',
+      marginRight: 'auto'
+    },
   },
 
   render: function () {
     return (
-        <Well bsSize='small'>
-          <Grid>
-            <Row className='show-grid'>
-              <Col xs={2} sm={2} md={1}><img style={this.styles.imgStyle} src={this.props.currentCommit.avatarUrl + '&s=' + 48}/></Col>
-              <Col xs={10} sm={10} md={11}>{this.props.currentCommit.message}</Col>
-            </Row>
-            <Row className='show-grid'>
-              <Col xs={2} sm={2} md={1}><a target="_blank" href={"https://github.com/" + this.props.currentCommit.committer}>{this.props.currentCommit.committer}</a></Col>
-            </Row>
-          </Grid>
-        </Well>
+        <Row className='show-grid'>
+          <Col xs={3} sm={3} md={3}>
+            <Well bsSize='small'>
+              <img style={this.styles.imgStyle} src={this.props.currentCommit.avatarUrl + '&s=' + 48}/>
+              <a style={this.styles.textStyle} target="_blank" href={"https://github.com/" + this.props.currentCommit.committer}>{this.props.currentCommit.committer}</a>
+            </Well>
+          </Col>
+          <Col xs={9} sm={9} md={9}><Well bsSize='small'>{this.props.currentCommit.message}</Well></Col>
+        </Row>
       )
   }
 });
