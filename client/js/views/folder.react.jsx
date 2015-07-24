@@ -12,7 +12,8 @@ var Folder = React.createClass({
       width: '115px',
       height: '115px',
       margin: '3px',
-      display: 'inline-block'
+      display: 'inline-block',
+      overflow: 'hidden'
     },
     textStyle: {
       textAlign: 'center',
@@ -100,7 +101,8 @@ var File = React.createClass({
           <Button style={_.extend(context.styles.buttonStyle, this.props.animation)} bsSize='large' onClick={function() {context.props.updateCurrentPath(context.props.currentPath === ''? this.props.fileName: context.props.currentPath + '/' + this.props.fileName)}.bind(this)}>
             <Glyphicon glyph={this.props.iconType}/>
           </Button>
-          <p style={context.styles.textStyle}>{this.props.fileName.slice(this.props.fileName.lastIndexOf('/') + 1)}</p>
+          
+            <p style={context.styles.textStyle}> {this.props.fileName.slice(this.props.fileName.lastIndexOf('/') + 1)} </p>
         </div>
       )
   }
