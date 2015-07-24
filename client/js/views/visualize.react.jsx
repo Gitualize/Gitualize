@@ -35,6 +35,7 @@ var Visualize = React.createClass({
     $.getJSON('repos/'+repoFullName+'/commits', {accessToken: window.localStorage.gitHubAccessToken})
     .success(function(commits) {
       if (commits.msg === 'auth required') return window.location = commits.authUrl;
+
       if (Array.isArray(commits)) { //repo was successfully fetched
         commits.forEach(function(commit) {
           commit.files = JSON.parse(commit.files);
@@ -45,9 +46,8 @@ var Visualize = React.createClass({
         this.setState({fileTree: fileTree, commits: commits});
         this.updatePaths();
       } else { //repo fetch failed
-        this.transitionTo('/'); //TODO show error msg first
+        this.transitionTo('/', null, {error: 'badRepo'}); //TODO show error msg first
       }
-
     }.bind(this));
   },
 
