@@ -42,7 +42,7 @@ var Landing = React.createClass({
     return (
       <form className='repoForm' onSubmit={this.handleSubmit}>
         <Input type='text' ref='repo' label='Visualize a repo' onChange={this.handleChange} placeholder='user/reponame - try jashkenas/backbone'/>
-        <ButtonInput type='submit' value='Go' bsStyle={this.state.style} disabled={this.state.disabled} />
+        <ButtonInput type='submit' value='Gitualize' bsStyle={this.state.style} disabled={this.state.disabled} />
       </form>
     );
   }
