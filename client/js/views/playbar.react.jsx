@@ -3,7 +3,6 @@ var React = require('react');
 var ProgressBar = ReactBootstrap.ProgressBar;
 var Button = ReactBootstrap.Button;
 var Glyphicon = ReactBootstrap.Glyphicon;
-var Grid = ReactBootstrap.Grid;
 var Row = ReactBootstrap.Row;
 var Col = ReactBootstrap.Col;
 var Well = ReactBootstrap.Well;
@@ -115,25 +114,21 @@ var Playbar = React.createClass({
 
   render: function () {
     return (
-      <Grid>
-        <Row className='show-grid'>
-          <Col><ProgressBar bsStyle='danger' now={this.state.now*10/this.props.numberOfCommits}/></Col>
-        </Row>
-        <Row className='show-grid'>
-          <Col xs={3} sm={3} md={2}>
-            <ButtonToolbar>
-              <ButtonGroup bsSize='medium'>
-                <Button onClick={this.slowDown}><Glyphicon glyph='backward' /></Button>
-                <Button onClick={this.handleClick}><Glyphicon glyph={this.state.glyphicon} /></Button>
-                <Button onClick={this.speedUp}><Glyphicon glyph='forward' /></Button>
-              </ButtonGroup>
-            </ButtonToolbar>
-          </Col>
-          <Col xs={2} sm={2} md={1} className='text-center'><Well bsSize='small'>{this.speeds[this.state.speed]}x</Well></Col>
-          <Col xs={3} sm={3} md={2} className='text-center'><Well bsSize='small'>{this.props.commitIndex}/{this.props.numberOfCommits} Commits</Well></Col>
-          <Col xs={4} sm={3} md={3} className='text-center'><Well bsSize='small'>{this.state.date} / {this.totalTime.toString()}</Well></Col>
-        </Row>
-      </Grid>
+      <Row className='show-grid'>
+        <Col xs={12} sm={12} md={12}><ProgressBar bsStyle='danger' now={this.state.now*10/this.props.numberOfCommits}/></Col>
+        <Col xs={3} sm={3} md={2}>
+          <ButtonToolbar>
+            <ButtonGroup bsSize='medium'>
+              <Button onClick={this.slowDown}><Glyphicon glyph='backward' /></Button>
+              <Button onClick={this.handleClick}><Glyphicon glyph={this.state.glyphicon} /></Button>
+              <Button onClick={this.speedUp}><Glyphicon glyph='forward' /></Button>
+            </ButtonGroup>
+          </ButtonToolbar>
+        </Col>
+        <Col xs={2} sm={2} md={1} className='text-center'><Well bsSize='small'>{this.speeds[this.state.speed]}x</Well></Col>
+        <Col xs={3} sm={3} md={2} className='text-center'><Well bsSize='small'>{this.props.commitIndex}/{this.props.numberOfCommits} Commits</Well></Col>
+        <Col xs={4} sm={3} md={3} className='text-center'><Well bsSize='small'>{this.state.date} / {this.totalTime.toString()}</Well></Col>
+      </Row>
     )
   }
 });
