@@ -45,11 +45,13 @@ var Playbar = React.createClass({
       now: 0,
       glyphicon: 'play',
       commit : 0,
-      speed : 100
+      speed : 100,
+      direction : 'forward'
     };
   },
 
   play: function() {
+    this.setState({direction: 'forward'});
     this.timer = setInterval(this.tick, this.state.speed);
     var glyphicon = 'pause';
     this.setState( {glyphicon} );
@@ -79,6 +81,10 @@ var Playbar = React.createClass({
         this.timer = setInterval(this.tick, this.state.speed);
       }
     }
+  },
+
+  rewind: function() {
+    this.setState({direction: 'backward'});
   },
 
   end: function() {
@@ -143,7 +149,7 @@ var Playbar = React.createClass({
         <Col xs={4} sm={3} md={2}>
           <ButtonToolbar>
             <ButtonGroup bsSize='medium'>
-              <Button onClick={this.slowDown}><Glyphicon glyph='backward' /></Button>
+              <Button onClick={this.rewind}><Glyphicon glyph='backward' /></Button>
               <Button onClick={this.handleClick}><Glyphicon glyph={this.state.glyphicon} /></Button>
               <Button onClick={this.speedUp}><Glyphicon glyph='forward' /></Button>
             </ButtonGroup>
