@@ -37,15 +37,15 @@ var Playbar = React.createClass({
 
   getInitialState: function() {
     this.time = this.clock(0);
-    this.staticMath = 4.95/(this.props.numberOfCommits);
+    this.staticMath = 9.9/(this.props.numberOfCommits);
     this.totalTime = this.clock(this.props.numberOfCommits);
-    this.speeds = {'50': '1', '100': '.5', '150': '.33', '200': '.25'};
+    this.speeds = {'100': '1', '200': '.5', '300': '.33', '400': '.25'};
     return {
       date: this.time.toString(),
       now: 0,
       glyphicon: 'play',
       commit : 0,
-      speed : 50
+      speed : 100
     };
   },
 
@@ -63,7 +63,7 @@ var Playbar = React.createClass({
 
   speedUp: function() {
     if (this.state.glyphicon !== 'refresh') {
-      if (this.state.speed > 50) this.setState( {speed: this.state.speed - 50} );
+      if (this.state.speed > 100) this.setState( {speed: this.state.speed - 100} );
       if (this.state.glyphicon === 'pause') {
         clearInterval(this.timer);
         this.timer = setInterval(this.tick, this.state.speed);
@@ -73,7 +73,7 @@ var Playbar = React.createClass({
 
   slowDown: function() {
     if (this.state.glyphicon !== 'refresh') {
-      if (this.state.speed < 200) this.setState( {speed: this.state.speed + 50} );
+      if (this.state.speed < 400) this.setState( {speed: this.state.speed + 100} );
       if (this.state.glyphicon === 'pause') {
         clearInterval(this.timer);
         this.timer = setInterval(this.tick, this.state.speed);
@@ -90,9 +90,9 @@ var Playbar = React.createClass({
   tick: function() {
     var now = this.state.now + 1;
     this.setState( {now} );
-    if (now % 20 === 0) {
+    if (now % 10 === 0) {
       this.props.updateCommitIndex(this.props.commitIndex + 1);
-      if (now % (this.props.numberOfCommits*20) === 0) this.end();
+      if (now % (this.props.numberOfCommits*10) === 0) this.end();
       this.time.add(1);
       var date = this.time.toString();
       this.setState( {date} );
