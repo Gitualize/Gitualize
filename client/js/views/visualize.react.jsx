@@ -117,15 +117,11 @@ var Visualize = React.createClass({
         <Grid>
           <Row className='show-grid'>
             <Col xs={12} md={12}>
-             <Path repoName={this.props.params.repoName} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+              <Path repoName={this.props.params.repoName} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
             </Col>
           </Row>
 
-          <Row className='show-grid'>
-            <Col xs={12} md={12}>
-              <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
-            </Col>
-          </Row>
+          <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
 
           <Row className='show-grid'>
             <Col xs={3} md={3}>
