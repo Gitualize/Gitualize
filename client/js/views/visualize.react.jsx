@@ -129,7 +129,7 @@ var Visualize = React.createClass({
                 <Directory key={this.state.commitIndex} fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
               </div>
             </Col>
-            <div style={{height: this.state.windowHeight, overflow: 'scroll'}}>
+            <div style={{height: this.state.windowHeight, overflow: 'scroll', border: '1px solid lightgray'}}>
               {maindisplay}
             </div>
           </Row>
