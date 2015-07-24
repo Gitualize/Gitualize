@@ -97,7 +97,7 @@ var File = React.createClass({
     var context = this.props.context;
     return (
         <div style={context.styles.containerStyle}>
-          <Button style={_.extend(context.styles.buttonStyle, this.props.animation)} bsSize='large' onClick={function() {context.props.updateCurrentPath(context.props.currentPath === ''? this.props.fileName: context.props.currentPath + '/' + this.props.fileName)}}>
+          <Button style={_.extend(context.styles.buttonStyle, this.props.animation)} bsSize='large' onClick={function() {context.props.updateCurrentPath(context.props.currentPath === ''? this.props.fileName: context.props.currentPath + '/' + this.props.fileName)}.bind(this)}>
             <Glyphicon glyph={this.props.iconType}/>
           </Button>
           <p style={context.styles.textStyle}>{this.props.fileName.slice(this.props.fileName.lastIndexOf('/') + 1)}</p>
