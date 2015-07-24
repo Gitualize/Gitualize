@@ -34,16 +34,12 @@ var Visualize = React.createClass({
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
     $.getJSON('repos/'+repoFullName+'/commits', {accessToken: window.localStorage.gitHubAccessToken})
     .success(function(commits) {
-      if (commits.msg === 'auth required') { //redirect to auth
-        return window.location = commits.authUrl;
-      }
-      if (!Array.isArray(commits)) { //repo fetch failed
-        return this.transitionTo('/', null, {error: 'badRepo'});
-      }
-
+      if (commits.msg === 'auth required') return window.location = commits.authUrl;
+      if (!Array.isArray(commits)) this.transitionTo('/'); //TODO show error msg first
       commits.forEach(function(commit) {
         commit.files = JSON.parse(commit.files);
       });
+
       //build tree and flat path stuff before rendering
       var fileTree = {};
       Tree.updateTree(commits[0], fileTree);
@@ -117,11 +113,15 @@ var Visualize = React.createClass({
         <Grid>
           <Row className='show-grid'>
             <Col xs={12} md={12}>
-              <Path repoName={this.props.params.repoName} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+             <Path repoName={this.props.params.repoName} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
             </Col>
           </Row>
 
-          <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
+          <Row className='show-grid'>
+            <Col xs={12} md={12}>
+              <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
+            </Col>
+          </Row>
 
           <Row className='show-grid'>
             <Col xs={3} md={3}>
@@ -132,7 +132,13 @@ var Visualize = React.createClass({
             {maindisplay}
           </Row>
 
-          <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset}/>
+          <Row className='show-grid'>
+            <Col xs={12} md={12}>
+              <div style={{position: 'relative', bottom: '0'}}>
+                <Playbar style={{'marginBottom': '0'}} currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset}/>
+              </div>
+            </Col>
+          </Row>
         </Grid>
       )
     } else {

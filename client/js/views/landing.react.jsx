@@ -7,7 +7,11 @@ var ButtonInput = ReactBootstrap.ButtonInput;
 var Landing = React.createClass({
   mixins : [Navigation],
   errorMessages: {badRepo: 'Unable to fetch the requested repository. You may only gitualize public repositories.'},
-
+  styles: {
+    formStyle: {
+      padding: 225
+    }
+  },
   handleSubmit: function(e) {
     e.preventDefault();
     var repo = this.refs.repo.getValue().split('/');
@@ -47,7 +51,7 @@ var Landing = React.createClass({
     }
 
     return (
-      <form className='repoForm' onSubmit={this.handleSubmit}>
+      <form style={this.styles.formStyle} className='repoForm' onSubmit={this.handleSubmit}>
         <Input type='text' ref='repo' label='Visualize a repo' onChange={this.handleChange} placeholder='user/reponame - try tchan247/blog-project'/>
         <ButtonInput type='submit' value='Gitualize' bsStyle={this.state.style} disabled={this.state.disabled} />
         {errorMessage}

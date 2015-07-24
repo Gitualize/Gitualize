@@ -22,7 +22,8 @@ var Folder = React.createClass({
     buttonStyle: {
       display: 'block',
       marginLeft: 'auto',
-      marginRight: 'auto'
+      marginRight: 'auto',
+      marginTop: 25
     }
   },
 
