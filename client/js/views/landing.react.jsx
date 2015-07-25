@@ -12,6 +12,7 @@ var Landing = React.createClass({
   errorMessages: {badRepo: 'Unable to fetch the requested repository. You may only gitualize public repositories.'},
   styles: {
     containerStyle: {
+      paddingTop: 25,
       paddingLeft: 100,
       paddingRight: 100
     },
@@ -23,7 +24,8 @@ var Landing = React.createClass({
       margin: 10,
       padding: 0,
       display: 'inline-block',
-      wordWrap: 'break-word'
+      wordWrap: 'break-word',
+      overflow: 'auto'
     }, 
     stepContentStyle: {
       width: 'auto',
@@ -35,19 +37,17 @@ var Landing = React.createClass({
       width: 'auto',
       height: 75,
       display: 'block',
-      backgroundColor: 'white'
+      backgroundColor: 'white',
+      textWrap: 'break-word'
     },
     instructionStyle: {
-      width: 'auto',
-      minWidth: 100,
-      marginTop: 50,
+      width: '100%',
+      minWidth: '1000',
+      marginTop: 30,
       padding: 10,
       borderRadius: 10,
-      marginLeft: 'auto',
-      marginRight: 'auto',
       backgroundColor: 'lightblue',
-      whiteSpace: 'nowrap',
-      overflowX: 'scroll',
+      display: 'inline-block',
       textAlign: 'center'
     }
   },
@@ -104,7 +104,8 @@ var Landing = React.createClass({
                 (add content)
               </div>
               <div style={this.styles.stepTextStyle}>
-                <p> Step 1 </p>
+                <p> Step 1</p>
+                <p> Input an existing public GitHub repository </p>
               </div>
             </Col>
             <Col style={this.styles.stepStyle}> 
@@ -113,6 +114,7 @@ var Landing = React.createClass({
               </div>
               <div style={this.styles.stepTextStyle}>
                 <p> Step 2 </p>
+                <p> Press play/pause and adjust speed as needed </p>
               </div>
             </Col>
             <Col style={this.styles.stepStyle}> 
@@ -121,6 +123,7 @@ var Landing = React.createClass({
               </div>
               <div style={this.styles.stepTextStyle}>
                 <p> Step 3 </p>
+                <p> Navigate through folder and directory views </p>
               </div>
             </Col>
           </Row>
