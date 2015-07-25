@@ -6,7 +6,6 @@ var url = require('url');
 var _ = require('underscore');
 var Commit = require('../db/models/commit');
 var Repo = require('../db/models/repo');
-//var Github = require('github-api');
 
 var request = require('request');
 var rp = require('request-promise');
