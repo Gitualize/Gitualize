@@ -34,15 +34,19 @@ var Visualize = React.createClass({
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
     $.getJSON('repos/'+repoFullName+'/commits', {accessToken: window.localStorage.gitHubAccessToken})
     .success(function(commits) {
-      if (commits.msg === 'auth required') return window.location = commits.authUrl;
-      if (!Array.isArray(commits)) this.transitionTo('/'); //TODO show error msg first
+      if (commits.msg === 'auth required') { //redirect to auth
+        return window.location = commits.authUrl;
+      }
+      if (!Array.isArray(commits)) { //repo fetch failed
+        return this.transitionTo('/', null, {error: 'badRepo'});
+      }
+
       commits.forEach(function(commit) {
         commit.files = JSON.parse(commit.files);
       });
-
       //build tree and flat path stuff before rendering
       var fileTree = {};
-      Tree.updateTree(commits[0], fileTree);
+      Tree.updateFiles(commits[0], fileTree);
       this.setState({fileTree: fileTree, commits: commits});
       this.updatePaths();
     }.bind(this));
@@ -68,7 +72,7 @@ var Visualize = React.createClass({
   },
 
   updateCommitIndex: function (index) {
-    Tree.updateTree(this.state.commits[index], this.state.fileTree);
+    Tree.updateFiles(this.state.commits[index], this.state.fileTree);
     this.setState({commitIndex: index});
     this.updatePaths();
   },
@@ -78,7 +82,7 @@ var Visualize = React.createClass({
   },
   reset: function() {
     var fileTree = {};
-    Tree.updateTree(this.state.commits[0], fileTree);
+    Tree.updateFiles(this.state.commits[0], fileTree);
     this.setState( {commitIndex: 0, currentPath: '', fileTree: fileTree, filePaths : {}} );
     this.updatePaths();
   },
@@ -113,32 +117,22 @@ var Visualize = React.createClass({
         <Grid>
           <Row className='show-grid'>
             <Col xs={12} md={12}>
-             <Path repoName={this.props.params.repoName} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+              <Path repoName={this.props.params.repoName} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
             </Col>
           </Row>
 
-          <Row className='show-grid'>
-            <Col xs={12} md={12}>
-              <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
-            </Col>
-          </Row>
+          <CommitInfo currentCommit={this.state.commits[this.state.commitIndex]}/>
 
           <Row className='show-grid'>
             <Col xs={3} md={3}>
               <div style={{backgroundColor: 'lightgray', height: this.state.windowHeight, overflow: 'scroll'}}>
-                <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+                <Directory key={this.state.commitIndex} fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
               </div>
             </Col>
             {maindisplay}
           </Row>
 
-          <Row className='show-grid'>
-            <Col xs={12} md={12}>
-              <div style={{position: 'relative', bottom: '0'}}>
-                <Playbar style={{'marginBottom': '0'}} currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset}/>
-              </div>
-            </Col>
-          </Row>
+          <Playbar currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset}/>
         </Grid>
       )
     } else {
