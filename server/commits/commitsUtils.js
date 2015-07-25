@@ -1,3 +1,4 @@
+//var Spooky = require('spooky');
 var Promise = require('bluebird');
 var db = require('../db/config');
 var fs = require('fs');
@@ -47,9 +48,18 @@ var addCommitsToRepo = function(dbRepo, commits, callback) { //helper for saveCo
   if (!repoCommits) return console.error('repo ', repoFullName, ' has no commits relationship. wtf');
   console.log('# commits in addCommitsToRepo: ', commits.length);
   callback(null, commits); //give caller immediately so don't have to wait for them to finish storing
-  commits.forEach(function(commit) { //the general /commits only has very general info. we must then get the detailed info for each commit later
-    repoCommits.create(commit);
-  });
+  commits.reduce(function(prevCommitPromise, commit) {
+    return prevCommitPromise
+    .then(function(dbCommit) {
+      return repoCommits.create(commit);
+    });
+  }, new Promise(function(resolve) { resolve(); }));
+
+  //commits.forEach(function(commit) { //the general /commits only has very general info. we must then get the detailed info for each commit later
+    //repoCommits.create(commit)
+    //.then(function(dbCommit) {
+      //repoCommits.create(commit);
+  //});
 };
 var saveCommitsToDb = Promise.promisify(function(repoFullName, commits, callback) {
   console.log('begin saving repo: ', repoFullName, ' to db');
@@ -110,6 +120,64 @@ var visitEachCommit = function(shas, options) { //visit each commit, update comm
   });
   return Promise.all(commitsDetailed);
 };
+
+//var getTotalCommits = function(repoFullName) {
+  //debugger;
+  //var spooky = new Spooky({
+    //child: {
+      //transport: 'http'
+    //},
+    //casper: {
+      //logLevel: 'debug',
+      //verbose: true
+    //}
+  //}, function (err) {
+    //if (err) {
+      //e = new Error('Failed to initialize SpookyJS');
+      //e.details = err;
+      //throw e;
+    //}
+
+    //spooky.start(
+      //'http://en.wikipedia.org/wiki/Spooky_the_Tuff_Little_Ghost');
+      //spooky.then(function () {
+        //this.emit('hello', 'Hello, from ' + this.evaluate(function () {
+          //return document.title;
+        //}));
+      //});
+      //spooky.run();
+  //});
+
+  //spooky.on('error', function (e, stack) {
+    //console.error(e);
+
+    //if (stack) {
+      //console.log(stack);
+    //}
+  //});
+
+  //[>
+  //// Uncomment this block to see all of the things Casper has to say.
+  //// There are a lot.
+  //// He has opinions.
+  //spooky.on('console', function (line) {
+  //console.log(line);
+  //});
+  //*/
+
+  //spooky.on('hello', function (greeting) {
+    //console.log(greeting);
+  //});
+
+  //spooky.on('log', function (log) {
+    //if (log.space === 'remote') {
+      //console.log(log.message.replace(/ \- .*/, ''));
+    //}
+  //});
+
+//};
+//getTotalCommits('IncognizantDoppelganger/gitpun');
+
 var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, callback) {
   console.log('trying to go to github');
   //var localLastCommitTime = Date.now(), pulledLastCommitTime, githubCommits = [];
@@ -128,16 +196,16 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, 
       //console.log('commitsOverview.length = ', commitsOverview.length);
       //TODO handle if commitsOverview is empty
       totalCommits = totalCommits.concat(commitsOverview);
+      processCommits(); //process these 100 commits and send to client
       if (commitsOverview.length === 100 && totalCommits.length < maxCommits) {
         options.qs.page++;
         getMoreCommits();
-      } else {
-        processCommits();
-      }
+      };
     });
   })();
   function processCommits() {
     commitShas = getShas(totalCommits).reverse(); //first thing in commitsOverview is the oldest commit
+    //commit 40 41 42 43 44
     var commitOptions = { url: 'https://api.github.com/repos/' + repoFullName + '/commits/', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken} };
     //TODO DRY with above options
     visitEachCommit(commitShas, commitOptions)
