@@ -41,7 +41,7 @@ We use PostgreSQL as our RDB.
 
 ### API Use
 
-If a repository is not in the database, the server will attempt to make a call to the GitHub API to update fetch the repository.
+If a repository is not in the database, the server will attempt to make a call to the GitHub API to  fetch the repository.
 
 ```sh
 api/user/:username/repo/:repository_name/
