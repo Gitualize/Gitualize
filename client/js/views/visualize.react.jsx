@@ -112,6 +112,10 @@ var Visualize = React.createClass({
 
   render: function () {
     if (Object.keys(this.state.fileTree).length > 0) { //fileTree loads last. bandaidy render check
+      //TODO uncomment these- it's logging multiple times on first load??
+      //console.dir(this.state.commits);
+      //console.log('filetree: ',this.state.fileTree);
+      //console.log('commit index: ',this.state.commitIndex);
       var maindisplay = this.fileOrFolder();
 
       return (
