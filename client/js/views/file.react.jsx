@@ -15,8 +15,8 @@ var File = React.createClass({
   componentWillReceiveProps: function(nextProps) { //TODO refactor DRY with componentWillMount
     //var nextFile = nextProps.filePaths[this.props.currentPath];
     var currFile = this.props.filePaths[this.props.currentPath];
-    var url = currFile.last_url;
-    var nextUrl = currFile.raw_url; //:( TODO I think nextFile is the same as the currFile since we are building the filepath as we go...convert to react niceness like below
+    var nextUrl = this.props.urls.to || currFile.raw_url; //:( TODO I think nextFile is the same as the currFile since we are building the filepath as we go...convert to react niceness like below
+    var url = this.props.urls.from || currFile.last_url || nextUrl;
     //var nextUrl = nextFile.raw_url;
     if (url === nextUrl) return;
     $.get(url)
@@ -33,8 +33,8 @@ var File = React.createClass({
 
   componentWillMount: function() { //TODO i don't think this file should know about ALL the other files via filePaths
     var currentFile = this.props.filePaths[this.props.currentPath];
-    var url = currentFile.raw_url;
-    var prevUrl = currentFile.last_url || url;
+    var url = this.props.urls.to || currentFile.raw_url;
+    var prevUrl = this.props.urls.from || currentFile.last_url || url;
 
     $.get(prevUrl)
     .always(function(prevData) { //for each tick of commitIndex, we get the previous data again...why?? refactor
