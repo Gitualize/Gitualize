@@ -8,7 +8,6 @@ module.exports.updateTree = function(currentCommit, fileTree) {
 };
 var addFile = function (tree, file) {
   var filePath = file.filename;
-  if (filePath === 'docs/images/lens.jpg') debugger;
   var path = filePath.split('/');
   var currentFolder = tree;
   var folderMatch, folder;

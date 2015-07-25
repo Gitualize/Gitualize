@@ -53,22 +53,18 @@ var Folder = React.createClass({
     // add file to list of files to show
     for(var key in current) {
       var currentDir = current[key];
-      //if(currentDir.deleted) {
-        //delete current[key];
-      //}
       if(currentDir._folderDetails) { //this is a file or folder
         showFiles[key] = {filename: key};
         showFiles[key].style = currentDir.style || {'backgroundColor': 'white'};
 
-        if(!merge && currentDir.path && changes[currentDir._folderDetails.path]){
-
+        if(!merge && currentDir._folderDetails.path && changes[currentDir._folderDetails.path]) {
           showFiles[key].style = {'backgroundColor': animation[changes[currentDir._folderDetails.path]]};
         }
         
         if(currentDir._folderDetails.isFolder) {
           showFiles[key].isFolder = true; //looks like we are again remaking the file tree, but a section of it TODO refactor
           for(var i=0; i<commitLength; i++) {
-            var slicedPath = currentCommit[i].filename.substring(0, currentDir._folderDetails.path.length)
+            var slicedPath = currentCommit[i].filename.substring(0, currentDir._folderDetails.path.length);
             if(!merge && currentDir.path === slicedPath) {
               showFiles[key].style = {'backgroundColor': 'orange'};
             }
@@ -105,6 +101,6 @@ var File = React.createClass({
         </div>
       )
   }
-})
+});
 
 module.exports = Folder;
