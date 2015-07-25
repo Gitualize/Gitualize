@@ -27,6 +27,7 @@ var Folder = React.createClass({
   },
 
   render: function () {
+    //TODO why is everything in render????
     var context = this;
     var changes = {};
     var showFiles = {};
@@ -52,22 +53,22 @@ var Folder = React.createClass({
     // add file to list of files to show
     for(var key in current) {
       var currentDir = current[key];
-      if(currentDir.deleted) {
-        delete current[key];
-      }
-      if(currentDir.hasOwnProperty('isFolder')) {
+      //if(currentDir.deleted) {
+        //delete current[key];
+      //}
+      if(currentDir._folderDetails) { //this is a file or folder
         showFiles[key] = {filename: key};
         showFiles[key].style = currentDir.style || {'backgroundColor': 'white'};
 
-        if(!merge && currentDir.path && changes[currentDir.path]){
+        if(!merge && currentDir.path && changes[currentDir._folderDetails.path]){
 
-          showFiles[key].style = {'backgroundColor': animation[changes[currentDir.path]]};
+          showFiles[key].style = {'backgroundColor': animation[changes[currentDir._folderDetails.path]]};
         }
         
-        if(currentDir.isFolder) {
-          showFiles[key].isFolder = true;
+        if(currentDir._folderDetails.isFolder) {
+          showFiles[key].isFolder = true; //looks like we are again remaking the file tree, but a section of it TODO refactor
           for(var i=0; i<commitLength; i++) {
-            var slicedPath = currentCommit[i].filename.substring(0, currentDir.path.length)
+            var slicedPath = currentCommit[i].filename.substring(0, currentDir._folderDetails.path.length)
             if(!merge && currentDir.path === slicedPath) {
               showFiles[key].style = {'backgroundColor': 'orange'};
             }
@@ -80,16 +81,14 @@ var Folder = React.createClass({
     showFiles = FolderUtils.fileSort(showFiles, {method: 'changed', reverse: false});
     showFiles = showFiles.map(function(file) {
       var fileName = file.filename;
-      var iconType = FolderUtils.getFileType(fileName, file.isFolder); 
-
+      var iconType = FolderUtils.getFileType(fileName, file.isFolder);
       return (
           <File iconType={iconType} fileName={fileName} animation={file.style} context={context}/>
-        )
+        );
     });
-
     return (
-        <Well bsSize='small'>{showFiles}</Well>     
-      )
+        <Well bsSize='small'>{showFiles}</Well>
+      );
   }
 });
 
