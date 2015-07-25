@@ -105,7 +105,7 @@ var Landing = React.createClass({
               </div>
               <div style={this.styles.stepTextStyle}>
                 <p> Step 1</p>
-                <p> Input an existing GitHub repository </p>
+                <p> Input an existing public GitHub repository </p>
               </div>
             </Col>
             <Col style={this.styles.stepStyle}> 
