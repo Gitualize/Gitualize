@@ -46,7 +46,7 @@ var Visualize = React.createClass({
       });
       //build tree and flat path stuff before rendering
       var fileTree = {};
-      Tree.updateFiles(commits[0], fileTree);
+      Tree.updateTree(commits[0], fileTree);
       this.setState({fileTree: fileTree, commits: commits});
       this.updatePaths();
     }.bind(this));
@@ -72,7 +72,7 @@ var Visualize = React.createClass({
   },
 
   updateCommitIndex: function (index) {
-    Tree.updateFiles(this.state.commits[index], this.state.fileTree);
+    Tree.updateTree(this.state.commits[index], this.state.fileTree);
     this.setState({commitIndex: index});
     this.updatePaths();
   },
@@ -82,7 +82,7 @@ var Visualize = React.createClass({
   },
   reset: function() {
     var fileTree = {};
-    Tree.updateFiles(this.state.commits[0], fileTree);
+    Tree.updateTree(this.state.commits[0], fileTree);
     this.setState( {commitIndex: 0, currentPath: '', fileTree: fileTree, filePaths : {}} );
     this.updatePaths();
   },
@@ -126,7 +126,7 @@ var Visualize = React.createClass({
           <Row className='show-grid'>
             <Col xs={3} md={3}>
               <div style={{backgroundColor: 'lightgray', height: this.state.windowHeight, overflow: 'scroll'}}>
-                <Directory key={this.state.commitIndex} fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+                <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
               </div>
             </Col>
             {maindisplay}

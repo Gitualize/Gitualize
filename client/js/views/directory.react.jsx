@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var ReactBootstrap = require('react-bootstrap');
 var React = require('react');
 var Button = ReactBootstrap.Button;
@@ -5,43 +6,27 @@ var Glyphicon = ReactBootstrap.Glyphicon;
 var Well = ReactBootstrap.Well;
 
 var Directory = React.createClass({
-  map: function(obj, callback) {
-    var array = [];
-    for (var key in obj) {
-      if (key !== 'isFolder' && key !== 'path' && key !== 'deleted') {
-        array.push(callback(obj[key], key));
-      }
-    }
-    return array;
+  padStyle: function(depth) {
+    return { paddingLeft: (depth*10) + 'px' };
   },
-
-  buildDirectory: function(obj, depth, path) {
-    var style = {
-      paddingLeft: (depth*10) + 'px'
-    }
-    return this.map(obj,function(value, key) { //TODO refactor
-      if (value.deleted) {
-        return;
-      }
-      if (value.isFolder) {
-        return (
-          <div>
-            <div style={style}><Glyphicon glyph="folder-open" /><Button bsSize="xsmall" onClick={ function() {this.props.updateCurrentPath(path + key)}.bind(this) } bsStyle="link">{key}</Button></div>
-            <div>{this.buildDirectory(value, depth+1,path + key + '/') }</div>
-          </div>
-        )
-      } else {
-        return <div style={style}><Glyphicon glyph="file" /><Button bsSize="xsmall" onClick={ function() {this.props.updateCurrentPath(path + key)}.bind(this) } bsStyle="link">{key}</Button></div>
-      }
+  formatTree: function(tree, depth) {
+    var depth = depth || 0;
+    return _.map(tree, function(contents, filename) {
+      if (filename === '_folderDetails') return;
+      var details = contents._folderDetails;
+      return (<div>
+          <div style={this.padStyle(depth+1)}><Glyphicon glyph={details.isFolder ? 'folder-open' : 'file'}/><Button bsSize="xsmall" onClick={this.handleClick.bind(this, details.path)} bsStyle="link">{filename}</Button></div>
+          {details.isFolder ? this.formatTree(contents, depth+1) : null}
+        </div>);
     }.bind(this));
   },
-
+  handleClick: function(path) {
+    this.props.updateCurrentPath(path);
+  },
   render: function () {
-    var path = this.buildDirectory(this.props.fileTree, 0, '');
-
     return (
-        <Well bsSize='small'>{ path }</Well>
-      )
+      <Well bsSize='small'>{ this.formatTree(this.props.fileTree) }</Well>
+    )
   }
 });
 
