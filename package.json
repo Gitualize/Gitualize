@@ -41,6 +41,7 @@
     "reactify": "^1.1.1",
     "request": "^2.58.0",
     "request-promise": "^0.4.2",
+    "spooky": "^0.2.5",
     "underscore": "^1.8.3",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.2.3"
