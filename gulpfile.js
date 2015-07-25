@@ -9,8 +9,9 @@ var notify = require('gulp-notify');
 var shell = require('gulp-shell');
 var browserify = require('browserify');
 var watchify = require('watchify');
-var reactify = require('reactify'); 
+var babelify = require('babelify');
 var source = require('vinyl-source-stream');
+var streamify = require('gulp-streamify');
 
 var paths = {
   backend: ['./server/**/*.js'],
@@ -39,18 +40,20 @@ gulp.task('test', function(){
 });
 
 gulp.task('browserifyWatchless', function(){
-  var b = browserify();
-  b.transform(reactify); // use the reactify transform
-  b.add('./client/js/app.js');
-  return b.bundle()
-    .pipe(source('./client/js/app.js'))
+  browserify({
+    entries: ['./client/js/app.js'],
+    transform: [babelify]
+  })
+    .bundle()
+    .pipe(source('bundle.js'))
+    .pipe(streamify(uglify()))
     .pipe(gulp.dest('./client/build'));
 });
 
 gulp.task('browserify', function() {
   var bundler = browserify({
     entries: ['./client/js/app.js'],
-    transform: [reactify], // We want to convert JSX to normal javascript
+    transform: [babelify], // We want to convert JSX to normal javascript
     debug: true, // Gives us sourcemapping
     cache: {}, packageCache: {}, fullPaths: true // Requirement of watchify
   });
@@ -65,13 +68,12 @@ gulp.task('browserify', function() {
       console.log(error.message);
       this.emit('end');
     }))
-    .pipe(source('./client/js/app.js'))
-    // This is where you add uglifying etc.
+    .pipe(source('bundle.js'))
     .pipe(gulp.dest('./client/build'));
     console.log('Updated!', (Date.now() - updateStart) + 'ms');
   })
   .bundle() // Create the initial bundle when starting the task
-  .pipe(source('./client/js/app.js'))
+  .pipe(source('bundle.js'))
   .pipe(gulp.dest('./client/build'));
 });
 
