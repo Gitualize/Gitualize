@@ -26,20 +26,12 @@
    new commit.
 1. Once the pull request has been reviewed, it will be merged by another member of the team. Do not merge your own commits.
 
-## Detailed Workflow
-For dev we are using pg 'test' db. Setup:
-1) Run `brew install postgres`
-2) Follow the on-screen instructions to add it to the launch agents and start pg.
-3) `createdb test` to create a db called test which Bookshelf will tap
-into.
-4) `psql` to type queries
-
 ### Fork the repo
 
 Use github’s interface to make a fork of the repo, then add that repo as an upstream remote:
 
 ```
-git remote add upstream https://github.com/hackreactor-labs/<NAME_OF_REPO>.git
+git remote add upstream https://github.com/incognizantdoppelganger/gitpun.git
 ```
 
 ### Cut a namespaced feature branch from master
@@ -151,7 +143,7 @@ Thanks for contributing!
     - Apply the [boy scout rule][].
     - Follow [STYLE-GUIDE.md](STYLE-GUIDE.md)
 1. Run the [tests][] before submitting a pull request.
-1. Tests are very, very important. Submit tests if your pull request contains
+1. Tests are important. Submit tests if your pull request contains
    new, testable behavior.
 1. Your pull request is comprised of a single ([squashed][]) commit.
 
@@ -171,19 +163,3 @@ This is just to help you organize your process
 
 If you follow all of these guidelines and make good changes, you should have
 no problem getting your changes merged in.
-
-
-<!-- Links -->
-[style guide]: https://github.com/hackreactor-labs/style-guide
-[n-queens]: https://github.com/hackreactor-labs/n-queens
-[Underbar]: https://github.com/hackreactor-labs/underbar
-[curriculum workflow diagram]: http://i.imgur.com/p0e4tQK.png
-[cons of merge]: https://f.cloud.github.com/assets/1577682/1458274/1391ac28-435e-11e3-88b6-69c85029c978.png
-[Bookstrap]: https://github.com/hackreactor/bookstrap
-[Taser]: https://github.com/hackreactor/bookstrap
-[tools workflow diagram]: http://i.imgur.com/kzlrDj7.png
-[Git Flow]: http://nvie.com/posts/a-successful-git-branching-model/
-[GitHub Flow]: http://scottchacon.com/2011/08/31/github-flow.html
-[Squash]: http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html
-
-
