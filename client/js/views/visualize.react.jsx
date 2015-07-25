@@ -1,4 +1,3 @@
-
 var React = require('react');
 var Navigation = require('react-router').Navigation;
 var $ = require('jquery');
