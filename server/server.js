@@ -7,7 +7,8 @@ var morgan = require('morgan'), // used for logging incoming request
   commitsController = require('./commits/commitsController'),
   authController = require('./auth/authController.js'),
   request = require('request'),
-  fs = require('fs');
+  fs = require('fs'),
+  compress = require('compression');
 
 var app = express();
 
@@ -18,6 +19,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+app.use(compress());
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client'));
 var server = app.listen(process.env.PORT || 3000, function(){
