@@ -114,7 +114,7 @@ var Playbar = React.createClass({
     }
   },
 
-  gitulaize: function() {
+  showFileGitualizeModal: function() {
     this.pause();
     this.props.showFileGitualize();
   },
@@ -122,7 +122,7 @@ var Playbar = React.createClass({
   isFile: function() {
     if (this.props.isFile) {
       return (
-          <Col xs={3} sm={3} md={2}><Button onClick={this.gitulaize}><Glyphicon glyph='modal-window' /> Gitualize</Button></Col>
+          <Col xs={3} sm={3} md={2}><Button onClick={this.showFileGitualizeModal}><Glyphicon glyph='modal-window' /> Gitualize</Button></Col>
         )
     } else  {
       return (
