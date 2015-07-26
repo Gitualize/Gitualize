@@ -8,6 +8,8 @@ var Col = ReactBootstrap.Col;
 var Well = ReactBootstrap.Well;
 var ButtonToolbar = ReactBootstrap.ButtonToolbar;
 var ButtonGroup = ReactBootstrap.ButtonGroup;
+var Tooltip = ReactBootstrap.Tooltip;
+var OverlayTrigger = ReactBootstrap.OverlayTrigger;
 
 var Playbar = React.createClass({
   clock: function(seconds) {
@@ -112,11 +114,33 @@ var Playbar = React.createClass({
     }
   },
 
+  showFileGitualizeModal: function() {
+    this.pause();
+    this.props.showFileGitualize();
+  },
+
+  isFile: function() {
+    if (this.props.isFile) {
+      return (
+          <Col xs={3} sm={3} md={2}><Button onClick={this.showFileGitualizeModal}><Glyphicon glyph='modal-window' /> Gitualize</Button></Col>
+        )
+    } else  {
+      return (
+          <Col xs={3} sm={3} md={2}></Col>
+        )
+    }
+  },
+
   render: function () {
+    var gitualizeFile = this.isFile();
     return (
       <Row className='show-grid'>
-        <Col xs={12} sm={12} md={12}><ProgressBar bsStyle='danger' now={this.state.now*10/this.props.numberOfCommits}/></Col>
-        <Col xs={3} sm={3} md={2}>
+        <Col xs={12} sm={12} md={12}>
+          <OverlayTrigger placement='top' overlay={<Tooltip>{this.state.date} / {this.totalTime.toString()}</Tooltip>}>
+            <ProgressBar bsStyle='danger' now={this.state.now*10/this.props.numberOfCommits}/>
+          </OverlayTrigger>
+        </Col>
+        <Col xs={4} sm={3} md={2}>
           <ButtonToolbar>
             <ButtonGroup bsSize='medium'>
               <Button onClick={this.slowDown}><Glyphicon glyph='backward' /></Button>
@@ -127,7 +151,7 @@ var Playbar = React.createClass({
         </Col>
         <Col xs={2} sm={2} md={1} className='text-center'><Well bsSize='small'>{this.speeds[this.state.speed]}x</Well></Col>
         <Col xs={3} sm={3} md={2} className='text-center'><Well bsSize='small'>{this.props.commitIndex}/{this.props.numberOfCommits} Commits</Well></Col>
-        <Col xs={4} sm={3} md={3} className='text-center'><Well bsSize='small'>{this.state.date} / {this.totalTime.toString()}</Well></Col>
+        {gitualizeFile}
       </Row>
     )
   }
