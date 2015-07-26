@@ -1,7 +1,7 @@
 {
-  "name": "gitpun",
+  "name": "Gitualize",
   "version": "1.0.0",
-  "description": "git stuff",
+  "description": "Visualize your git repository with Gitualize",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\""
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/IncognizantDoppelganger/gitpun.git"
   },
-  "author": "Alberto, Dani, Devon, Terry",
+  "author": "Alberto D'Souza, Dani Hu, Devon Harvey, Terry Chan",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/IncognizantDoppelganger/gitpun/issues"
@@ -27,7 +27,6 @@
     "cors": "^2.7.1",
     "diff": "^1.4.0",
     "express": "^4.13.1",
-    "github-api": "^0.10.6",
     "gulp-streamify": "0.0.5",
     "jquery": "^2.1.4",
     "knex": "^0.8.6",
@@ -38,7 +37,6 @@
     "react-bootstrap": "^0.23.7",
     "react-router": "^0.13.3",
     "react-tools": "^0.13.3",
-    "reactify": "^1.1.1",
     "request": "^2.58.0",
     "request-promise": "^0.4.2",
     "spooky": "^0.2.5",

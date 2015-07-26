@@ -1,7 +1,5 @@
-//routes
 var $ = require('jquery');
 var React = require('react');
-//var Github = require('github-api');
 var Landing = require('./landing.react.jsx');
 var Navbar = require('./navbar.react.jsx');
 var About = require('./about.react.jsx');
