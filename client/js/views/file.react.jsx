@@ -35,7 +35,6 @@ var File = React.createClass({
     var currentFile = this.props.filePaths[this.props.currentPath];
     var url = this.props.urls.to || currentFile.raw_url;
     var prevUrl = this.props.urls.from || currentFile.last_url || url;
-
     $.get(prevUrl)
     .always(function(prevData) { //for each tick of commitIndex, we get the previous data again...why?? refactor
       //always is workaround for now, this goes to the .error if encounters JS (but data in responseText)
