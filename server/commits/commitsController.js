@@ -12,6 +12,7 @@ module.exports = {
     var repoOwner = req.params.repoOwner;
     var repoName = req.params.repoName;
     var repoFullName = repoOwner + '/' + repoName;
+    utils.getTotalCommits(repoFullName);
     utils.getCommitsFromDb(repoFullName).then(function(commits) {
       if (commits && commits.length > 0) return res.json(commits); //commits are in db
     }).catch(function(err) {
