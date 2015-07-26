@@ -1,4 +1,4 @@
-//var Spooky = require('spooky');
+var Spooky = require('spooky');
 var Promise = require('bluebird');
 var db = require('../db/config');
 var fs = require('fs');
@@ -55,9 +55,9 @@ var addCommitsToRepo = function(dbRepo, commits, callback) { //helper for saveCo
   }, new Promise(function(resolve) { resolve(); }));
 
   //commits.forEach(function(commit) { //the general /commits only has very general info. we must then get the detailed info for each commit later
-    //repoCommits.create(commit)
-    //.then(function(dbCommit) {
-      //repoCommits.create(commit);
+  //repoCommits.create(commit)
+  //.then(function(dbCommit) {
+  //repoCommits.create(commit);
   //});
 };
 var saveCommitsToDb = Promise.promisify(function(repoFullName, commits, callback) {
@@ -120,68 +120,44 @@ var visitEachCommit = function(shas, options) { //visit each commit, update comm
   return Promise.all(commitsDetailed);
 };
 
-//var getTotalCommits = function(repoFullName) {
-  //debugger;
-  //var spooky = new Spooky({
-    //child: {
-      //transport: 'http'
-    //},
-    //casper: {
-      //logLevel: 'debug',
-      //verbose: true
-    //}
-  //}, function (err) {
-    //if (err) {
-      //e = new Error('Failed to initialize SpookyJS');
-      //e.details = err;
-      //throw e;
-    //}
-
-    //spooky.start(
-      //'http://en.wikipedia.org/wiki/Spooky_the_Tuff_Little_Ghost');
-      //spooky.then(function () {
-        //this.emit('hello', 'Hello, from ' + this.evaluate(function () {
-          //return document.title;
-        //}));
-      //});
-      //spooky.run();
-  //});
-
-  //spooky.on('error', function (e, stack) {
-    //console.error(e);
-
-    //if (stack) {
-      //console.log(stack);
-    //}
-  //});
-
-  //[>
-  //// Uncomment this block to see all of the things Casper has to say.
-  //// There are a lot.
-  //// He has opinions.
+var getTotalCommits = function(repoFullName) {
+  var spooky = new Spooky({
+    child: { transport: 'http' }, casper: { logLevel: 'debug', verbose: true } }, function (err) {
+    if (err) {
+      e = new Error('Failed to initialize SpookyJS');
+      e.details = err;
+      throw e;
+    }
+    spooky.start('https://github.com/'+repoFullName);
+    spooky.then(function () {
+      var scrapeNumCommits = function() {
+        return document.querySelector('li.commits .num').firstChild.nodeValue.trim();
+        //return $('li.commits .num').text().trim();
+      };
+      this.emit('commits', this.evaluate(scrapeNumCommits));
+    });
+    spooky.run();
+  });
+  spooky.on('error', function (e, stack) {
+    console.error(e);
+    if (stack) console.log(stack);
+  });
   //spooky.on('console', function (line) {
-  //console.log(line);
+    //console.log(line);
   //});
-  //*/
-
-  //spooky.on('hello', function (greeting) {
-    //console.log(greeting);
-  //});
-
-  //spooky.on('log', function (log) {
-    //if (log.space === 'remote') {
-      //console.log(log.message.replace(/ \- .*/, ''));
-    //}
-  //});
-
-//};
-//getTotalCommits('IncognizantDoppelganger/gitpun');
+  spooky.on('log', function (log) {
+    if (log.space === 'remote') {
+      console.log(log.message.replace(/ \- .*/, ''));
+    }
+  });
+  spooky.on('commits', function (num) {
+    console.log('scraped total commits: ', num);
+  });
+};
 
 var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, callback) {
   console.log('trying to go to github');
-  //var localLastCommitTime = Date.now(), pulledLastCommitTime, githubCommits = [];
   var options = { url: 'https://api.github.com/repos/' + repoFullName + '/commits', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken, per_page: 100, page: 1} };
-  //page param also avail for pagination
   var totalCommits = [];
   (function getMoreCommits() {
     request(options, function(error, response, commitsOverview) { //TODO promisify
@@ -225,5 +201,6 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, 
 
 module.exports = {
   setAccessToken: setAccessToken,
+  getTotalCommits: getTotalCommits,
   getCommitsFromDb: getCommitsFromDb,
   getCommitsFromGithub: getCommitsFromGithub };
