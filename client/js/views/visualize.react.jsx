@@ -48,7 +48,7 @@ var Visualize = React.createClass({
         commit.files = JSON.parse(commit.files);
       });
       //build tree and flat path stuff before rendering
-      Tree.updateFiles(commits[0], this.state.fileTree);
+      Tree.updateTree(commits[0], this.state.fileTree);
       this.updatePaths(0, commits);
       this.setState({commits: commits});
     }.bind(this));
@@ -73,7 +73,7 @@ var Visualize = React.createClass({
   },
 
   updateCommitIndex: function (index) {
-    Tree.updateFiles(this.state.commits[index], this.state.fileTree);
+    Tree.updateTree(this.state.commits[index], this.state.fileTree);
     this.updatePaths(index);
     this.setState( {commitIndex: index, filePaths: this.state.filePaths, fileTree: this.state.fileTree} );
   },
@@ -106,7 +106,7 @@ var Visualize = React.createClass({
       //<File key={this.state.currentPath + '/' + this.state.filePaths[this.state.currentPath].commitIndex} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
       return (
         <Col xs={9} md={9} style={{height: this.state.windowHeight, overflow: 'scroll'}}>
-          <File key={this.state.currentPath} currentIndex={this.state.commitIndex} urls={this.state.urls} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
+          <File currentIndex={this.state.commitIndex} urls={{to : '', from: ''}} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
         </Col>
       )
     }
@@ -129,42 +129,39 @@ var Visualize = React.createClass({
     e.preventDefault();
     var from = parseInt(this.refs.from.getValue());
     var to = parseInt(this.refs.to.getValue());
-    var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
+    var context = this;
     if (!isNaN(from) && !isNaN(to) && this.validCommit(to,from)) {
       var toUrl = this.state.commits[to].files[0].raw_url.split('/').slice(0,6).join('/') + '/' + this.state.currentPath;
       var fromUrl = this.state.commits[from].files[0].raw_url.split('/').slice(0,6).join('/') + '/' + this.state.currentPath;
-      console.log(toUrl,fromUrl);
       $.get(toUrl)
       .always(function(toStatus) {
         $.get(fromUrl)
         .always(function(fromStatus) {
-          if (toStatus.status === 'OK' && fromStatus.status === 'OK') {
-            this.setState ( {urls: {from: fromUrl, to: toUrl}} );
-          } else if (toStatus.status === 'OK') {
-            this.setState( {help: "File doesn't exist at: " + from + '!'});
-          } else if (fromStatus.status === 'OK') {
-            this.setState( {help: "File doesn't exist at: " + to + '!'});
+          if ((typeof toStatus === 'string' || toStatus.statusText === 'OK') && (typeof fromStatus === 'string' || fromStatus.statusText === 'OK')) {
+            context.setState ( {urls: {from: fromUrl, to: toUrl}, help: 'Gitualizing from commit ' + from + ' to ' + to + '!'} );
+          } else if (typeof toStatus === 'string' || toStatus.statusText === 'OK') {
+            context.setState( {help: "File doesn't exist at: " + from + '!'});
+          } else if (typeof fromStatus === 'string' || fromStatus.statusText === 'OK') {
+            context.setState( {help: "File doesn't exist at: " + to + '!'});
           } else {
-            this.setState( {help: "File doesn't exist at: " + from + ', or: ' + to +'!'});
+            context.setState( {help: "File doesn't exist at: " + from + ', or: ' + to +'!'});
           }
         });
       });
-    } else if (!isNaN(to) && this.validCommit(to)) {
+    } else if (!isNaN(to) && this.validCommit(to,from)) {
       to = this.state.commitIndex + to;
       var toUrl = this.state.commits[to].files[0].raw_url.split('/').slice(0,6).join('/') + '/' + this.state.currentPath;
-      var fromUrl = '';
+      var fromUrl = context.state.commits[context.state.commitIndex].files[0].raw_url.split('/').slice(0,6).join('/') + '/' + context.state.currentPath;
       $.get(toUrl)
       .always(function(toStatus) {
-        if (toStatus.status === 'OK') {
-          if (to < this.state.commitIndex) {
-            fromUrl = toUrl;
-            toUrl = this.state.commits[this.state.commitIndex].files[0].raw_url.split('/').slice(0,6).join('/') + '/' + this.state.currentPath;
+        if (typeof toStatus === 'string' || toStatus.statusText === 'OK') {
+          if (to < context.state.commitIndex) {
+            context.setState ( {urls: {from: toUrl, to: fromUrl}, help: 'Gitualizing from commit ' + to + ' to ' + context.state.commitIndex + '!'} );
           } else {
-            fromUrl = this.state.commits[this.state.commitIndex].files[0].raw_url.split('/').slice(0,6).join('/') + '/' + this.state.currentPath;
+            context.setState ( {urls: {from: fromUrl, to: toUrl}, help: 'Gitualizing from commit ' + context.state.commitIndex + ' to ' + to + '!'} );
           }
-          this.setState ( {urls: {from: fromUrl, to: toUrl}} );
         } else {
-          this.setState( {help: "File doesn't exist at: " + to + '!'});
+          context.setState( {help: "File doesn't exist at: " + to + '!'});
         }
       });
     } else {
@@ -185,7 +182,7 @@ var Visualize = React.createClass({
             </Input>
             <hr />
             <div style={{height: this.state.windowHeight, overflow: 'scroll'}}>
-              <File urls={this.state.urls} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
+              <File key={this.state.urls.from+this.state.urls.to} urls={this.state.urls} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
             </div>
           </Modal.Body>
         )
