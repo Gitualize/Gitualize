@@ -23,7 +23,6 @@
     "bookshelf": "^0.8.1",
     "bootstrap": "^3.3.5",
     "browserify": "^10.2.6",
-    "casperjs": "^1.1.0-beta3",
     "compression": "^1.5.1",
     "cors": "^2.7.1",
     "diff": "^1.4.0",
