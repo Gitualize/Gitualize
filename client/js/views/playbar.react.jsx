@@ -147,12 +147,13 @@ var Playbar = React.createClass({
             <ProgressBar bsStyle='danger' now={this.state.now*10/this.props.numberOfCommits}/>
           </OverlayTrigger>
         </Col>
-        <Col xs={4} sm={3} md={2}>
+        <Col xs={5} sm={4} md={3}>
           <ButtonToolbar>
             <ButtonGroup bsSize='medium'>
               <Button onClick={this.rewind}><Glyphicon glyph='backward' /></Button>
               <Button onClick={this.handleClick}><Glyphicon glyph={this.state.glyphicon} /></Button>
-              <Button onClick={this.speedUp}><Glyphicon glyph='forward' /></Button>
+              <Button onClick={this.slowDown}><Glyphicon glyph='minus-sign' /></Button>
+              <Button onClick={this.speedUp}><Glyphicon glyph='plus-sign' /></Button>
             </ButtonGroup>
           </ButtonToolbar>
         </Col>
