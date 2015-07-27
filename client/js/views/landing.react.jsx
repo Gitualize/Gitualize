@@ -17,6 +17,7 @@ var Landing = React.createClass({
       paddingRight: 100
     },
     formStyle: {
+      minWidth: 1000
     },
     stepStyle: {
       width: 300,
@@ -25,7 +26,8 @@ var Landing = React.createClass({
       padding: 0,
       display: 'inline-block',
       wordWrap: 'break-word',
-      overflow: 'auto'
+      overflow: 'hidden',
+      border: '5px double white'
     }, 
     stepContentStyle: {
       width: 'auto',
@@ -114,7 +116,7 @@ var Landing = React.createClass({
               </div>
               <div style={this.styles.stepTextStyle}>
                 <p> Step 2 </p>
-                <p> Press play/pause and adjust speed as needed </p>
+                <p> Press play/pause and adjust speed if needed </p>
               </div>
             </Col>
             <Col style={this.styles.stepStyle}> 
