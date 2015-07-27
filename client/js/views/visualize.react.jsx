@@ -16,6 +16,7 @@ var Folder = require('./folder.react.jsx');
 var Playbar = require('./playbar.react.jsx');
 var CommitInfo = require('./commitInfo.react.jsx');
 var Tree = require('../utils/fileTreeUtils');
+var Loading = require('./loading.react.jsx');
 
 var $ = require('jquery');
 
@@ -35,6 +36,7 @@ var Visualize = React.createClass({
     }.bind(this);
 
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
+
     $.getJSON('repos/'+repoFullName+'/commits', {accessToken: window.localStorage.gitHubAccessToken})
     .success(function(commits) {
       if (commits.msg === 'auth required') { //redirect to auth
@@ -50,7 +52,7 @@ var Visualize = React.createClass({
       //build tree and flat path stuff before rendering
       Tree.updateTree(commits[0], this.state.fileTree);
       this.updatePaths(0, commits);
-      this.setState({commits: commits});
+      this.setState({commits: commits, loading: false});
     }.bind(this));
   },
 
@@ -98,7 +100,7 @@ var Visualize = React.createClass({
   },
 
   getInitialState: function() {
-    return {windowHeight: $(window).height() - 305, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}, showFileGitualize: false, urls: {form: '', to: ''}, help: 'Read up on tips and tricks!'};
+    return {loading: true, windowHeight: $(window).height() - 305, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}, showFileGitualize: false, urls: {form: '', to: ''}, help: 'Read up on tips and tricks!'};
   },
 
   fileOrFolder: function() {
@@ -192,7 +194,7 @@ var Visualize = React.createClass({
   },
 
   render: function () {
-    if (Object.keys(this.state.fileTree).length > 0) { //fileTree loads last. bandaidy render check
+    if (!this.state.loading) { //fileTree loads last. bandaidy render check
       //TODO uncomment these- it's logging multiple times on first load??
       //console.dir(this.state.commits);
       //console.log('filetree: ',this.state.fileTree);
@@ -233,8 +235,7 @@ var Visualize = React.createClass({
       )
     } else {
       return (
-        <div>
-        </div>
+        <Loading/>
       )
     }
   }
