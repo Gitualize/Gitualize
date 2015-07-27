@@ -75,13 +75,17 @@ var Visualize = React.createClass({
   },
 
   updateCommitIndex: function (index) {
-    if (this.state.playbarDirection === 'backward' && index === 0) {
-      this.setState( {commitIndex: index, filePaths: this.state.filePaths, fileTree: this.state.fileTree} );
-    } else {
-      Tree.updateTree(this.state.commits[index], this.state.fileTree, this.state.playbarDirection);  
+    if (this.state.playbarDirection === 'forward') {
+      Tree.updateTree(this.state.commits[index], this.state.fileTree, 'forward');  
       this.updatePaths(index);
       this.setState( {commitIndex: index, filePaths: this.state.filePaths, fileTree: this.state.fileTree} );
+      return;
     }
+    if (index >= 0) {
+      Tree.updateTree(this.state.commits[index + 1], this.state.fileTree, 'backward');  
+    }
+    this.updatePaths(index);
+    this.setState( {commitIndex: index, filePaths: this.state.filePaths, fileTree: this.state.fileTree} );
   },
 
   updateCurrentPath: function (path) {
@@ -98,14 +102,14 @@ var Visualize = React.createClass({
 
   updatePlaybarDirection: function (direction) {
     this.setState({playbarDirection: direction});
-    Tree.updateTree(this.state.commits[this.state.commitIndex], this.state.fileTree, direction);
   },
 
   reset: function() {
     var fileTree = {};
     Tree.updateTree(this.state.commits[0], fileTree);
-    this.setState( {commitIndex: 0, currentPath: '', fileTree: fileTree, filePaths : {}, playbarDirection: 'forward'} );
+    this.state.filePaths = {};
     this.updatePaths(0);
+    this.setState( {commitIndex: 0, currentPath: '', fileTree: fileTree, playbarDirection: 'forward'} );
   },
 
   getInitialState: function() {
