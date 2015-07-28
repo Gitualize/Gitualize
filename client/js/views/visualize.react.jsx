@@ -81,13 +81,13 @@ var Visualize = React.createClass({
 
   updateCommitIndex: function (index) {
     if (this.state.playbarDirection === 'forward') {
-      Tree.updateTree(this.state.commits[index], this.state.fileTree, 'forward');  
+      Tree.updateTree(this.state.commits[index], this.state.fileTree, 'forward');
       this.updatePaths(index);
       this.setState( {commitIndex: index, filePaths: this.state.filePaths, fileTree: this.state.fileTree} );
       return;
     }
     if (index >= 0) {
-      Tree.updateTree(this.state.commits[index + 1], this.state.fileTree, 'backward');  
+      Tree.updateTree(this.state.commits[index + 1], this.state.fileTree, 'backward');
     }
     this.updatePaths(index);
     this.setState( {commitIndex: index, filePaths: this.state.filePaths, fileTree: this.state.fileTree} );
@@ -116,6 +116,9 @@ var Visualize = React.createClass({
     this.updatePaths(0);
     this.setState( {commitIndex: 0, currentPath: '', fileTree: fileTree, playbarDirection: 'forward'} );
   },
+  //getDefaultProps: function () { //please put defaults here (if you must) instead of state
+    //return { hi: 'hey' };
+  //},
 
   getInitialState: function() {
     return {windowHeight: $(window).height() - 305, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}, playbarDirection: 'forward', showFileDiffualize: false, diffualizeMsg: 'Read up on tips and tricks!', urls: {from: '', to: ''}};
@@ -194,27 +197,27 @@ var Visualize = React.createClass({
   modalOrNo: function() {
     if (this.state.showFileDiffualize) {
       return (
-          <Modal.Body>
-            <Input label='Enter a commit range' diffualizeMsg={this.state.diffualizeMsg + ' The current commit index is: ' + this.state.commitIndex} wrapperClassName='wrapper'>
-              <Row>
-                <Col xs={4}><Input type='text' ref='from' addonBefore='From:' bsSize="small" placeholder='here' className='form-control' /></Col>
-                <Col xs={4}><Input type='text' ref='to' addonBefore='To:' bsSize="small" placeholder='there' className='form-control' /></Col>
-                <Col xs={4}><ButtonInput onSubmit={this.handleSubmit} onClick={this.handleSubmit} bsSize="small" type='submit' value='Diffualize'/></Col>
-              </Row>
-            </Input>
-            <hr />
-            <div style={{height: this.state.windowHeight, overflow: 'scroll'}}>
-              <File key={this.state.urls.from+this.state.urls.to} urls={this.state.urls} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
-            </div>
-          </Modal.Body>
-        )
+        <Modal.Body>
+          <Input label='Enter a commit range' diffualizeMsg={this.state.diffualizeMsg + ' The current commit index is: ' + this.state.commitIndex} wrapperClassName='wrapper'>
+            <Row>
+              <Col xs={4}><Input type='text' ref='from' addonBefore='From:' bsSize="small" placeholder='here' className='form-control' /></Col>
+              <Col xs={4}><Input type='text' ref='to' addonBefore='To:' bsSize="small" placeholder='there' className='form-control' /></Col>
+              <Col xs={4}><ButtonInput onSubmit={this.handleSubmit} onClick={this.handleSubmit} bsSize="small" type='submit' value='Diffualize'/></Col>
+            </Row>
+          </Input>
+          <hr />
+          <div style={{height: this.state.windowHeight, overflow: 'scroll'}}>
+            <File key={this.state.urls.from+this.state.urls.to} urls={this.state.urls} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
+          </div>
+        </Modal.Body>
+      )
     } else {
       return ;
     }
   },
 
   render: function () {
-    if (Object.keys(this.state.fileTree).length > 0) { //fileTree loads last. bandaidy render check
+    if (this.state.commits.length > 0) {
       //TODO uncomment these- it's logging multiple times on first load??
       //console.dir(this.state.commits);
       //console.log('filetree: ',this.state.fileTree);
