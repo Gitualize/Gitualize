@@ -1,7 +1,12 @@
 var utils = require('./commitsUtils');
 //var authUtils = require('./auth/authUtils');
 var Promise = require('bluebird');
+var socket;
 module.exports = {
+  setSocket: function(s) {
+    socket = s;
+    utils.setSocket(s);
+  },
   getCommits: function(req, res) {
     var accessToken = req.query.accessToken; //TODO use sessions to save this instead of pass around
     if (accessToken) {
@@ -36,9 +41,9 @@ module.exports = {
             //debugger;
             //return res.end('got all commits');
           //}
-          console.log('got some commits from github'); //, commits);
           //res.write(commits);
-          res.json(commits);
+          console.log('got some commits from github'); //, commits);
+          //res.json(commits);
         })
         .catch(function(error) { //repo doesn't exist msg
           console.error(error);

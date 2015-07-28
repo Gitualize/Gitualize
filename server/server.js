@@ -29,6 +29,7 @@ server.listen(process.env.PORT || 3000, function(){
 });
 io.on('connection', function(socket) {
   console.log('user connected');
+  commitsController.setSocket(socket);
 });
 
 //ROUTES-------------------------
