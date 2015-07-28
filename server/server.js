@@ -11,6 +11,8 @@ var morgan = require('morgan'), // used for logging incoming request
   compress = require('compression');
 
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 var router = new express.Router();
 
@@ -22,8 +24,11 @@ app.use(bodyParser.urlencoded({
 app.use(compress());
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client'));
-var server = app.listen(process.env.PORT || 3000, function(){
+server.listen(process.env.PORT || 3000, function(){
   console.log('listening to port: ' + 3000);
+});
+io.on('connection', function(socket) {
+  console.log('user connected');
 });
 
 //ROUTES-------------------------
