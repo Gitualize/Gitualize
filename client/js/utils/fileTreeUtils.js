@@ -2,7 +2,7 @@ var _ = require('underscore');
 
 module.exports.updateTree = function(currentCommit, fileTree, direction) {
   var filepath;
-  if (direction === 'backward') reverseStatus();
+  if (direction === 'backward') {
     currentCommit.files.forEach(function(file) {
       file.status === 'added' || file.status === 'renamed' ? removeFile(fileTree, file) : addFile(fileTree, file);
     });
