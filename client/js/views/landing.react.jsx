@@ -82,8 +82,8 @@ var Landing = React.createClass({
       .always(function (repos) {
         var repoNames = repos.map(function(repo) {return userName + '/' + repo.name});
         $( ".uiAutocomplete" ).autocomplete({
-              source: repoNames
-            });
+          source: repoNames
+        });
       });
     }
 
