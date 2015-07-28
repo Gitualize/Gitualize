@@ -71,7 +71,7 @@ var removeFile = function (tree, file) {
   }
 };
 
-var cleanTree = function (tree) {
+var cleanTree = function (tree) { //for deleting nested empty folders
   for (var node in tree) {
     if (tree[node]._folderDetails && tree[node]._folderDetails.isFolder){
       if (Object.keys(tree[node]).length === 1) {
