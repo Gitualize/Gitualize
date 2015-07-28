@@ -1,4 +1,5 @@
 var React = require('react');
+var socket = require('socket.io-client')('http://localhost:3000'); //TODO env var
 var Navigation = require('react-router').Navigation;
 var $ = require('jquery');
 var ReactBootstrap = require('react-bootstrap');
@@ -36,12 +37,13 @@ var Visualize = React.createClass({
     }.bind(this);
 
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
-
+    //TODO replace with eventsource or streaming json something
     $.getJSON('repos/'+repoFullName+'/commits', {accessToken: window.localStorage.gitHubAccessToken})
     .success(function(commits) {
       if (commits.msg === 'auth required') { //redirect to auth
         return window.location = commits.authUrl;
       }
+      console.log('batch of first commits: index at 0 should be first one ever: ', commits);
       if (!Array.isArray(commits)) { //repo fetch failed
         return this.transitionTo('/', null, {error: 'badRepo'});
       }
@@ -57,6 +59,9 @@ var Visualize = React.createClass({
   },
 
   componentWillMount: function() {
+    socket.on('connect', function(socket) {
+      console.log('connected to server to get chunks of commits');
+    });
     this.getCommits();
   },
 
