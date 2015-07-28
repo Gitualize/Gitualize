@@ -50,6 +50,7 @@ var Playbar = React.createClass({
   },
 
   play: function() {
+    this.props.updatePlaybarDirection('forward');
     this.timer = setInterval(this.tick, this.state.speed);
     var glyphicon = 'pause';
     this.setState( {glyphicon} );
@@ -81,6 +82,10 @@ var Playbar = React.createClass({
     }
   },
 
+  rewind: function() {
+    this.props.updatePlaybarDirection('backward');
+  },
+
   end: function() {
     this.pause();
     var glyphicon = 'refresh';
@@ -88,12 +93,14 @@ var Playbar = React.createClass({
   },
 
   tick: function() {
-    var now = this.state.now + 1;
+    var incrementor = this.props.playbarDirection === 'forward' ? 1 : -1;
+    var now = this.state.now + incrementor;
     this.setState( {now} );
     if (now % 10 === 0) {
-      this.props.updateCommitIndex(this.props.commitIndex + 1);
+      if (this.props.commitIndex === 0 && this.props.playbarDirection === 'backward') return this.end();
+      this.props.updateCommitIndex(this.props.commitIndex + incrementor);
       if (now % (this.props.numberOfCommits*10) === 0) this.end();
-      this.time.add(1);
+      this.time.add(incrementor);
       var date = this.time.toString();
       this.setState( {date} );
     }
@@ -140,12 +147,13 @@ var Playbar = React.createClass({
             <ProgressBar bsStyle='danger' now={this.state.now*10/this.props.numberOfCommits}/>
           </OverlayTrigger>
         </Col>
-        <Col xs={4} sm={3} md={2}>
+        <Col xs={5} sm={4} md={3}>
           <ButtonToolbar>
             <ButtonGroup bsSize='medium'>
-              <Button onClick={this.slowDown}><Glyphicon glyph='backward' /></Button>
+              <Button onClick={this.rewind}><Glyphicon glyph='backward' /></Button>
               <Button onClick={this.handleClick}><Glyphicon glyph={this.state.glyphicon} /></Button>
-              <Button onClick={this.speedUp}><Glyphicon glyph='forward' /></Button>
+              <Button onClick={this.slowDown}><Glyphicon glyph='minus-sign' /></Button>
+              <Button onClick={this.speedUp}><Glyphicon glyph='plus-sign' /></Button>
             </ButtonGroup>
           </ButtonToolbar>
         </Col>
