@@ -150,15 +150,31 @@ var Playbar = React.createClass({
         <Col xs={5} sm={4} md={3}>
           <ButtonToolbar>
             <ButtonGroup bsSize='medium'>
-              <Button onClick={this.rewind}><Glyphicon glyph='backward' /></Button>
-              <Button onClick={this.handleClick}><Glyphicon glyph={this.state.glyphicon} /></Button>
-              <Button onClick={this.slowDown}><Glyphicon glyph='minus-sign' /></Button>
-              <Button onClick={this.speedUp}><Glyphicon glyph='plus-sign' /></Button>
+              <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> rewind </Tooltip>}>
+                <Button onClick={this.rewind}><Glyphicon glyph='backward' /></Button>
+              </OverlayTrigger>
+              <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> {this.state.glyphicon} </Tooltip>}>
+                <Button onClick={this.handleClick}><Glyphicon glyph={this.state.glyphicon} /></Button>
+              </OverlayTrigger>
+              <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> slow-down </Tooltip>}>
+                <Button onClick={this.slowDown}><Glyphicon glyph='minus-sign' /></Button>
+              </OverlayTrigger>
+              <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> speed-up </Tooltip>}>
+                <Button onClick={this.speedUp}><Glyphicon glyph='plus-sign' /></Button>
+              </OverlayTrigger>
             </ButtonGroup>
           </ButtonToolbar>
         </Col>
-        <Col xs={2} sm={2} md={1} className='text-center'><Well bsSize='small'>{this.speeds[this.state.speed]}x</Well></Col>
-        <Col xs={3} sm={3} md={2} className='text-center'><Well bsSize='small'>{this.props.commitIndex}/{this.props.numberOfCommits} Commits</Well></Col>
+        <Col xs={2} sm={2} md={1} className='text-center'>
+          <OverlayTrigger placement='top' delayShow={1000} overlay={<Tooltip> current speed </Tooltip>}>
+            <Well bsSize='small'>{this.speeds[this.state.speed]}x </Well>
+          </OverlayTrigger>
+        </Col>
+        <Col xs={3} sm={3} md={2} className='text-center'>
+          <OverlayTrigger placement='top' delayShow={1000} overlay={<Tooltip> current commit </Tooltip>}>
+            <Well bsSize='small'>{this.props.commitIndex}/{this.props.numberOfCommits} Commits</Well>
+          </OverlayTrigger>
+        </Col>
         {gitualizeFile}
       </Row>
     )
