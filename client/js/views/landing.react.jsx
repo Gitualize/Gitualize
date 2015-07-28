@@ -6,6 +6,8 @@ var ButtonInput = ReactBootstrap.ButtonInput;
 var Grid = ReactBootstrap.Grid;
 var Row = ReactBootstrap.Row;
 var Col = ReactBootstrap.Col;
+var Tooltip = ReactBootstrap.Tooltip;
+var OverlayTrigger = ReactBootstrap.OverlayTrigger;
 
 var Landing = React.createClass({
   mixins : [Navigation],
@@ -91,13 +93,25 @@ var Landing = React.createClass({
         )
     }
 
+        // <form style={this.styles.formStyle} className='repoForm' onSubmit={this.handleSubmit}>
+        // </form>
     return (
       <div style={this.styles.containerStyle}>
-        <form style={this.styles.formStyle} className='repoForm' onSubmit={this.handleSubmit}>
-          <Input type='text' ref='repo' label='Visualize a repo' onChange={this.handleChange} placeholder='user/reponame - try tchan247/blog-project'/>
-          <ButtonInput type='submit' value='Gitualize' bsStyle={this.state.style} disabled={this.state.disabled} />
-          {errorMessage}
-        </form>
+          <form style={this.styles.formStyle} className='repoForm' onSubmit={this.handleSubmit}>
+            <Row>
+              <Col>
+                <Input style={{minWidth:1000}} type='text' ref='repo' label='Visualize a repo' onChange={this.handleChange} placeholder='user/reponame - try tchan247/blog-project'/>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={1}>
+                <OverlayTrigger placement='bottom' delayShow={1000} overlay={<Tooltip> visualize the repository </Tooltip>}>
+                  <ButtonInput type='submit' value='Gitualize' bsStyle={this.state.style} disabled={this.state.disabled}/>
+                </OverlayTrigger>
+              </Col>
+              {errorMessage}
+            </Row>
+          </form>
 
         <Grid style={this.styles.instructionStyle} bsSize='small'>
           <Row>
