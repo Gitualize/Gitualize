@@ -1,5 +1,6 @@
 var React = require('react');
-var socket = require('socket.io-client')('http://localhost:3000'); //TODO env var
+var socketURL = process.env.SOCKET_URL || 'http://localhost:3000';
+var socket = require('socket.io-client')(socketURL);
 var Navigation = require('react-router').Navigation;
 var $ = require('jquery');
 var ReactBootstrap = require('react-bootstrap');
