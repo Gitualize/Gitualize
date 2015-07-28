@@ -25,7 +25,7 @@ var Loader = React.createClass({
     return (
       <div style={this.styles.loadingStyle}>
         <img style={this.styles.spinnerStyle} src={'../../pics/octocat-spinner.svg'}/>
-        <p style={this.styles.textStyle}> Powered By </p>
+        <p style={this.styles.textStyle}> Loading from </p>
         <img style={this.styles.spinnerStyle} src={'../../pics/GitHub_Logo.png'}/>
       </div>
     )
