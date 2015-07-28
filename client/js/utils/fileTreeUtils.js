@@ -1,11 +1,20 @@
 var _ = require('underscore');
-module.exports.updateTree = function(currentCommit, fileTree) {
+
+module.exports.updateTree = function(currentCommit, fileTree, direction) {
   var filepath;
-  currentCommit.files.forEach(function(file) {
-    //filepath = file.filename;
-    file.status === 'removed' ? removeFile(fileTree, file) : addFile(fileTree, file);
-  });
+  if (direction === 'backward') {
+    currentCommit.files.forEach(function(file) {
+      file.status === 'added' || file.status === 'renamed' ? removeFile(fileTree, file) : addFile(fileTree, file);
+    });
+  } else {
+    currentCommit.files.forEach(function(file) {
+      //filepath = file.filename;
+      file.status === 'removed' ? removeFile(fileTree, file) : addFile(fileTree, file);
+    });
+  }
+  cleanTree(fileTree);
 };
+
 var addFile = function (tree, file) {
   var filePath = file.filename;
   var path = filePath.split('/');
@@ -35,10 +44,10 @@ var addFile = function (tree, file) {
 var removeFile = function (tree, file) {
   var filePath = file.filename;
   var path = filePath.split('/');
-  var currentFolder = tree, parentFolder;
-  var folderOrFileName, targetFolderOrFileName;
+  var currentFolder = tree;
+  var parentFolder, folderOrFileName, targetFolderOrFileName;
+  targetFolderOrFileName = path[0];
   while (path.length > 1) {
-    targetFolderOrFileName = path[0];
     var found = _.find(currentFolder, function(contents, folderOrFileName) {
       if (folderOrFileName === targetFolderOrFileName) {
         parentFolder = currentFolder;
@@ -46,8 +55,9 @@ var removeFile = function (tree, file) {
         return true;
       }
     });
-    if (!found) return console.log('File or Folder not found in our tree');
+    if (!found) return console.log('File or Folder not found in our tree: ', targetFolderOrFileName);
     path.shift();
+    targetFolderOrFileName = path[0];
   }
   delete currentFolder[targetFolderOrFileName]; //delete the file
 
@@ -59,3 +69,15 @@ var removeFile = function (tree, file) {
     parentFolder && delete parentFolder[folderName]; //delete the folder if it's empty now
   }
 };
+
+var cleanTree = function (tree) {
+  for (var node in tree) {
+    if (tree[node]._folderDetails && tree[node]._folderDetails.isFolder){
+      if (Object.keys(tree[node]).length === 1) {
+        delete tree[node];
+      } else {
+        cleanTree(tree[node]);
+      }
+    }
+  }
+}
