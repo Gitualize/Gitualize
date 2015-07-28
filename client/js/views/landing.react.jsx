@@ -1,3 +1,5 @@
+var $ = require('jquery');
+var jqueryUI = require('jquery-ui');
 var React = require('react');
 var Navigation = require('react-router').Navigation;
 var ReactBootstrap = require('react-bootstrap');
@@ -73,7 +75,17 @@ var Landing = React.createClass({
     var style = 'danger';
 
     if (string.match(/[\w]+\/[\w]+/)) { style = 'success'; }
-    else if (string.match(/[\w]/)) { style = 'warning'; }
+    else if (string.match(/[\w]+\//)) { 
+      style = 'warning';
+      var userName = this.refs.repo.getValue().split('/')[0];
+      $.get('http://api.github.com/users/' + userName + '/repos', {accessToken: window.localStorage.gitHubAccessToken})
+      .always(function (repos) {
+        var repoNames = repos.map(function(repo) {return userName + '/' + repo.name});
+        $( ".uiAutocomplete" ).autocomplete({
+              source: repoNames
+            });
+      });
+    }
 
     var disabled = style !== 'success';
 
@@ -87,20 +99,18 @@ var Landing = React.createClass({
   render: function() {
     if (this.props.query.error) {
       var errorMessage = (
-          <div className='error-message'>
-            Error: {this.errorMessages[this.props.query.error]}
-          </div>
-        )
+        <div className='error-message'>
+          Error: {this.errorMessages[this.props.query.error]}
+        </div>
+      )
     }
 
-        // <form style={this.styles.formStyle} className='repoForm' onSubmit={this.handleSubmit}>
-        // </form>
     return (
       <div style={this.styles.containerStyle}>
           <form style={this.styles.formStyle} className='repoForm' onSubmit={this.handleSubmit}>
             <Row>
               <Col>
-                <Input style={{minWidth:1000}} type='text' ref='repo' label='Visualize a repo' onChange={this.handleChange} placeholder='user/reponame - try tchan247/blog-project'/>
+                <Input type='text' ref='repo' className='uiAutocomplete' label='Visualize a repo' onChange={this.handleChange} placeholder='user/reponame - try tchan247/blog-project'/>
               </Col>
             </Row>
             <Row>
@@ -109,8 +119,8 @@ var Landing = React.createClass({
                   <ButtonInput type='submit' value='Gitualize' bsStyle={this.state.style} disabled={this.state.disabled}/>
                 </OverlayTrigger>
               </Col>
-              {errorMessage}
             </Row>
+            {errorMessage}
           </form>
 
         <Grid style={this.styles.instructionStyle} bsSize='small'>

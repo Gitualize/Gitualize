@@ -29,6 +29,7 @@
     "express": "^4.13.1",
     "gulp-streamify": "0.0.5",
     "jquery": "^2.1.4",
+    "jquery-ui": "^1.10.5",
     "knex": "^0.8.6",
     "morgan": "^1.6.1",
     "path": "^0.11.14",
