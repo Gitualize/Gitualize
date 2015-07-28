@@ -92,12 +92,12 @@ var Visualize = React.createClass({
     this.setState({currentPath: path});
   },
 
-  showFileGitualize: function() {
-    this.setState( {showFileGitualize: true} );
+  showFileDiffualize: function() {
+    this.setState( {showFileDiffualize: true} );
   },
 
-  closeFileGitualize: function() {
-    this.setState( {showFileGitualize: false, urls: {form: '', to: ''}, help: 'Read up on tips and tricks!'} );
+  closeFileDiffualize: function() {
+    this.setState( {showFileDiffualize: false, urls: {form: '', to: ''}, help: 'Read up on tips and tricks!'} );
   },
 
   updatePlaybarDirection: function (direction) {
@@ -113,7 +113,7 @@ var Visualize = React.createClass({
   },
 
   getInitialState: function() {
-    return {loading: true, windowHeight: $(window).height() - 305, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}, playbarDirection: 'forward', showFileGitualize: false, urls: {form: '', to: ''}, help: 'Read up on tips and tricks!'};
+    return {loading: true, windowHeight: $(window).height() - 305, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}, playbarDirection: 'forward', showFileDiffualize: false, urls: {form: '', to: ''}, help: 'Read up on tips and tricks!'};
   },
 
   fileOrFolder: function() {
@@ -153,7 +153,7 @@ var Visualize = React.createClass({
         $.get(fromUrl)
         .always(function(fromStatus) {
           if ((typeof toStatus === 'string' || toStatus.statusText === 'OK') && (typeof fromStatus === 'string' || fromStatus.statusText === 'OK')) {
-            context.setState ( {urls: {from: fromUrl, to: toUrl}, help: 'Gitualizing from commit ' + from + ' to ' + to + '!'} );
+            context.setState ( {urls: {from: fromUrl, to: toUrl}, help: 'Diffualizing from commit ' + from + ' to ' + to + '!'} );
           } else if (typeof toStatus === 'string' || toStatus.statusText === 'OK') {
             context.setState( {help: "File doesn't exist at: " + from + '!'});
           } else if (typeof fromStatus === 'string' || fromStatus.statusText === 'OK') {
@@ -171,9 +171,9 @@ var Visualize = React.createClass({
       .always(function(toStatus) {
         if (typeof toStatus === 'string' || toStatus.statusText === 'OK') {
           if (to < context.state.commitIndex) {
-            context.setState ( {urls: {from: toUrl, to: fromUrl}, help: 'Gitualizing from commit ' + to + ' to ' + context.state.commitIndex + '!'} );
+            context.setState ( {urls: {from: toUrl, to: fromUrl}, help: 'Diffualizing from commit ' + to + ' to ' + context.state.commitIndex + '!'} );
           } else {
-            context.setState ( {urls: {from: fromUrl, to: toUrl}, help: 'Gitualizing from commit ' + context.state.commitIndex + ' to ' + to + '!'} );
+            context.setState ( {urls: {from: fromUrl, to: toUrl}, help: 'Diffualizing from commit ' + context.state.commitIndex + ' to ' + to + '!'} );
           }
         } else {
           context.setState( {help: "File doesn't exist at: " + to + '!'});
@@ -185,14 +185,14 @@ var Visualize = React.createClass({
   },
 
   modalOrNo: function() {
-    if (this.state.showFileGitualize) {
+    if (this.state.showFileDiffualize) {
       return (
           <Modal.Body>
             <Input label='Enter a commit range' help={this.state.help + ' The current commit index is: ' + this.state.commitIndex} wrapperClassName='wrapper'>
               <Row>
                 <Col xs={4}><Input type='text' ref='from' addonBefore='From:' bsSize="small" placeholder='here' className='form-control' /></Col>
                 <Col xs={4}><Input type='text' ref='to' addonBefore='To:' bsSize="small" placeholder='there' className='form-control' /></Col>
-                <Col xs={4}><ButtonInput onSubmit={this.handleSubmit} onClick={this.handleSubmit} bsSize="small" type='submit' value='Gitualize'/></Col>
+                <Col xs={4}><ButtonInput onSubmit={this.handleSubmit} onClick={this.handleSubmit} bsSize="small" type='submit' value='Diffualize'/></Col>
               </Row>
             </Input>
             <hr />
@@ -235,12 +235,12 @@ var Visualize = React.createClass({
               {maindisplay}
             </Row>
 
-            <Playbar playbarDirection={this.state.playbarDirection} updatePlaybarDirection={this.updatePlaybarDirection} currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset} showFileGitualize={this.showFileGitualize} isFile={this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder}/>
+            <Playbar playbarDirection={this.state.playbarDirection} updatePlaybarDirection={this.updatePlaybarDirection} currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset} showFileDiffualize={this.showFileDiffualize} isFile={this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder}/>
           </Grid>
 
-          <Modal show={this.state.showFileGitualize} onHide={this.closeFileGitualize}>
+          <Modal show={this.state.showFileDiffualize} onHide={this.closeFileDiffualize}>
             <Modal.Header closeButton>
-              <Modal.Title>Gitualizing {this.state.currentPath}</Modal.Title>
+              <Modal.Title>Diffualizing {this.state.currentPath}</Modal.Title>
             </Modal.Header>
             {modal}
           </Modal>

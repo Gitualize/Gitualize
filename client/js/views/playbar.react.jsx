@@ -121,15 +121,15 @@ var Playbar = React.createClass({
     }
   },
 
-  showFileGitualizeModal: function() {
+  showFileDiffualizeModal: function() {
     this.pause();
-    this.props.showFileGitualize();
+    this.props.showFileDiffualize();
   },
 
   isFile: function() {
     if (this.props.isFile) {
       return (
-          <Col xs={3} sm={3} md={2}><Button onClick={this.showFileGitualizeModal}><Glyphicon glyph='modal-window' /> Gitualize</Button></Col>
+          <Col xs={3} sm={3} md={2}><Button onClick={this.showFileDiffualizeModal}><Glyphicon glyph='modal-window' /> Diffualize</Button></Col>
         )
     } else  {
       return (
@@ -139,7 +139,7 @@ var Playbar = React.createClass({
   },
 
   render: function () {
-    var gitualizeFile = this.isFile();
+    var diffualizeFile = this.isFile();
     return (
       <Row className='show-grid'>
         <Col xs={12} sm={12} md={12}>
@@ -175,7 +175,7 @@ var Playbar = React.createClass({
             <Well bsSize='small'>{this.props.commitIndex}/{this.props.numberOfCommits} Commits</Well>
           </OverlayTrigger>
         </Col>
-        {gitualizeFile}
+        {diffualizeFile}
       </Row>
     )
   }
