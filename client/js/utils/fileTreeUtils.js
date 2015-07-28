@@ -2,7 +2,7 @@ var _ = require('underscore');
 
 module.exports.updateTree = function(currentCommit, fileTree, direction) {
   var filepath;
-  if (direction === 'backward') {
+  if (direction === 'backward') reverseStatus();
     currentCommit.files.forEach(function(file) {
       file.status === 'added' || file.status === 'renamed' ? removeFile(fileTree, file) : addFile(fileTree, file);
     });
@@ -71,7 +71,7 @@ var removeFile = function (tree, file) {
   }
 };
 
-var cleanTree = function (tree) {
+var cleanTree = function (tree) { //for deleting nested empty folders
   for (var node in tree) {
     if (tree[node]._folderDetails && tree[node]._folderDetails.isFolder){
       if (Object.keys(tree[node]).length === 1) {
