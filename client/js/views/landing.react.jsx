@@ -108,18 +108,10 @@ var Landing = React.createClass({
     return (
       <div style={this.styles.containerStyle}>
           <form style={this.styles.formStyle} className='repoForm' onSubmit={this.handleSubmit}>
-            <Row>
-              <Col>
-                <Input type='text' ref='repo' className='uiAutocomplete' label='Visualize a repo' onChange={this.handleChange} placeholder='user/reponame - try tchan247/blog-project'/>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={1}>
-                <OverlayTrigger placement='bottom' delayShow={1000} overlay={<Tooltip> visualize the repository </Tooltip>}>
-                  <ButtonInput type='submit' value='Gitualize' bsStyle={this.state.style} disabled={this.state.disabled}/>
-                </OverlayTrigger>
-              </Col>
-            </Row>
+            <Input type='text' ref='repo' className='uiAutocomplete' label='Visualize a repo' onChange={this.handleChange} placeholder='user/reponame - try tchan247/blog-project'/>
+            <OverlayTrigger placement='bottom' delayShow={1000} overlay={<Tooltip> visualize the repository </Tooltip>}>
+              <ButtonInput type='submit' value='Gitualize' bsStyle={this.state.style} disabled={this.state.disabled}/>
+            </OverlayTrigger>
             {errorMessage}
           </form>
 
