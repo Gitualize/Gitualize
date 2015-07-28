@@ -46,13 +46,17 @@ var addCommitsToRepo = function(dbRepo, commits, callback) { //helper for saveCo
   var repoCommits = dbRepo.commits();
   if (!repoCommits) return console.error('repo ', repoFullName, ' has no commits relationship. wtf');
   console.log('# commits in addCommitsToRepo: ', commits.length);
-  callback(null, commits); //give caller immediately so don't have to wait for them to finish storing
+  //callback(null, commits); //give caller immediately so don't have to wait for them to finish storing
   commits.reduce(function(prevCommitPromise, commit) {
     return prevCommitPromise
     .then(function(dbCommit) {
       return repoCommits.create(commit);
     });
-  }, new Promise(function(resolve) { resolve(); }));
+  }, new Promise(function(resolve) { resolve(); }))
+  .then(function(commitChain) {
+    //debugger;
+    callback(null, commits); //give caller here to ensure no pinging of more github pages before saving the current batch
+  });
 
   //commits.forEach(function(commit) { //the general /commits only has very general info. we must then get the detailed info for each commit later
   //repoCommits.create(commit)
@@ -96,10 +100,9 @@ var cleanCommitsDetailed = function(commits) {
   var committer, avatarUrl, message;
   var c = _.map(commits, function(commit) {
     commit = JSON.parse(commit);
+    if (!commit.sha) return; //skip this commit...maybe reached some api access limit? check elsewhere perhaps
     committer = (commit.committer && commit.committer.login) || (commit.author && commit.author.login) || commit.commit.committer.name;
     avatarUrl = (commit.committer && commit.committer.avatar_url) || (commit.author && commit.author.avatar_url);
-    //if (commit.sha.length > 40) debugger;
-    //if (committer.length > 250) debugger;
 
     message = commit.commit.message;
     if (message.length > 195) message = message.substr(0,195) + '...';
@@ -120,49 +123,78 @@ var visitEachCommit = function(shas, options) { //visit each commit, update comm
   return Promise.all(commitsDetailed);
 };
 
-var getTotalCommits = function(repoFullName) {
+var getTotalCommits = Promise.promisify(function(repoFullName, callback) {
   var spooky = new Spooky({
     child: { transport: 'http' }, casper: { logLevel: 'debug', verbose: true } }, function (err) {
-    if (err) {
-      e = new Error('Failed to initialize SpookyJS');
-      e.details = err;
-      throw e;
-    }
-    spooky.start('https://github.com/'+repoFullName);
-    spooky.then(function () {
-      var scrapeNumCommits = function() {
-        return document.querySelector('li.commits .num').firstChild.nodeValue.trim();
-        //return $('li.commits .num').text().trim();
-      };
-      this.emit('commits', this.evaluate(scrapeNumCommits));
+      if (err) {
+        e = new Error('Failed to initialize SpookyJS');
+        e.details = err;
+        throw e;
+      }
+      spooky.start('https://github.com/'+repoFullName);
+      spooky.then(function () {
+        var scrapeNumCommits = function() {
+          return document.querySelector('li.commits .num').firstChild.nodeValue.trim();
+          //return $('li.commits .num').text().trim();
+        };
+        this.emit('commits', this.evaluate(scrapeNumCommits));
+      });
+      spooky.run();
     });
-    spooky.run();
-  });
-  spooky.on('error', function (e, stack) {
-    console.error(e);
-    if (stack) console.log(stack);
-  });
-  //spooky.on('console', function (line) {
+    spooky.on('error', function (e, stack) {
+      console.error(e);
+      callback(e, null);
+      if (stack) console.log(stack);
+    });
+    //spooky.on('console', function (line) { //uncomment to debug
     //console.log(line);
-  //});
-  spooky.on('log', function (log) {
-    if (log.space === 'remote') {
-      console.log(log.message.replace(/ \- .*/, ''));
-    }
-  });
-  spooky.on('commits', function (num) {
-    console.log('scraped total commits: ', num);
-  });
-};
+    //});
+    spooky.on('log', function (log) {
+      if (log.space === 'remote') {
+        console.log(log.message.replace(/ \- .*/, ''));
+      }
+    });
+    spooky.on('commits', function (num) {
+      if (typeof num !== 'string') return callback('unexpected format of scraped # of commits', null);
+      num = parseInt(num.replace(',', ''));
+      if (isNaN(num)) return callback('commits scraped NaN', null);
+      console.log('scraped total commits: ', num);
+      callback(null, num);
+    });
+});
 
-var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, callback) {
+var processCommits = Promise.promisify(function(commits, repoFullName, callback) { //getCommitsFromGithub helper
+  commitShas = getShas(commits).reverse(); //so first thing is the oldest commit for this batch
+  var commitOptions = { url: 'https://api.github.com/repos/' + repoFullName + '/commits/', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken} };
+  //TODO DRY with above options
+  visitEachCommit(commitShas, commitOptions)
+  .then(function(commitsDetailed) {
+    if (!Array.isArray(commitsDetailed)) callback('commits fetched not an array. api limit?', null);
+    commitsDetailed = cleanCommitsDetailed(commitsDetailed);
+    callback(null, commitsDetailed);
+    //stream commitsDetailed to client
+    //socket to send to client? would be easiest but maybe more overhead
+    return saveCommitsToDb(repoFullName, commitsDetailed);
+    //}).then(function(commits) {
+    //console.log('should have saved ' + commits.length + ' commits');
+    ////if (!commits) return res.status(500).end();
+  }).catch(function(err) { //is this ok or must be at end?
+    console.error('Error visiting all commits for detailed info: ', err);
+  }).catch(function(error) { //TODO many to many commits to repos relationship establish for forks
+    console.log('error saving commits to db: ', error);
+  });
+});
+var getCommitsFromGithub = Promise.promisify(function(repoFullName, totalNumCommits, maxCommits, callback) {
   console.log('trying to go to github');
-  var options = { url: 'https://api.github.com/repos/' + repoFullName + '/commits', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken, per_page: 100, page: 1} };
-  var totalCommits = [];
+  var startPage = Math.ceil(totalNumCommits/100);
+  console.log('starting with page: ', startPage);
+  var options = { url: 'https://api.github.com/repos/' + repoFullName + '/commits', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken, per_page: 100, page: startPage} };
+  var totalCommitsCount = 0;
   (function getMoreCommits() {
     request(options, function(error, response, commitsOverview) { //TODO promisify
       if (error) return callback(error, null);
       commitsOverview = JSON.parse(commitsOverview);
+      console.log('getting commits on page: ', options.qs.page);
       if (commitsOverview.message === 'Bad credentials') return callback(commitsOverview.message, null);
       if (commitsOverview.message === 'Not Found') {
         var msg = 'Repo ' + repoFullName + ' does not exist.';
@@ -170,33 +202,20 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, 
       }
       //console.log('commitsOverview.length = ', commitsOverview.length);
       //TODO handle if commitsOverview is empty
-      totalCommits = totalCommits.concat(commitsOverview);
-      processCommits(); //process these 100 commits and send to client
-      if (commitsOverview.length === 100 && totalCommits.length < maxCommits) {
-        options.qs.page++;
-        getMoreCommits();
-      };
+      //totalCommits = totalCommits.concat(commitsOverview);
+      //totalCommits = commitsOverview;
+      totalCommitsCount += commitsOverview.length;
+
+      //len should always be > 0 unless we are at startPage and didn't select it right
+      if (commitsOverview.length < 1) return callback('error fetching correct commits', null);
+      processCommits(commitsOverview, repoFullName)
+      .then(function(commits) {
+        console.log('should have saved ' + commits.length + ' commits');
+        callback(null, commits);
+        if (--options.qs.page > 0 && totalCommitsCount < maxCommits) getMoreCommits();
+      });
     });
   })();
-  function processCommits() {
-    commitShas = getShas(totalCommits).reverse(); //first thing in commitsOverview is the oldest commit
-    //commit 40 41 42 43 44
-    var commitOptions = { url: 'https://api.github.com/repos/' + repoFullName + '/commits/', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken} };
-    //TODO DRY with above options
-    visitEachCommit(commitShas, commitOptions)
-    .then(function(commitsDetailed) {
-      commitsDetailed = cleanCommitsDetailed(commitsDetailed);
-      callback(null, commitsDetailed);
-      return saveCommitsToDb(repoFullName, commitsDetailed);
-    }).then(function(commits) {
-      console.log('should have saved ' + commits.length + ' commits');
-      //if (!commits) return res.status(500).end();
-    }).catch(function(err) { //is this ok or must be at end?
-      console.error('Error visiting all commits for detailed info: ', err);
-    }).catch(function(error) { //TODO many to many commits to repos relationship establish for forks
-      console.log('error saving commits to db: ', error);
-    });
-  }
 });
 
 module.exports = {

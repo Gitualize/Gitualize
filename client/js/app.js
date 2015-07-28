@@ -1,5 +1,6 @@
 //main router file
 var _ = require('underscore');
+//var socket = require('socket.io-client');
 var $ = require('jquery');
 var React = require('react');
 var Router = require('react-router');
@@ -9,6 +10,7 @@ var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
 var DefaultRoute = Router.DefaultRoute;
 var Views = require('./views/views.react.jsx');
+//var socket = io();
 
 var App = React.createClass({
   render () {
