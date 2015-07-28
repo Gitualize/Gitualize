@@ -35,6 +35,10 @@ var Visualize = React.createClass({
       this.setState({windowHeight: $(window).height() - 305});
     }.bind(this);
 
+    window.onchange = function(){
+      console.log('change');
+    };
+
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
 
     $.getJSON('repos/'+repoFullName+'/commits', {accessToken: window.localStorage.gitHubAccessToken})
@@ -207,6 +211,10 @@ var Visualize = React.createClass({
   },
 
   render: function () {
+    if(this.props.tooltip) {
+      console.log('tooltip in visualize')
+    }
+
     if (!this.state.loading) { //fileTree loads last. bandaidy render check
       //TODO uncomment these- it's logging multiple times on first load??
       //console.dir(this.state.commits);
