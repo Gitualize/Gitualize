@@ -18,6 +18,7 @@ module.exports.updateTree = function(currentCommit, fileTree, direction) {
 var addFile = function (tree, file) {
   var filePath = file.filename;
   var path = filePath.split('/');
+  var originalPath = filePath.split('/');
   var currentFolder = tree;
   var folderMatch, folder;
   while (path.length > 1) {
@@ -29,10 +30,10 @@ var addFile = function (tree, file) {
       }
     }
     if (!folderMatch) {
-      var index = filePath.lastIndexOf('/');
-      var folderPath = filePath.slice(0, index > -1? index : filePath.length);
+      var index = filePath.indexOf(path[0]) + path[0].length;
+      var folderPath = originalPath.slice(0, originalPath.length - path.length + 1).join('/');
       //currentFolder[path[0]] = {isFolder: true, path: folderPath};
-      currentFolder[path[0]] = {_folderDetails: {isFolder: true, path: folderPath, value: path[path.length-2]}};
+      currentFolder[path[0]] = {_folderDetails: {isFolder: true, path: folderPath, value: path[0]}};
       //isFolder if there is something in the obj other than details?
       currentFolder = currentFolder[path[0]];
     }
