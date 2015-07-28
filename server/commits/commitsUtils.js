@@ -14,6 +14,10 @@ var accessToken;
 var setAccessToken = function(token) {
   accessToken = token;
 };
+var socket;
+var setSocket = function(s) { //could avoid code repeat by letting server know about commitsUtils but less encapsulatey
+  socket = s;
+};
 
 var getCommitsFromDb = Promise.promisify(function(repoFullName, callback) {
   new Repo({
@@ -56,6 +60,10 @@ var addCommitsToRepo = function(dbRepo, commits, callback) { //helper for saveCo
   .then(function(commitChain) {
     //debugger;
     callback(null, commits); //give caller here to ensure no pinging of more github pages before saving the current batch
+  })
+  .catch(function(err) {
+    console.error(err);
+    callback('error saving commits with chained commit promises', null);
   });
 
   //commits.forEach(function(commit) { //the general /commits only has very general info. we must then get the detailed info for each commit later
@@ -163,27 +171,38 @@ var getTotalCommits = Promise.promisify(function(repoFullName, callback) {
     });
 });
 
-var processCommits = Promise.promisify(function(commits, repoFullName, callback) { //getCommitsFromGithub helper
+//var processCommits = Promise.promisify(function(commits, repoFullName, callback) { //getCommitsFromGithub helper
+  //commitShas = getShas(commits).reverse(); //so first thing is the oldest commit for this batch
+  //var commitOptions = { url: 'https://api.github.com/repos/' + repoFullName + '/commits/', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken} };
+  ////TODO DRY with above options
+  //visitEachCommit(commitShas, commitOptions)
+  //.then(function(commitsDetailed) {
+    //if (!Array.isArray(commitsDetailed)) callback('commits fetched not an array. api limit?', null);
+    //commitsDetailed = cleanCommitsDetailed(commitsDetailed);
+    //callback(null, commitsDetailed); //give data to getCommitsFromGithub
+    ////TODO adding a callback above means a promise here but also returns the save promise below
+    //return saveCommitsToDb(repoFullName, commitsDetailed);
+    ////}).then(function(commits) {
+    ////console.log('should have saved ' + commits.length + ' commits');
+    //////if (!commits) return res.status(500).end();
+  //}).catch(function(err) { //is this ok or must be at end?
+    //console.error('Error visiting all commits for detailed info: ', err);
+  //}).catch(function(error) { //TODO many to many commits to repos relationship establish for forks
+    //console.log('error saving commits to db: ', error);
+  //});
+//});
+var processCommits = function(commits, repoFullName) { //getCommitsFromGithub helper
   commitShas = getShas(commits).reverse(); //so first thing is the oldest commit for this batch
   var commitOptions = { url: 'https://api.github.com/repos/' + repoFullName + '/commits/', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken} };
-  //TODO DRY with above options
-  visitEachCommit(commitShas, commitOptions)
+  return visitEachCommit(commitShas, commitOptions)
   .then(function(commitsDetailed) {
-    if (!Array.isArray(commitsDetailed)) callback('commits fetched not an array. api limit?', null);
+    if (!Array.isArray(commitsDetailed)) return console.error('commits fetched not an array. api limit?');
     commitsDetailed = cleanCommitsDetailed(commitsDetailed);
-    callback(null, commitsDetailed);
-    //stream commitsDetailed to client
-    //socket to send to client? would be easiest but maybe more overhead
     return saveCommitsToDb(repoFullName, commitsDetailed);
-    //}).then(function(commits) {
-    //console.log('should have saved ' + commits.length + ' commits');
-    ////if (!commits) return res.status(500).end();
-  }).catch(function(err) { //is this ok or must be at end?
+  }).catch(function(err) {
     console.error('Error visiting all commits for detailed info: ', err);
-  }).catch(function(error) { //TODO many to many commits to repos relationship establish for forks
-    console.log('error saving commits to db: ', error);
   });
-});
+};
 var getCommitsFromGithub = Promise.promisify(function(repoFullName, totalNumCommits, maxCommits, callback) {
   console.log('trying to go to github');
   var startPage = Math.ceil(totalNumCommits/100);
@@ -209,16 +228,21 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, totalNumComm
       //len should always be > 0 unless we are at startPage and didn't select it right
       if (commitsOverview.length < 1) return callback('error fetching correct commits', null);
       processCommits(commitsOverview, repoFullName)
-      .then(function(commits) {
-        console.log('should have saved ' + commits.length + ' commits');
-        callback(null, commits);
+      .then(function(commitsDetailed) {
+        console.log('should have saved ' + commitsDetailed.length + ' commits');
+        socket.emit('gotCommits', commitsDetailed);
+        console.log('emitted socket commits.length ', commitsDetailed);
+        //callback(null, commitsDetailed); // to commitsController
         if (--options.qs.page > 0 && totalCommitsCount < maxCommits) getMoreCommits();
+      }).catch(function(err) {
+        return console.error('Error processingCommits: ', err);
       });
     });
   })();
 });
 
 module.exports = {
+  setSocket: setSocket,
   setAccessToken: setAccessToken,
   getTotalCommits: getTotalCommits,
   getCommitsFromDb: getCommitsFromDb,
