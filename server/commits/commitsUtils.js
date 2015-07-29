@@ -32,8 +32,8 @@ var getCommitsFromDb = Promise.promisify(function(repoFullName, callback) {
       return console.error(msg);
     }
     dbRepo.commits().fetch().then(function(dbCommits) {
+      //sort in correct order (may not come in order from db)
       var formattedCommits = _.sortBy(_.pluck(dbCommits.models, 'attributes'), function(dbCommit) { return dbCommit.id });
-      //OMG WHY ARE THESE SOMETIMES IN THE WRONG ORDER EVEN THOUGH RIGHT IN DB!?!?!?//// AHHHH!! death.
       console.log('found repo commits in db, returning ', formattedCommits.length, ' commits');
       callback(null, formattedCommits);
     }).catch(function(err) {
