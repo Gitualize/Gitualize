@@ -177,6 +177,7 @@ var getTotalCommits = Promise.promisify(function(repoFullName, callback) {
     });
 });
 
+//original http way
 //var processCommits = Promise.promisify(function(commits, repoFullName, callback) { //getCommitsFromGithub helper
   //commitShas = getShas(commits).reverse(); //so first thing is the oldest commit for this batch
   //var commitOptions = { url: 'https://api.github.com/repos/' + repoFullName + '/commits/', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken} };

@@ -44,6 +44,8 @@ var getCommits = function(repoFullName, accessToken, socket, res) { //res is opt
         //due to how promise/callback works. callback is only called once
         //(only emits the first time, doesn't seem to work with recursive getMoreCommits in utils)
         //else it would be symmetric with above socket emit but with commits
+        
+        //socket emit is in utils
         console.log('got some commits from github'); //, commits);
         if (res) res.json(commits); //send back first page of commits if someone users our api as a perk
       })
@@ -54,6 +56,8 @@ var getCommits = function(repoFullName, accessToken, socket, res) { //res is opt
     });
   }).catch(function(err) {
     console.error(err);
+    socket.emit('gotCommitsError', err);
+    console.log('emitted gotCommitsError');
     if (res) res.send(err);
   });
 };
