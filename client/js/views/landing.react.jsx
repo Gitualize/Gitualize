@@ -79,7 +79,7 @@ var Landing = React.createClass({
       style = 'warning';
       var userName = this.refs.repo.getValue().split('/')[0];
       $.get('http://api.github.com/users/' + userName + '/repos', {accessToken: window.localStorage.gitHubAccessToken})
-      .always(function (repos) {
+      .success(function (repos) {
         var repoNames = repos.map(function(repo) {return userName + '/' + repo.name});
         $( ".uiAutocomplete" ).autocomplete({
           source: repoNames

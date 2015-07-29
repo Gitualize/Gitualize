@@ -51,15 +51,12 @@ var Playbar = React.createClass({
 
   play: function() {
     this.props.updatePlaybarDirection('forward');
+    clearInterval(this.timer);
     this.timer = setInterval(this.tick, this.state.speed);
-    var glyphicon = 'pause';
-    this.setState( {glyphicon} );
   },
 
   pause: function () {
     clearInterval(this.timer);
-    var glyphicon = 'play';
-    this.setState( {glyphicon} );
   },
 
   speedUp: function() {
@@ -83,7 +80,12 @@ var Playbar = React.createClass({
   },
 
   rewind: function() {
-    this.props.updatePlaybarDirection('backward');
+    if (this.props.commitIndex !== 0) {
+      this.props.updatePlaybarDirection('backward');
+      clearInterval(this.timer);
+      this.timer = setInterval(this.tick, this.state.speed);
+      this.setState({glyphicon: 'play'});
+    }
   },
 
   end: function() {
@@ -109,8 +111,6 @@ var Playbar = React.createClass({
   handleClick: function() {
     if (this.state.glyphicon === 'play') {
       this.play();
-    } else if (this.state.glyphicon === 'pause') {
-      this.pause();
     } else {
       var glyphicon = 'play';
       var now = 0;
@@ -155,6 +155,9 @@ var Playbar = React.createClass({
               </OverlayTrigger>
               <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> {this.state.glyphicon} </Tooltip>}>
                 <Button onClick={this.handleClick}><Glyphicon glyph={this.state.glyphicon} /></Button>
+              </OverlayTrigger>
+              <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> pause </Tooltip>}>
+                <Button onClick={this.pause}><Glyphicon glyph='pause' /></Button>
               </OverlayTrigger>
               <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> slow-down </Tooltip>}>
                 <Button onClick={this.slowDown}><Glyphicon glyph='minus-sign' /></Button>

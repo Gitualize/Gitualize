@@ -98,6 +98,9 @@ var Visualize = React.createClass({
   },
 
   updateCommitIndex: function (index) {
+    if (index >= this.state.commits.length) {
+      return null;
+    }
     if (this.state.playbarDirection === 'forward') {
       Tree.updateTree(this.state.commits[index], this.state.fileTree, 'forward');
       this.updatePaths(index);
