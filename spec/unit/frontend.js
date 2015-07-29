@@ -1,16 +1,43 @@
 var Path = require('../../client/js/views/path.react.jsx');
 var Directory = require('../../client/js/views/directory.react.jsx');
-var React = require('react/addons');
+var React = require('react/addons'); //for DOM manipulation to work we need to require 'react/addons' in all other files as well
 var TestUtils = React.addons.TestUtils;
 
 describe('Test frontend.', function(){
-  var shallowRender, component;
+  var shallowRender, component, node, onClick;
+  var updateCurrentPath = function(path) { onClick = path; };
+  var repoName = 'blog-project';
+  var currentPath = 'athing/bthing';
+  var fileTree = {
+    'athing' : {
+      _folderDetails : {
+        isFolder : true,
+        path : 'athing',
+        value : 'athing'
+      },
+      'bthing' : {
+        _folderDetails : {
+          isFolder : false,
+          path : 'athing/bthing',
+          url : 'www.something/bthing.gov'
+        },
+      }
+    },
+    'cthing' : {
+      _folderDetails : {
+        isFolder : false,
+        path : 'cthing',
+        url : 'www.somehing/cthing.gov'
+      },
+    }
+  };
 
   describe('Test Path.', function() {
-    shallowRender = TestUtils.createRenderer();
-    shallowRender.render(<Path repoName={'blog-project'} currentPath={'athing/bthing'} updateCurrentPath={function(path) { onClick = path; }}/>);
-    component = shallowRender.getRenderOutput();
-
+    beforeEach(function() {
+      shallowRender = TestUtils.createRenderer();
+      shallowRender.render(<Path repoName={repoName} currentPath={currentPath} updateCurrentPath={updateCurrentPath}/>);
+      component = shallowRender.getRenderOutput();
+    })
     it("Should be of type 'div'", function() {
       expect(component.type).toBe('div');
     });
@@ -41,8 +68,18 @@ describe('Test frontend.', function(){
   });
 
   describe('Test Directory.', function() {
-    shallowRender = TestUtils.createRenderer();
-    shallowRender.render(<Path repoName={'blog-project'} currentPath={'athing/bthing'} updateCurrentPath={function(path) { onClick = path; }}/>);
-    component = shallowRender.getRenderOutput();
-  })
+    beforeEach(function() {
+      shallowRender = TestUtils.createRenderer();
+      shallowRender.render(<Directory fileTree={fileTree} updateCurrentPath={this.updateCurrentPath}/>);
+      component = shallowRender.getRenderOutput();
+    })
+    
+    it("Should be of type 'Well'", function() {
+      expect(component.type.displayName).toBe('Well');
+    });
+
+    it("Should log", function() {
+      console.log(component._store.props.children);
+    })
+  });
 });
