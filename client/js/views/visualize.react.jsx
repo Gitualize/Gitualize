@@ -123,7 +123,7 @@ var Visualize = React.createClass({
   },
 
   closeFileDiffualize: function() {
-    this.setState( {showFileDiffualize: false, urls: {form: '', to: ''}, diffualizeMsg: 'Read up on tips and tricks!'} );
+    this.setState( {showFileDiffualize: false, urls: {form: '', to: ''}, help: 'Read up on tips and tricks!'} );
   },
 
   updatePlaybarDirection: function (direction) {
@@ -142,9 +142,9 @@ var Visualize = React.createClass({
   //},
 
   getInitialState: function() {
-    return {windowHeight: $(window).height() - 305, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}, playbarDirection: 'forward', showFileDiffualize: false, diffualizeMsg: 'Read up on tips and tricks!', urls: {from: '', to: ''}};
+    return {windowHeight: $(window).height() - 305, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}, playbarDirection: 'forward', showFileDiffualize: false, help: 'Read up on tips and tricks!', urls: {from: '', to: ''}};
     //please keep state minimal
-    //all diffualize stuff (show diffualize, diffualizemsg, urls (from, to)) should be removed from state
+    //all diffualize stuff (show diffualize, help, urls (from, to)) should be removed from state
   },
 
   fileOrFolder: function() {
@@ -184,13 +184,13 @@ var Visualize = React.createClass({
         $.get(fromUrl)
         .always(function(fromStatus) {
           if ((typeof toStatus === 'string' || toStatus.statusText === 'OK') && (typeof fromStatus === 'string' || fromStatus.statusText === 'OK')) {
-            context.setState ( {urls: {from: fromUrl, to: toUrl}, diffualizeMsg: 'Diffualizing from commit ' + from + ' to ' + to + '!'} );
+            context.setState ( {urls: {from: fromUrl, to: toUrl}, help: 'Diffualizing from commit ' + from + ' to ' + to + '!'} );
           } else if (typeof toStatus === 'string' || toStatus.statusText === 'OK') {
-            context.setState( {diffualizeMsg: "File doesn't exist at: " + from + '!'});
+            context.setState( {help: "File doesn't exist at: " + from + '!'});
           } else if (typeof fromStatus === 'string' || fromStatus.statusText === 'OK') {
-            context.setState( {diffualizeMsg: "File doesn't exist at: " + to + '!'});
+            context.setState( {help: "File doesn't exist at: " + to + '!'});
           } else {
-            context.setState( {diffualizeMsg: "File doesn't exist at: " + from + ', or: ' + to +'!'});
+            context.setState( {help: "File doesn't exist at: " + from + ', or: ' + to +'!'});
           }
         });
       });
@@ -202,16 +202,16 @@ var Visualize = React.createClass({
       .always(function(toStatus) {
         if (typeof toStatus === 'string' || toStatus.statusText === 'OK') {
           if (to < context.state.commitIndex) {
-            context.setState ( {urls: {from: toUrl, to: fromUrl}, diffualizeMsg: 'Diffualizing from commit ' + to + ' to ' + context.state.commitIndex + '!'} );
+            context.setState ( {urls: {from: toUrl, to: fromUrl}, help: 'Diffualizing from commit ' + to + ' to ' + context.state.commitIndex + '!'} );
           } else {
-            context.setState ( {urls: {from: fromUrl, to: toUrl}, diffualizeMsg: 'Diffualizing from commit ' + context.state.commitIndex + ' to ' + to + '!'} );
+            context.setState ( {urls: {from: fromUrl, to: toUrl}, help: 'Diffualizing from commit ' + context.state.commitIndex + ' to ' + to + '!'} );
           }
         } else {
-          context.setState( {diffualizeMsg: "File doesn't exist at: " + to + '!'});
+          context.setState( {help: "File doesn't exist at: " + to + '!'});
         }
       });
     } else {
-      this.setState( {diffualizeMsg: 'Invalid Entry!'});
+      this.setState( {help: 'Invalid Entry!'});
     }
   },
 
@@ -219,7 +219,7 @@ var Visualize = React.createClass({
     if (this.state.showFileDiffualize) {
       return (
         <Modal.Body>
-          <Input label='Enter a commit range' diffualizeMsg={this.state.diffualizeMsg + ' The current commit index is: ' + this.state.commitIndex} wrapperClassName='wrapper'>
+          <Input label='Enter a commit range' help={this.state.help + ' The current commit index is: ' + this.state.commitIndex} wrapperClassName='wrapper'>
             <Row>
               <Col xs={4}><Input type='text' ref='from' addonBefore='From:' bsSize="small" placeholder='here' className='form-control' /></Col>
               <Col xs={4}><Input type='text' ref='to' addonBefore='To:' bsSize="small" placeholder='there' className='form-control' /></Col>
