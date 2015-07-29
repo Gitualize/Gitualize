@@ -1,37 +1,29 @@
 describe('Gitualize', function() {
 
-  describe('The general website', function() {
+  describe('The website in general', function() {
 
-    it('should have a title', function() {
+    it('should have the correct title', function() {
       browser.get('http://localhost:3000');
       expect(browser.getTitle()).toEqual('Gitualize');
     });
 
-    it('should have tooltips in the navigation bar', function() {
+    it('GitHub icon should redirect to the GitHub repository', function(done) {
       browser.get('http://localhost:3000');
-    });
 
-    it('GitHub icon should redirect to the GitHub repository', function() {
-      browser.get('http://localhost:3000');
-    });
+      element(by.css('a img')).click();
 
-    it('should display the navigation bar in the landing page', function() {
-      browser.get('http://localhost:3000');
-    });
+      // wait for redirect to github by checking if a class is present in document
+      browser.wait(element(by.css(".is-copy-enabled")).isPresent());
 
-    it('should display the navigation bar in the visualize page', function() {
-
-    });
-
-    it('should display the navigation bar in the landing page', function() {
-
-    });
-
-    it('should display the navigation bar in the about page', function() {
+      browser.getCurrentUrl().then(function(url) {
+        expect(url).toEqual('https://github.com/incognizantdoppelganger/gitpun');
+        done();
+      });
 
     });
 
   });
+
 
   describe('Landing Page', function() {
     beforeEach(function(){
@@ -39,7 +31,7 @@ describe('Gitualize', function() {
     });
 
     it('should load the landing page', function() {
-
+      
     });
 
     it('should have a functional repo inupt form', function() {
@@ -47,14 +39,6 @@ describe('Gitualize', function() {
     });
 
     it('should redirect to loading page when input works', function() {
-
-    });
-
-    it('should have instructions', function() {
-
-    });
-
-    it('should display tooltips', function() {
 
     });
 
@@ -67,22 +51,6 @@ describe('Gitualize', function() {
       browser.get('http://localhost:3000/');
     });
 
-    it('should display the committer ', function() {
-
-    });
-
-    it('should display the commit message', function() {
-
-    });
-
-    it('should display the directory tree', function() {
-
-    });
-
-    it('should display the folder view', function() {
-
-    });
-
     it('display the correct paths', function() {
 
     });
@@ -91,15 +59,7 @@ describe('Gitualize', function() {
 
     });
 
-    it('should display the playbar options and info', function() {
-
-    });
-
     it('should play and pause', function() {
-
-    });
-
-    it('speed-up and slow-down', function() {
 
     });
 
@@ -107,7 +67,7 @@ describe('Gitualize', function() {
 
     });
 
-    it('should display Gitualize view', function() {
+    it('speed-up and slow-down', function() {
 
     });
 
@@ -120,10 +80,6 @@ describe('Gitualize', function() {
     });
 
     it('should display correct color for file status', function() {
-
-    });
-
-    it('should display tooltips', function() {
 
     });
 
@@ -153,6 +109,7 @@ describe('Gitualize', function() {
     });
 
     it('should load the about page', function() {
+
     });
 
     it('should display information in the about page', function() {
