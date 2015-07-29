@@ -18,7 +18,7 @@ var File = React.createClass({
     var nextUrl = this.props.urls.to || currFile.raw_url; //:( TODO I think nextFile is the same as the currFile since we are building the filepath as we go...convert to react niceness like below
     var url = this.props.urls.from || currFile.last_url || nextUrl;
     //var nextUrl = nextFile.raw_url;
-    if (url === nextUrl) return;
+    //if (url === nextUrl) return;
     $.get(url)
     .always(function(data) { //for each tick of commitIndex, we get the previous data again...why?? refactor
       //always is workaround for now, this goes to the .error if encounters JS (but data in responseText)

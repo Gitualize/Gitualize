@@ -38,24 +38,41 @@ var Visualize = React.createClass({
     }.bind(this);
 
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
-    //TODO replace with eventsource or streaming json something
-    $.getJSON('repos/'+repoFullName+'/commits', {accessToken: window.localStorage.gitHubAccessToken})
-    .success(function(commits) {
-      if (commits.msg === 'auth required') { //redirect to auth
-        return window.location = commits.authUrl;
-      }
-      console.log('batch of first commits: index at 0 should be first one ever: ', commits);
+    socket.emit('getCommits', {accessToken: window.localStorage.gitHubAccessToken, repoFullName: repoFullName});
+    socket.on('authRequired', function(data) {
+      window.location = data.authUrl; //redirect to auth
+    });
+    //$.getJSON('repos/'+repoFullName+'/commits', {accessToken: window.localStorage.gitHubAccessToken})
+    //.success(function(commits) {
+      //if (commits.msg === 'auth required') { //redirect to auth
+        //return window.location = commits.authUrl;
+      //}
+      //console.log('normal get request gets db commits for now:', commits);
+      //if (!Array.isArray(commits)) { //repo fetch failed
+      //return this.transitionTo('/', null, {error: 'badRepo'});
+      //}
+
+      ////commits.forEach(function(commit) {
+      ////commit.files = JSON.parse(commit.files);
+      ////});
+    //});
+    var firstCommit = true; //for now
+    socket.on('gotCommits', function(commits) {
+      commits = JSON.parse(commits);
+      console.log('got socket commits: ', commits);
       if (!Array.isArray(commits)) { //repo fetch failed
         return this.transitionTo('/', null, {error: 'badRepo'});
       }
-
       commits.forEach(function(commit) {
         commit.files = JSON.parse(commit.files);
       });
       //build tree and flat path stuff before rendering
-      Tree.updateTree(commits[0], this.state.fileTree);
-      this.updatePaths(0, commits);
-      this.setState({commits: commits, loading: false});
+      if (firstCommit) {
+        Tree.updateTree(commits[0], this.state.fileTree);
+        this.updatePaths(0, commits);
+        firstCommit = false;
+      }
+      this.setState({commits: this.state.commits.concat(commits)});
     }.bind(this));
   },
 
@@ -118,7 +135,7 @@ var Visualize = React.createClass({
     this.setState( {commitIndex: 0, currentPath: '', fileTree: fileTree, playbarDirection: 'forward'} );
   },
   //getDefaultProps: function () { //please put defaults here (if you must) instead of state
-    //return { hi: 'hey' };
+  //return { hi: 'hey' };
   //},
 
   getInitialState: function() {

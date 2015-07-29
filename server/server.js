@@ -29,10 +29,11 @@ server.listen(process.env.PORT || 3000, function(){
 });
 io.on('connection', function(socket) {
   console.log('user connected');
+  commitsController(socket);
 });
 
 //ROUTES-------------------------
-app.get('/repos/:repoOwner/:repoName/commits', commitsController.getCommits);
+//app.get('/repos/:repoOwner/:repoName/commits', commitsController.getCommitsHttp); //api endpoint
 app.get('/auth', authController.gitHubLogin);
 app.get('/getAccessToken', authController.getAccessToken);
 //-------------------------------
