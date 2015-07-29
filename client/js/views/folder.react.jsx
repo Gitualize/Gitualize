@@ -82,7 +82,6 @@ var Folder = React.createClass({
     showFiles = Object.keys(showFiles).map(function(x){return showFiles[x]});
     showFiles = FolderUtils.fileSort(showFiles, {method: 'changed', reverse: false});
     showFiles = showFiles.map(function(file) {
-      console.log(file);
       var fileName = file.filename;
       var iconType = FolderUtils.getFileType(fileName, file.isFolder);
       return (
