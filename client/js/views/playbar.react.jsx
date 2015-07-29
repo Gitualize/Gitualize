@@ -80,10 +80,12 @@ var Playbar = React.createClass({
   },
 
   rewind: function() {
-    this.props.updatePlaybarDirection('backward');
-    clearInterval(this.timer);
-    this.timer = setInterval(this.tick, this.state.speed);
-    this.setState({glyphicon: 'play'});
+    if (this.props.commitIndex !== 0) {
+      this.props.updatePlaybarDirection('backward');
+      clearInterval(this.timer);
+      this.timer = setInterval(this.tick, this.state.speed);
+      this.setState({glyphicon: 'play'});
+    }
   },
 
   end: function() {
