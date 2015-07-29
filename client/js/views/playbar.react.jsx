@@ -153,7 +153,7 @@ var Playbar = React.createClass({
               <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> rewind </Tooltip>}>
                 <Button onClick={this.rewind}><Glyphicon glyph='backward' /></Button>
               </OverlayTrigger>
-              <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> play </Tooltip>}>
+              <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> {this.state.glyphicon} </Tooltip>}>
                 <Button onClick={this.handleClick}><Glyphicon glyph={this.state.glyphicon} /></Button>
               </OverlayTrigger>
               <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> pause </Tooltip>}>
