@@ -18,6 +18,11 @@ var paths = {
   frontend: ['./client/**/*.js']
 };
 
+var dependencies = [
+  'react',
+  'react/addons',
+];
+
 gulp.task('jshint', function(done){
   gulp.src(paths.backend.concat(paths.frontend))
   .pipe(jshint())
@@ -35,9 +40,53 @@ gulp.task('min', function(){
 });
 
 gulp.task('test', function(){
-  gulp.src(['./spec/unit/backend.js', './spec/unit/frontend.js', './spec/integration/backend.js'])
+  gulp.src(['./spec/unit/backend.js', './spec/integration/backend.js'])
   .pipe(jasmine());
 });
+
+gulp.task('testify', function() {
+  var bundler = browserify({
+    entries: ['./spec/unit/frontend.js'],
+    transform: [babelify], // We want to convert JSX to normal javascript
+    debug: true, // Gives us sourcemapping
+    cache: {}, packageCache: {}, fullPaths: true // Requirement of watchify
+  });
+
+  var watcher = watchify(bundler);
+
+  return watcher
+  .on('update', function () { // When any files update
+    var updateStart = Date.now();
+    console.log('Updating!');
+    watcher.bundle() // Create new bundle that uses the cache for high performance
+    .on('error', notify.onError(function(error) {
+      console.log(error.message);
+      this.emit('end');
+    }))
+    .pipe(source('bundle.js'))
+    .pipe(gulp.dest('./spec/build'));
+    console.log('Updated!', (Date.now() - updateStart) + 'ms');
+  })
+  .bundle() // Create the initial bundle when starting the task
+  .pipe(source('bundle.js'))
+  .pipe(gulp.dest('./spec/build'));
+})
+
+gulp.task('testifyWatchless', function(){
+  browserify({
+    entries: ['./spec/unit/frontend.js'],
+    transform: [babelify]
+  })
+    .bundle()
+    .pipe(source('bundle.js'))
+    .pipe(streamify(uglify()))
+    .pipe(gulp.dest('./spec/build'));
+});
+
+gulp.task('testf', function() {
+  gulp.src(['./spec/build/bundle.js'])
+  .pipe(jasmine());
+})
 
 gulp.task('browserifyWatchless', function(){
   browserify({
