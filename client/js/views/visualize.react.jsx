@@ -19,6 +19,7 @@ var Playbar = require('./playbar.react.jsx');
 var CommitInfo = require('./commitInfo.react.jsx');
 var Tree = require('../utils/fileTreeUtils');
 var Loading = require('./loading.react.jsx');
+var Diffualize = require('./diffualize.react.jsx');
 
 var $ = require('jquery');
 
@@ -123,7 +124,7 @@ var Visualize = React.createClass({
   },
 
   closeFileDiffualize: function() {
-    this.setState( {showFileDiffualize: false, urls: {form: '', to: ''}, diffualizeMsg: 'Read up on tips and tricks!'} );
+    this.setState( {showFileDiffualize: false} );
   },
 
   updatePlaybarDirection: function (direction) {
@@ -142,9 +143,7 @@ var Visualize = React.createClass({
   //},
 
   getInitialState: function() {
-    return {windowHeight: $(window).height() - 305, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}, playbarDirection: 'forward', showFileDiffualize: false, diffualizeMsg: 'Read up on tips and tricks!', urls: {from: '', to: ''}};
-    //please keep state minimal
-    //all diffualize stuff (show diffualize, diffualizemsg, urls (from, to)) should be removed from state
+    return {windowHeight: $(window).height() - 305, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}, playbarDirection: 'forward', showFileDiffualize: false};
   },
 
   fileOrFolder: function() {
@@ -152,7 +151,7 @@ var Visualize = React.createClass({
       //<File key={this.state.currentPath + '/' + this.state.filePaths[this.state.currentPath].commitIndex} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
       return (
         <Col xs={9} md={9} style={{height: this.state.windowHeight, overflow: 'scroll'}}>
-          <File currentIndex={this.state.commitIndex} urls={{to : '', from: ''}} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
+          <File urls={{to : '', from: ''}} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
         </Col>
       )
     }
@@ -165,72 +164,10 @@ var Visualize = React.createClass({
     }
   },
 
-  validCommit : function(to,from) {
-    if (!from && this.state.commitIndex + to >= 0 && this.state.commitIndex + to < this.state.commits.length) return true;
-    else if (from <= to && from >= 0 && to < this.state.commits.length) return true;
-    return false;
-  },
-
-  handleSubmit: function(e) {
-    e.preventDefault();
-    var from = parseInt(this.refs.from.getValue());
-    var to = parseInt(this.refs.to.getValue());
-    var context = this;
-    if (!isNaN(from) && !isNaN(to) && this.validCommit(to,from)) {
-      var toUrl = this.state.commits[to].files[0].raw_url.split('/').slice(0,6).join('/') + '/' + this.state.currentPath;
-      var fromUrl = this.state.commits[from].files[0].raw_url.split('/').slice(0,6).join('/') + '/' + this.state.currentPath;
-      $.get(toUrl)
-      .always(function(toStatus) {
-        $.get(fromUrl)
-        .always(function(fromStatus) {
-          if ((typeof toStatus === 'string' || toStatus.statusText === 'OK') && (typeof fromStatus === 'string' || fromStatus.statusText === 'OK')) {
-            context.setState ( {urls: {from: fromUrl, to: toUrl}, diffualizeMsg: 'Diffualizing from commit ' + from + ' to ' + to + '!'} );
-          } else if (typeof toStatus === 'string' || toStatus.statusText === 'OK') {
-            context.setState( {diffualizeMsg: "File doesn't exist at: " + from + '!'});
-          } else if (typeof fromStatus === 'string' || fromStatus.statusText === 'OK') {
-            context.setState( {diffualizeMsg: "File doesn't exist at: " + to + '!'});
-          } else {
-            context.setState( {diffualizeMsg: "File doesn't exist at: " + from + ', or: ' + to +'!'});
-          }
-        });
-      });
-    } else if (!isNaN(to) && this.validCommit(to,from)) {
-      to = this.state.commitIndex + to;
-      var toUrl = this.state.commits[to].files[0].raw_url.split('/').slice(0,6).join('/') + '/' + this.state.currentPath;
-      var fromUrl = context.state.commits[context.state.commitIndex].files[0].raw_url.split('/').slice(0,6).join('/') + '/' + context.state.currentPath;
-      $.get(toUrl)
-      .always(function(toStatus) {
-        if (typeof toStatus === 'string' || toStatus.statusText === 'OK') {
-          if (to < context.state.commitIndex) {
-            context.setState ( {urls: {from: toUrl, to: fromUrl}, diffualizeMsg: 'Diffualizing from commit ' + to + ' to ' + context.state.commitIndex + '!'} );
-          } else {
-            context.setState ( {urls: {from: fromUrl, to: toUrl}, diffualizeMsg: 'Diffualizing from commit ' + context.state.commitIndex + ' to ' + to + '!'} );
-          }
-        } else {
-          context.setState( {diffualizeMsg: "File doesn't exist at: " + to + '!'});
-        }
-      });
-    } else {
-      this.setState( {diffualizeMsg: 'Invalid Entry!'});
-    }
-  },
-
   modalOrNo: function() {
     if (this.state.showFileDiffualize) {
       return (
-        <Modal.Body>
-          <Input label='Enter a commit range' diffualizeMsg={this.state.diffualizeMsg + ' The current commit index is: ' + this.state.commitIndex} wrapperClassName='wrapper'>
-            <Row>
-              <Col xs={4}><Input type='text' ref='from' addonBefore='From:' bsSize="small" placeholder='here' className='form-control' /></Col>
-              <Col xs={4}><Input type='text' ref='to' addonBefore='To:' bsSize="small" placeholder='there' className='form-control' /></Col>
-              <Col xs={4}><ButtonInput onSubmit={this.handleSubmit} onClick={this.handleSubmit} bsSize="small" type='submit' value='Diffualize'/></Col>
-            </Row>
-          </Input>
-          <hr />
-          <div style={{height: this.state.windowHeight, overflow: 'scroll'}}>
-            <File key={this.state.urls.from+this.state.urls.to} urls={this.state.urls} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
-          </div>
-        </Modal.Body>
+        <Diffualize commitIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath} commits={this.state.commits} windowHeight={this.state.windowHeight}/>
       )
     } else {
       return ;
