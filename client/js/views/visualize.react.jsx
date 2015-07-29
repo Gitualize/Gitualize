@@ -39,9 +39,13 @@ var Visualize = React.createClass({
 
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
     socket.emit('getCommits', {accessToken: window.localStorage.gitHubAccessToken, repoFullName: repoFullName});
+    socket.on('gotCommitsError', function(error) { //error scraping w/ spooky, probably b/c repo doesn't exist. (first step in getting commit data)
+      return this.transitionTo('/', null, {error: 'badRepo'});
+    }.bind(this));
     socket.on('authRequired', function(data) {
       window.location = data.authUrl; //redirect to auth
     });
+    //ye olde HTTP request way
     //$.getJSON('repos/'+repoFullName+'/commits', {accessToken: window.localStorage.gitHubAccessToken})
     //.success(function(commits) {
       //if (commits.msg === 'auth required') { //redirect to auth
@@ -51,7 +55,6 @@ var Visualize = React.createClass({
       //if (!Array.isArray(commits)) { //repo fetch failed
       //return this.transitionTo('/', null, {error: 'badRepo'});
       //}
-
       ////commits.forEach(function(commit) {
       ////commit.files = JSON.parse(commit.files);
       ////});
@@ -60,9 +63,6 @@ var Visualize = React.createClass({
     socket.on('gotCommits', function(commits) {
       commits = JSON.parse(commits);
       console.log('got socket commits: ', commits);
-      if (!Array.isArray(commits)) { //repo fetch failed
-        return this.transitionTo('/', null, {error: 'badRepo'});
-      }
       commits.forEach(function(commit) {
         commit.files = JSON.parse(commit.files);
       });
