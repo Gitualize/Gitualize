@@ -11,8 +11,7 @@ var request = require('request');
 var rp = require('request-promise');
 
 var accessToken;
-var setAccessToken = function(token) {
-  debugger;
+var setAccessToken = function(token) { //TODO refactor
   accessToken = token;
 };
 
