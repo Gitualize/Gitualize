@@ -79,7 +79,7 @@ describe('Test frontend.', function(){
     });
 
     it("Should log", function() {
-      console.log(component._store.props.children);
+      console.log(component._store.props.children[0]._store.props.children[0]._store.props.children[0]._store.props);
     })
   });
 });
