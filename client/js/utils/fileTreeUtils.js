@@ -8,8 +8,15 @@ module.exports.updateTree = function(currentCommit, fileTree, direction) {
     });
   } else {
     currentCommit.files.forEach(function(file) {
-      //filepath = file.filename;
-      file.status === 'removed' ? removeFile(fileTree, file) : addFile(fileTree, file);
+      if (file.status === 'renamed') {
+        removeFile(fileTree, {filename: file.previous_filename});
+        addFile(fileTree, file);
+        cleanTree(fileTree);
+      } else if (file.status === 'removed'){
+        removeFile(fileTree, file);
+      } else {
+        addFile(fileTree, file);
+      }
     });
   }
   cleanTree(fileTree);
