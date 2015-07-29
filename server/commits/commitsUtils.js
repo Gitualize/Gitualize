@@ -12,12 +12,16 @@ var rp = require('request-promise');
 
 var accessToken;
 var setAccessToken = function(token) {
+  debugger;
   accessToken = token;
 };
-var socket;
-var setSocket = function(s) { //could avoid code repeat by letting server know about commitsUtils but less encapsulatey
-  socket = s;
-};
+
+//must have access to socket due to recursive use of processCommits (callback only called once). ideally only commitsController sees socket.
+//var socket;
+//var setSocket = function(s) { //could avoid code repeat by letting server know about commitsUtils but less encapsulatey
+  //debugger;
+  //socket = s;
+//};
 
 var getCommitsFromDb = Promise.promisify(function(repoFullName, callback) {
   new Repo({
@@ -29,12 +33,14 @@ var getCommitsFromDb = Promise.promisify(function(repoFullName, callback) {
       return console.error(msg);
     }
     dbRepo.commits().fetch().then(function(dbCommits) {
-      var formattedCommits = _.pluck(dbCommits.models, 'attributes');
+      var formattedCommits = _.sortBy(_.pluck(dbCommits.models, 'attributes'), function(dbCommit) { return dbCommit.id });
+      //OMG WHY ARE THESE SOMETIMES IN THE WRONG ORDER EVEN THOUGH RIGHT IN DB!?!?!?//// AHHHH!! death.
       console.log('found repo commits in db, returning ', formattedCommits.length, ' commits');
       callback(null, formattedCommits);
+    }).catch(function(err) {
+      callback('error fetching commits of repo: '+err, null);
     });
-  })
-  .catch(function(error) {
+  }).catch(function(error) {
     console.log('error fetching db repo: ', error);
     callback(error, null);
   });
@@ -163,6 +169,7 @@ var getTotalCommits = Promise.promisify(function(repoFullName, callback) {
       }
     });
     spooky.on('commits', function (num) {
+      if (typeof num === 'null') return callback('scraped commits was null', null);
       if (typeof num !== 'string') return callback('unexpected format of scraped # of commits', null);
       num = parseInt(num.replace(',', ''));
       if (isNaN(num)) return callback('commits scraped NaN', null);
@@ -203,7 +210,7 @@ var processCommits = function(commits, repoFullName) { //getCommitsFromGithub he
     console.error('Error visiting all commits for detailed info: ', err);
   });
 };
-var getCommitsFromGithub = Promise.promisify(function(repoFullName, totalNumCommits, maxCommits, callback) {
+var getCommitsFromGithub = Promise.promisify(function(repoFullName, totalNumCommits, maxCommits, socket, callback) {
   console.log('trying to go to github');
   var startPage = Math.ceil(totalNumCommits/100);
   console.log('starting with page: ', startPage);
@@ -229,10 +236,11 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, totalNumComm
       if (commitsOverview.length < 1) return callback('error fetching correct commits', null);
       processCommits(commitsOverview, repoFullName)
       .then(function(commitsDetailed) {
+        socket.emit('gotCommits', JSON.stringify(commitsDetailed)); //stringify just in case, big data objs cause problems
+        //debugger;
+        console.log('emitted socket commits.length ', commitsDetailed.length);
         console.log('should have saved ' + commitsDetailed.length + ' commits');
-        socket.emit('gotCommits', commitsDetailed);
-        console.log('emitted socket commits.length ', commitsDetailed);
-        //callback(null, commitsDetailed); // to commitsController
+        callback(null, commitsDetailed); // to commitsController to handle normal http requests
         if (--options.qs.page > 0 && totalCommitsCount < maxCommits) getMoreCommits();
       }).catch(function(err) {
         return console.error('Error processingCommits: ', err);
@@ -241,8 +249,8 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, totalNumComm
   })();
 });
 
+//setSocket: setSocket,
 module.exports = {
-  setSocket: setSocket,
   setAccessToken: setAccessToken,
   getTotalCommits: getTotalCommits,
   getCommitsFromDb: getCommitsFromDb,
