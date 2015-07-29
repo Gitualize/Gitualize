@@ -14,7 +14,7 @@ var File = React.createClass({
   },
   componentWillReceiveProps: function(nextProps) { //TODO refactor DRY with componentWillMount
     //var nextFile = nextProps.filePaths[this.props.currentPath];
-    var currFile = this.props.filePaths[this.props.currentPath];
+    var currFile = this.props.filePaths[nextProps.currentPath];
     var nextUrl = this.props.urls.to || currFile.raw_url; //:( TODO I think nextFile is the same as the currFile since we are building the filepath as we go...convert to react niceness like below
     var url = this.props.urls.from || currFile.last_url || nextUrl;
     //var nextUrl = nextFile.raw_url;
