@@ -236,7 +236,7 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, totalNumComm
       if (commitsOverview.length < 1) return callback('error fetching correct commits', null);
       processCommits(commitsOverview, repoFullName)
       .then(function(commitsDetailed) {
-        socket.emit('gotCommits', JSON.stringify(commitsDetailed)); //stringify just in case, big data objs cause problems
+        socket.emit('gotCommits', JSON.stringify({commits: commitsDetailed})); //stringify just in case, big data objs cause problems
         //debugger;
         console.log('emitted socket commits.length ', commitsDetailed.length);
         console.log('should have saved ' + commitsDetailed.length + ' commits');
