@@ -54,6 +54,7 @@ var Visualize = React.createClass({
       //if (!Array.isArray(commits)) { //repo fetch failed
       //return this.transitionTo('/', null, {error: 'badRepo'});
       //}
+
       ////commits.forEach(function(commit) {
       ////commit.files = JSON.parse(commit.files);
       ////});
