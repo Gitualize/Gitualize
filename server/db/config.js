@@ -41,12 +41,12 @@ bookshelf.knex.schema.hasTable('repo').then(function (exists) {
             commit.timestamps();
           }).then(function (table) {
             console.log('Created table: commit');
-            bookshelf.knex.schema.createTable('commits_repos', function (commitsRepos) {
+            bookshelf.knex.schema.createTable('commit_repo', function (commitsRepos) {
               commitsRepos.increments('id').primary();
               commitsRepos.integer('repo_id').notNullable().references('repo.id');
               commitsRepos.integer('commit_id').notNullable().references('commit.id');
             }).then(function(table) {
-              console.log('Created table: commits_repos (join)');
+              console.log('Created table: commit_repo (join)');
             });
           })
           .catch(function(error) {
