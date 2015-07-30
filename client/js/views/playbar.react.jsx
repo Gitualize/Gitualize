@@ -181,7 +181,7 @@ var Playbar = React.createClass({
         </Col>
         <Col xs={3} sm={3} md={2} className='text-center'>
           <OverlayTrigger placement='top' delayShow={1000} overlay={<Tooltip> current commit </Tooltip>}>
-            <Well style={this.styles.wellStyle}>{this.props.commitIndex}/{this.props.numberOfCommits} Commits</Well>
+            <Well style={this.styles.wellStyle}>{this.props.commitIndex}/{this.props.totalNumCommits} Commits</Well>
           </OverlayTrigger>
         </Col>
         {diffualizeFile}

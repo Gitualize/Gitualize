@@ -13,8 +13,8 @@ var getCommits = function(repoFullName, accessToken, socket, res) { //res is opt
     .then(function(commits) {
       if (commits && commits.length > 0) {
         if (res) res.json(commits); //commits are in db, send back if someone is using our api endpoint as a nice feature
-        commits = JSON.stringify(commits);
-        socket.emit('gotCommits', commits); //stringify just in case--big arr, just sending the arr caused problems jumping to catch below
+        var commitsData = JSON.stringify({commits: commits, totalNumCommits: totalNumCommits});
+        socket.emit('gotCommits', commitsData); //stringify just in case--big arr, just sending the arr caused problems jumping to catch below
       }
     }).catch(function(err) {
       //console.log('err sending commits from db:', err);
