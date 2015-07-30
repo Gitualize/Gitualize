@@ -12,7 +12,7 @@ var File = require('./file.react.jsx');
 
 var Diffualize = React.createClass({
   getInitialState: function() {
-    return {help: 'Read up on tips and tricks!', urls: {from: '', to: ''}};
+    return {help: 'Enter a range or from can be left blank and to can be ±n commits.', urls: {from: '', to: ''}};
   },
 
   handleSubmit: function(e) {
@@ -68,7 +68,7 @@ var Diffualize = React.createClass({
   render: function () {
     return (
       <Modal.Body>
-        <Input label='Enter a commit range' help={this.state.help + ' The current commit index is: ' + this.props.commitIndex} wrapperClassName='wrapper'>
+        <Input label={'Enter a commit range. The current commit index is: ' + this.props.commitIndex} help={this.state.help} wrapperClassName='wrapper'>
           <Row>
             <Col xs={4}><Input type='text' ref='from' addonBefore='From:' bsSize="small" placeholder='here' className='form-control' /></Col>
             <Col xs={4}><Input type='text' ref='to' addonBefore='To:' bsSize="small" placeholder='there' className='form-control' /></Col>
@@ -76,9 +76,9 @@ var Diffualize = React.createClass({
           </Row>
         </Input>
         <hr />
-        <div style={{height: this.props.windowHeight, overflow: 'scroll'}}>
+        <pre style={{wordWrap: 'break-word; white-space; pre-wrap',height: this.props.windowHeight, overflow: 'scroll'}}>
           <File key={this.state.urls.from+this.state.urls.to} urls={this.state.urls} filePaths={this.props.filePaths} currentPath={this.props.currentPath}/>
-        </div>
+        </pre>
       </Modal.Body>
     )
   }

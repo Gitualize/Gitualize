@@ -3,7 +3,6 @@ var ReactBootstrap = require('react-bootstrap');
 var React = require('react');
 var Button = ReactBootstrap.Button;
 var Glyphicon = ReactBootstrap.Glyphicon;
-var Well = ReactBootstrap.Well;
 
 var Directory = React.createClass({
   styles : {
@@ -29,7 +28,7 @@ var Directory = React.createClass({
   },
   render: function () {
     return (
-      <Well bsSize='small'>{ this.formatTree(this.props.fileTree) }</Well>
+      <div>{ this.formatTree(this.props.fileTree) }</div>
     )
   }
 });

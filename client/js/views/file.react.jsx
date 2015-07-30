@@ -75,15 +75,12 @@ var File = React.createClass({
     function color(part) {
       return {color: part.added ? 'green' : part.removed ? 'red' : 'grey'};
     };
-    var style = {
-      wordWrap: 'break-word; white-space; pre-wrap'
-    }
     return (
-        <pre style={style}>
+        <div>
           { diff.map(function(part) {
             return (<span style={color(part)}>{part.value}</span>);
           })}
-        </pre>
+        </div>
       )
   },
   render: function () {
