@@ -4,8 +4,8 @@ require('./repo'); //don't need var assignment, using bookshelf registry
 var Commit = db.Model.extend({
   tableName: 'commit',
   hasTimestamps: true,
-  repo: function() {
-    return this.belongsTo('repo');
+  repos: function() {
+    return this.belongsToMany('repo');
   }
 });
 

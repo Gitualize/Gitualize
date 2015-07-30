@@ -22,6 +22,7 @@ bookshelf.knex.schema.hasTable('repo').then(function (exists) {
     bookshelf.knex.schema.createTable('repo', function (repo) {
       repo.increments('id').primary();
       repo.string('fullName', 200).unique(); //user/repo
+      repo.integer('totalCommits', 10); //scraped total commits by Spooky
       repo.timestamps();
     }).then(function (table) {
       console.log('Created table: repo');
@@ -31,7 +32,7 @@ bookshelf.knex.schema.hasTable('repo').then(function (exists) {
             commit.increments('id').primary(); //TODO specify storage bytes
             commit.string('sha', 50).unique();
             commit.text('files', 20000); //files changed. json obj containing urls and patches
-            commit.integer('repo_id').notNullable().references('repo.id');
+            //commit.integer('repo_id').notNullable().references('repo.id');
             commit.text('committer').notNullable(); //.references('user')
             commit.string('avatarUrl', 60);
             commit.text('message', 200); //truncate if too long
@@ -40,6 +41,13 @@ bookshelf.knex.schema.hasTable('repo').then(function (exists) {
             commit.timestamps();
           }).then(function (table) {
             console.log('Created table: commit');
+            bookshelf.knex.schema.createTable('commits_repos', function (commitsRepos) {
+              commitsRepos.increments('id').primary();
+              commitsRepos.integer('repo_id').notNullable().references('repo.id');
+              commitsRepos.integer('commit_id').notNullable().references('commit.id');
+            }).then(function(table) {
+              console.log('Created table: commits_repos (join)');
+            });
           })
           .catch(function(error) {
             console.log(error);

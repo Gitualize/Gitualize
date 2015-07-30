@@ -64,6 +64,7 @@ var Visualize = React.createClass({
     socket.on('gotCommits', function(commitsData) {
       commitsData = JSON.parse(commitsData);
       var commits = commitsData.commits;
+      if (!Array.isArray(commits) || commits.length < 1) return this.transitionTo('/', null, {error: 'badRepo'}); //in case of server uncaught err
       commits.forEach(function(commit) {
         commit.files = JSON.parse(commit.files);
       });
