@@ -68,20 +68,16 @@ var Playbar = React.createClass({
   speedUp: function() {
     if (this.state.glyphicon !== 'refresh') {
       if (this.state.speed > 100) this.setState( {speed: this.state.speed - 100} );
-      if (this.state.glyphicon === 'pause') {
-        clearInterval(this.timer);
-        this.timer = setInterval(this.tick, this.state.speed);
-      }
+      clearInterval(this.timer);
+      this.timer = setInterval(this.tick, this.state.speed);
     }
   },
 
   slowDown: function() {
     if (this.state.glyphicon !== 'refresh') {
       if (this.state.speed < 400) this.setState( {speed: this.state.speed + 100} );
-      if (this.state.glyphicon === 'pause') {
-        clearInterval(this.timer);
-        this.timer = setInterval(this.tick, this.state.speed);
-      }
+      clearInterval(this.timer);
+      this.timer = setInterval(this.tick, this.state.speed);
     }
   },
 
