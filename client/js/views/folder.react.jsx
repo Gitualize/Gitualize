@@ -4,7 +4,6 @@ var Glyphicon = ReactBootstrap.Glyphicon;
 var Button = ReactBootstrap.Button;
 var FolderUtils = require('../utils/folderUtils');
 var _ = require('underscore');
-var Well = ReactBootstrap.Well;
 var Tooltip = ReactBootstrap.Tooltip;
 var OverlayTrigger = ReactBootstrap.OverlayTrigger;
 
@@ -89,7 +88,7 @@ var Folder = React.createClass({
         );
     });
     return (
-        <Well bsSize='small'>{showFiles}</Well>
+        <div>{showFiles}</div>
       );
   }
 });
