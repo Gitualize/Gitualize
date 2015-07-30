@@ -5,7 +5,7 @@ var Repo = db.Model.extend({
   tableName: 'repo',
   hasTimestamps: true,
   commits: function() {
-    return this.hasMany('commit');
+    return this.belongsToMany('commit'); //ideally hasMany but bookshelf looks for commit.repo_id instead of in the join table in that case
   }
 });
 
