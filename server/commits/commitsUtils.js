@@ -47,7 +47,7 @@ var addCommitsToRepo = function(dbRepo, commits, callback) { //helper for saveCo
   }
   console.log('saved or got existing db repo');
   var repoCommits = dbRepo.commits();
-  if (!repoCommits) return console.error('repo ', repoFullName, ' has no commits relationship. wtf');
+  if (!repoCommits) return console.error('repo ', repoFullName, ' has no commits relationship. Something is wrong with the db if this occurs.');
   console.log('# commits in addCommitsToRepo: ', commits.length);
   //callback(null, commits); //give caller immediately so don't have to wait for them to finish storing--in our case for the batching to work we must wait for them to store in db
   var dbCommits = Promise.map(commits, function(commit) { //map commits to dbCommits
