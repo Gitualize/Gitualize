@@ -161,7 +161,7 @@ var Visualize = React.createClass({
     else {
       return (
         <Col xs={9} md={9}>
-          <Well bsStyle='small' style={{height: this.state.windowHeight, overflow: 'scroll'}}>
+          <Well bsSize='small' style={{height: this.state.windowHeight, overflow: 'scroll'}}>
             <Folder fileTree={this.state.fileTree} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
           </Well>
         </Col>
@@ -201,7 +201,7 @@ var Visualize = React.createClass({
 
             <Row className='show-grid'>
               <Col xs={3} md={3}>
-                <Well bsStyle='small' style={{height: this.state.windowHeight, overflow: 'scroll'}}>
+                <Well bsSize='small' style={{height: this.state.windowHeight, overflow: 'scroll'}}>
                   <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
                 </Well>
               </Col>
