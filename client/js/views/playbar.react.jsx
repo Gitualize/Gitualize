@@ -44,7 +44,7 @@ var Playbar = React.createClass({
 
   getInitialState: function() {
     this.time = this.clock(0);
-    this.totalTime = this.clock(this.props.numberOfCommits);
+    this.totalTime = this.clock(this.props.totalNumCommits);
     this.speeds = {'100': '1', '200': '.5', '300': '.33', '400': '.25'};
     return {
       date: this.time.toString(),
@@ -150,7 +150,7 @@ var Playbar = React.createClass({
       <Row className='show-grid'>
         <Col xs={12} sm={12} md={12}>
           <OverlayTrigger placement='top' overlay={<Tooltip>{this.state.date} / {this.totalTime.toString()}</Tooltip>}>
-            <ProgressBar bsStyle='danger' now={this.state.now*10/this.props.numberOfCommits}/>
+            <ProgressBar bsStyle='danger' now={this.state.now*10/this.props.totalNumCommits}/>
           </OverlayTrigger>
         </Col>
         <Col xs={5} sm={4} md={3}>
