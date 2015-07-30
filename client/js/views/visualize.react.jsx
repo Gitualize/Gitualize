@@ -60,9 +60,11 @@ var Visualize = React.createClass({
       ////commit.files = JSON.parse(commit.files);
       ////});
     //});
-    var firstCommit = true; //for now
-    socket.on('gotCommits', function(commits) {
-      commits = JSON.parse(commits);
+    var firstCommit = true; //only build tree and paths the first time
+    socket.on('gotCommits', function(commitsData) {
+      commitsData = JSON.parse(commitsData);
+      this.setState({totalNumCommits: commitsData.totalNumCommits});
+      var commits = commitsData.commits;
       commits.forEach(function(commit) {
         commit.files = JSON.parse(commit.files);
       });
@@ -206,7 +208,7 @@ var Visualize = React.createClass({
               {maindisplay}
             </Row>
 
-            <Playbar playbarDirection={this.state.playbarDirection} updatePlaybarDirection={this.updatePlaybarDirection} currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} reset={this.reset} showFileDiffualize={this.showFileDiffualize} isFile={this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder}/>
+            <Playbar playbarDirection={this.state.playbarDirection} updatePlaybarDirection={this.updatePlaybarDirection} currentCommit={this.state.commits[this.state.commitIndex]} numberOfCommits={this.state.commits.length-1} commitIndex={this.state.commitIndex} updateCommitIndex={this.updateCommitIndex} totalNumCommits={this.state.totalNumCommits} reset={this.reset} showFileDiffualize={this.showFileDiffualize} isFile={this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder}/>
           </Grid>
 
           <Modal show={this.state.showFileDiffualize} onHide={this.closeFileDiffualize}>

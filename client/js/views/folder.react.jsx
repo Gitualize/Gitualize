@@ -64,12 +64,11 @@ var Folder = React.createClass({
           showFiles[key].style = {'backgroundColor': animation[changes[currentDir._folderDetails.path]]};
           showFiles[key].status = changes[currentDir._folderDetails.path];
         }
-        
-        if(changes[currentDir._folderDetails.isFolder]) {
+        if(currentDir._folderDetails.isFolder) {
           showFiles[key].isFolder = true; //looks like we are again remaking the file tree, but a section of it TODO refactor
           for(var i=0; i<commitLength; i++) {
             var slicedPath = currentCommit[i].filename.substring(0, currentDir._folderDetails.path.length);
-            if(!merge && currentDir.path === slicedPath) {
+            if(!merge && currentDir._folderDetails.path === slicedPath) {
               showFiles[key].style = {'backgroundColor': 'orange'};
               showFiles[key].status = 'changed';
             }
@@ -77,7 +76,6 @@ var Folder = React.createClass({
         }
       }
     }
-    // console.log(changes[currentDir._folderDetails.path]);
     showFiles = Object.keys(showFiles).map(function(x){return showFiles[x]});
     showFiles = FolderUtils.fileSort(showFiles, {method: 'changed', reverse: false});
     showFiles = showFiles.map(function(file) {
