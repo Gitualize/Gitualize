@@ -5,6 +5,7 @@ var fs = require('fs');
 var url = require('url');
 var _ = require('underscore');
 var Commit = require('../db/models/commit');
+var Commits = require('../db/collections/commits');
 var Repo = require('../db/models/repo');
 
 var request = require('request');
@@ -55,21 +56,84 @@ var addCommitsToRepo = function(dbRepo, commits, callback) { //helper for saveCo
   var repoCommits = dbRepo.commits();
   if (!repoCommits) return console.error('repo ', repoFullName, ' has no commits relationship. wtf');
   console.log('# commits in addCommitsToRepo: ', commits.length);
+  debugger;
   //callback(null, commits); //give caller immediately so don't have to wait for them to finish storing
-  commits.reduce(function(prevCommitPromise, commit) {
-    return prevCommitPromise
+  //may have to iter through commits to see if already in db, if so add to collection and then call attach instead of save then call attach
+  //
+  //commits.reduce(function(prevCommitPromise, commit) {
+    //return prevCommitPromise
+    //.then(function(dbCommit) {
+      //return ; // should add entry to commits_repos join table
+    //});
+  //}, new Promise(function(resolve) { resolve(); }))
+  //.then(function(commitChain) {
+    ////debugger;
+    //callback(null, commits); //give caller here to ensure no pinging of more github pages before saving the current batch
+  //})
+  //.catch(function(err) {
+    //console.error(err);
+    //callback('error saving commits with chained commit promises', null);
+  //});
+  var dbCommits = Promise.map(commits, function(commit) { //map commits to dbCommits
+  //commits.reduce(function(prevCommitPromise, commit) {
+    //return prevCommitPromise
+    //.then(function(dbCommit) {
+      //return repoCommits.create(commit); // should add entry to commits_repos join table
+    //});
+  //}, new Promise(function(resolve) { resolve(); }))
+  //.then(function(commitChain) {
+    ////debugger;
+    //callback(null, commits); //give caller here to ensure no pinging of more github pages before saving the current batch
+  //})
+  //.catch(function(err) {
+    //console.error(err);
+    //callback('error saving commits with chained commit promises', null);
+  //});
+    return new Commit({sha: commit.sha}).fetch()
     .then(function(dbCommit) {
-      return repoCommits.create(commit);
+      if (dbCommit) { //commit exists in db
+        repoCommits.attach(dbCommit); //connect commit to new repo
+      } else { //make new commit
+        new Commit(commit).save()
+        .then(function(dbCommit) {
+          repoCommits.attach(dbCommit);
+        });
+      }
     });
-  }, new Promise(function(resolve) { resolve(); }))
-  .then(function(commitChain) {
-    //debugger;
-    callback(null, commits); //give caller here to ensure no pinging of more github pages before saving the current batch
-  })
-  .catch(function(err) {
-    console.error(err);
-    callback('error saving commits with chained commit promises', null);
   });
+  console.dir(dbCommits);
+  debugger;
+
+  //var commitsCollection = Commits.add(commits); //or don't use bookshelf collection and just call save on manual Commit objs
+  //Promise.all(commitsCollection.invoke('save'))
+  //.then(function(commitsSaved) { //TODO make sure commits saved in order by id
+    //debugger;
+    //repoCommits.attach(commitsCollection);
+  ////.then(function(commitsSaved) {
+    //if (!commitsSaved) return callback('error saving all commits via repoCommits.attach', null);
+    //callback(null, commits);
+  //})
+  //.catch(function(err) {
+    //console.error(err);
+    //callback('error saving all commits then doing repoCommits.attach: '+err, null);
+  //});
+
+  //TODO reset Commits collection
+  //below was one to many relationship:
+  //commits.reduce(function(prevCommitPromise, commit) {
+    //return prevCommitPromise
+    //.then(function(dbCommit) {
+      //return repoCommits.create(commit); // should add entry to commits_repos join table
+    //});
+  //}, new Promise(function(resolve) { resolve(); }))
+  //.then(function(commitChain) {
+    ////debugger;
+    //callback(null, commits); //give caller here to ensure no pinging of more github pages before saving the current batch
+  //})
+  //.catch(function(err) {
+    //console.error(err);
+    //callback('error saving commits with chained commit promises', null);
+  //});
 
   //commits.forEach(function(commit) { //the general /commits only has very general info. we must then get the detailed info for each commit later
   //repoCommits.create(commit)
