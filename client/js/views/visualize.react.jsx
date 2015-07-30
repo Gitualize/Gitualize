@@ -63,13 +63,13 @@ var Visualize = React.createClass({
     var firstCommit = true; //only build tree and paths the first time
     socket.on('gotCommits', function(commitsData) {
       commitsData = JSON.parse(commitsData);
-      this.setState({totalNumCommits: commitsData.totalNumCommits});
       var commits = commitsData.commits;
       commits.forEach(function(commit) {
         commit.files = JSON.parse(commit.files);
       });
       //build tree and flat path stuff before rendering
       if (firstCommit) {
+        this.setState({totalNumCommits: commitsData.totalNumCommits});
         Tree.updateTree(commits[0], this.state.fileTree);
         this.updatePaths(0, commits);
         firstCommit = false;
