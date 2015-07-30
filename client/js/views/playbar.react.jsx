@@ -45,6 +45,7 @@ var Playbar = React.createClass({
   getInitialState: function() {
     this.time = this.clock(0);
     this.totalTime = this.clock(this.props.totalNumCommits);
+    this.canSpeedChange = false;
     this.speeds = {'100': '1', '200': '.5', '300': '.33', '400': '.25'};
     return {
       date: this.time.toString(),
@@ -59,16 +60,18 @@ var Playbar = React.createClass({
     this.props.updatePlaybarDirection('forward');
     clearInterval(this.timer);
     this.timer = setInterval(this.tick, this.state.speed);
+    this.canSpeedChange = true;
   },
 
   pause: function () {
     clearInterval(this.timer);
+    this.canSpeedChange = false;
   },
 
   speedUp: function() {
     if (this.state.glyphicon !== 'refresh') {
       if (this.state.speed > 100) this.setState( {speed: this.state.speed - 100} );
-      if (this.state.glyphicon === 'pause') {
+      if (this.canSpeedChange) {
         clearInterval(this.timer);
         this.timer = setInterval(this.tick, this.state.speed);
       }
@@ -78,7 +81,7 @@ var Playbar = React.createClass({
   slowDown: function() {
     if (this.state.glyphicon !== 'refresh') {
       if (this.state.speed < 400) this.setState( {speed: this.state.speed + 100} );
-      if (this.state.glyphicon === 'pause') {
+      if (this.canSpeedChange) {
         clearInterval(this.timer);
         this.timer = setInterval(this.tick, this.state.speed);
       }
