@@ -1,8 +1,8 @@
+var $ = require('jquery');
 var React = require('react');
-var socketURL = process.env.SOCKET_URL || 'http://localhost:3000';
+var socketURL = process.env.PRODUCTION ? 'http://gitualize.com' : 'http://localhost:3000';
 var socket = require('socket.io-client')(socketURL);
 var Navigation = require('react-router').Navigation;
-var $ = require('jquery');
 var ReactBootstrap = require('react-bootstrap');
 var Grid = ReactBootstrap.Grid;
 var Row = ReactBootstrap.Row;
@@ -20,8 +20,6 @@ var CommitInfo = require('./commitInfo.react.jsx');
 var Tree = require('../utils/fileTreeUtils');
 var Loading = require('./loading.react.jsx');
 var Diffualize = require('./diffualize.react.jsx');
-
-var $ = require('jquery');
 
 var Visualize = React.createClass({
   mixins : [Navigation],
@@ -63,7 +61,6 @@ var Visualize = React.createClass({
     var firstCommit = true; //for now
     socket.on('gotCommits', function(commits) {
       commits = JSON.parse(commits);
-      console.log('got socket commits: ', commits);
       commits.forEach(function(commit) {
         commit.files = JSON.parse(commit.files);
       });
