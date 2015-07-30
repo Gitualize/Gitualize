@@ -78,7 +78,7 @@ var Landing = React.createClass({
     else if (string.match(/[\w]+\//)) { 
       style = 'warning';
       var userName = this.refs.repo.getValue().split('/')[0];
-      $.get('http://api.github.com/users/' + userName + '/repos', {accessToken: window.localStorage.gitHubAccessToken})
+      $.get('http://api.github.com/users/' + userName + '/repos', {access_token: window.localStorage.gitHubAccessToken})
       .success(function (repos) {
         var repoNames = repos.map(function(repo) {return userName + '/' + repo.name});
         $( ".uiAutocomplete" ).autocomplete({
@@ -108,7 +108,7 @@ var Landing = React.createClass({
     return (
       <div style={this.styles.containerStyle}>
           <form style={this.styles.formStyle} className='repoForm' onSubmit={this.handleSubmit}>
-            <Input type='text' ref='repo' className='uiAutocomplete' label='Visualize a repo' onChange={this.handleChange} placeholder='user/reponame - try tchan247/blog-project'/>
+            <Input type='text' ref='repo' className='uiAutocomplete' label='Visualize a repo' onChange={this.handleChange} placeholder='user/reponame - try jashkenas/backbone'/>
             <ButtonInput type='submit' value='Gitualize' bsStyle={this.state.style} disabled={this.state.disabled}/>
             {errorMessage}
           </form>
