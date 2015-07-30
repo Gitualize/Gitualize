@@ -5,6 +5,7 @@ var fs = require('fs');
 var url = require('url');
 var _ = require('underscore');
 var Commit = require('../db/models/commit');
+//var Commits = require('../db/collections/commits');
 var Repo = require('../db/models/repo');
 
 var request = require('request');
@@ -14,13 +15,6 @@ var accessToken;
 var setAccessToken = function(token) { //TODO refactor
   accessToken = token;
 };
-
-//must have access to socket due to recursive use of processCommits (callback only called once). ideally only commitsController sees socket.
-//var socket;
-//var setSocket = function(s) { //could avoid code repeat by letting server know about commitsUtils but less encapsulatey
-  //debugger;
-  //socket = s;
-//};
 
 var getCommitsFromDb = Promise.promisify(function(repoFullName, callback) {
   new Repo({
@@ -53,36 +47,62 @@ var addCommitsToRepo = function(dbRepo, commits, callback) { //helper for saveCo
   }
   console.log('saved or got existing db repo');
   var repoCommits = dbRepo.commits();
-  if (!repoCommits) return console.error('repo ', repoFullName, ' has no commits relationship. wtf');
+  if (!repoCommits) return console.error('repo ', repoFullName, ' has no commits relationship. Something is wrong with the db if this occurs.');
   console.log('# commits in addCommitsToRepo: ', commits.length);
-  //callback(null, commits); //give caller immediately so don't have to wait for them to finish storing
-  commits.reduce(function(prevCommitPromise, commit) {
-    return prevCommitPromise
+  //callback(null, commits); //give caller immediately so don't have to wait for them to finish storing--in our case for the batching to work we must wait for them to store in db
+  var dbCommits = Promise.map(commits, function(commit) { //map commits to dbCommits
+    return new Commit({sha: commit.sha}).fetch()
     .then(function(dbCommit) {
-      return repoCommits.create(commit);
+      return dbCommit || new Commit(commit).save();
+    }).catch(function(err) {
+      callback('error getting or saving individual commit to db: '+err, null);
     });
-  }, new Promise(function(resolve) { resolve(); }))
-  .then(function(commitChain) {
-    //debugger;
-    callback(null, commits); //give caller here to ensure no pinging of more github pages before saving the current batch
-  })
-  .catch(function(err) {
-    console.error(err);
-    callback('error saving commits with chained commit promises', null);
+  }).then(function(dbCommits) {
+    repoCommits.attach(dbCommits); //returns a promise
+    callback(null, commits);
+  }).catch(function(err) {
+    callback('err getting saved dbCommits: '+err, null);
   });
 
-  //commits.forEach(function(commit) { //the general /commits only has very general info. we must then get the detailed info for each commit later
-  //repoCommits.create(commit)
-  //.then(function(dbCommit) {
-  //repoCommits.create(commit);
+  //BELOW: notes for methods of saving sequential data to db 
+  //-------Previous one to many (repo to commits) method of saving:
+  //commits.reduce(function(prevCommitPromise, commit) {
+    //return prevCommitPromise
+    //.then(function(dbCommit) {
+      //return repoCommits.create(commit); // correctly set the repo_id on each commit row
+    //});
+  //}, new Promise(function(resolve) { resolve(); }))
+  //.then(function(commitChain) {
+    //callback(null, commits); //give caller here to ensure no pinging of more github pages before saving the current batch
+  //})
+  //.catch(function(err) {
+    //console.error(err);
+    //callback('error saving commits with chained commit promises', null);
   //});
+  //
+  //--------The below would work if these are all new commits:
+  //var commitsCollection = Commits.add(commits); //or don't use bookshelf collection and just call save on manual Commit objs
+  //Promise.all(commitsCollection.invoke('save'))
+  //.then(function(commitsSaved) { //research order of commits saved in db TODO
+    //repoCommits.attach(commitsCollection);
+  ////.then(function(commitsSaved) {
+    //if (!commitsSaved) return callback('error saving all commits via repoCommits.attach', null);
+    //callback(null, commits);
+  //})
+  //.catch(function(err) {
+    //console.error(err);
+    //callback('error saving all commits then doing repoCommits.attach: '+err, null);
+  //});
+  //Commits.reset();
+  
 };
 var saveCommitsToDb = Promise.promisify(function(repoFullName, commits, callback) {
   console.log('begin saving repo: ', repoFullName, ' to db');
   console.log('and saving commits to db');
+  //try }).fetch({withRelated: ['commits']}).then(function(dbRepo) { below if doesn't fetch commits with repo
   new Repo({
     fullName: repoFullName
-  }).fetch().then(function(dbRepo) {
+  }).fetch({}).then(function(dbRepo) {
     if (dbRepo) { //repo exists in db
       addCommitsToRepo(dbRepo, commits, callback);
     } else { //make new repo
@@ -249,7 +269,6 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, totalNumComm
   })();
 });
 
-//setSocket: setSocket,
 module.exports = {
   setAccessToken: setAccessToken,
   getTotalCommits: getTotalCommits,
