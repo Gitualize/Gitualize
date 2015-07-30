@@ -78,7 +78,7 @@ var Landing = React.createClass({
     else if (string.match(/[\w]+\//)) { 
       style = 'warning';
       var userName = this.refs.repo.getValue().split('/')[0];
-      $.get('http://api.github.com/users/' + userName + '/repos', {accessToken: window.localStorage.gitHubAccessToken})
+      $.get('http://api.github.com/users/' + userName + '/repos', {access_token: window.localStorage.gitHubAccessToken})
       .success(function (repos) {
         var repoNames = repos.map(function(repo) {return userName + '/' + repo.name});
         $( ".uiAutocomplete" ).autocomplete({
