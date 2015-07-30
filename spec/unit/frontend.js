@@ -15,19 +15,19 @@ describe('Test frontend.', function(){
         path : 'athing',
         value : 'athing'
       },
-      'bthing' : {
+      'cthing' : {
         _folderDetails : {
           isFolder : false,
-          path : 'athing/bthing',
-          url : 'www.something/bthing.gov'
+          path : 'athing/cthing',
+          url : 'www.something/cthing.gov'
         },
       }
     },
-    'cthing' : {
+    'bthing' : {
       _folderDetails : {
         isFolder : false,
-        path : 'cthing',
-        url : 'www.somehing/cthing.gov'
+        path : 'bthing',
+        url : 'www.somehing/bthing.gov'
       },
     }
   };
@@ -78,8 +78,28 @@ describe('Test frontend.', function(){
       expect(component.type.displayName).toBe('Well');
     });
 
-    it("Should log", function() {
-      console.log(component._store.props.children[0]._store.props.children[0]._store.props.children[0]._store.props);
-    })
+    it("Should wrap folders in divs with a 'folder-open' Glyphicon", function() {
+      expect(component._store.props.children[0].type).toBe('div');
+      expect(component._store.props.children[0]._store.props.style.paddingLeft).toBe('10px');
+      expect(component._store.props.children[0]._store.props.children[0]._store.props.glyph).toBe('folder-open');
+      expect(component._store.props.children[0]._store.props.children[1]._store.props.type).toBe('button');
+      expect(component._store.props.children[0]._store.props.children[1]._store.props.children).toBe('athing');
+    });
+
+    it("Should wrap files in divs with a 'file' Glyphicon", function() {
+      expect(component._store.props.children[1].type).toBe('div');
+      expect(component._store.props.children[1]._store.props.style.paddingLeft).toBe('10px');
+      expect(component._store.props.children[1]._store.props.children[0]._store.props.glyph).toBe('file');
+      expect(component._store.props.children[1]._store.props.children[1]._store.props.type).toBe('button');
+      expect(component._store.props.children[1]._store.props.children[1]._store.props.children).toBe('bthing');
+    });
+
+    it("Should nest items", function() { //component._store.props.children[0]._store.props.children[2][0] is undefined for React reasons
+      expect(component._store.props.children[0]._store.props.children[2][1].type).toBe('div');
+      expect(component._store.props.children[0]._store.props.children[2][1]._store.props.style.paddingLeft).toBe('10px');
+      expect(component._store.props.children[0]._store.props.children[2][1]._store.props.children[0]._store.props.glyph).toBe('file');
+      expect(component._store.props.children[0]._store.props.children[2][1]._store.props.children[1]._store.props.type).toBe('button');
+      expect(component._store.props.children[0]._store.props.children[2][1]._store.props.children[1]._store.props.children).toBe('cthing');
+    });
   });
 });
