@@ -3,102 +3,102 @@ require('./waitReady.js');
 
 describe('Gitualize', function() {
 
-  // describe('The website in general', function() {
+  describe('The website in general', function() {
 
-  //   beforeEach(function() {
-  //     browser.get('http://localhost:3000');
-  //   });
+    beforeEach(function() {
+      browser.get('http://localhost:3000');
+    });
 
-  //   it('should have the correct title', function() {
-  //     expect(browser.getTitle()).toEqual('Gitualize');
-  //   });
+    xit('should have the correct title', function() {
+      expect(browser.getTitle()).toEqual('Gitualize');
+    });
 
-  //   it('should have tooltips working', function() {
-  //     // element(by.css('a img:hover')).perform();
-  //     // expect(element(by.css('')).isDisplayed()).toBeTruthy();
-  //   });
+    xit('should have tooltips working', function() {
+      // element(by.css('a img:hover')).perform();
+      // expect(element(by.css('')).isDisplayed()).toBeTruthy();
+    });
 
-  //   it('GitHub icon should redirect to the GitHub repository', function(done) {
-  //     element(by.css('a img')).click();
+    xit('GitHub icon should redirect to the GitHub repository', function(done) {
+      element(by.css('a img')).click();
 
-  //     // wait for redirect to github by checking if a class is present in document
-  //     browser.wait(element(by.css(".is-copy-enabled")).isPresent());
+      // wait for redirect to github by checking if a class is present in document
+      browser.wait(element(by.css(".is-copy-enabled")).isPresent());
 
-  //     browser.getCurrentUrl().then(function(url) {
-  //       expect(url).toEqual('https://github.com/incognizantdoppelganger/gitpun');
-  //       done();
-  //     });
+      browser.getCurrentUrl().then(function(url) {
+        expect(url).toEqual('https://github.com/incognizantdoppelganger/gitpun');
+        done();
+      });
 
-  //   });
+    });
 
-  // });
+  });
 
-  // describe('Landing Page', function() {
-  //   beforeEach(function(){
-  //     browser.get('http://localhost:3000');
-  //   });
+  describe('Landing Page', function() {
+    beforeEach(function(){
+      browser.get('http://localhost:3000');
+    });
 
-  //   it('should load the landing page', function(done) {
-  //     browser.getCurrentUrl().then(function(url) {
-  //       expect(url).toEqual('http://localhost:3000/#/');
-  //       done();
-  //     });
-  //   });
+    xit('should load the landing page', function(done) {
+      browser.getCurrentUrl().then(function(url) {
+        expect(url).toEqual('http://localhost:3000/#/');
+        done();
+      });
+    });
 
-  //   // imlement dropdown testing here:
-  //   it('should have a functional repo inupt form', function(done) {
-  //     var inputField = element(by.css('.uiAutocomplete'));
+    // imlement dropdown testing here:
+    xit('should have a functional repo inupt form', function(done) {
+      var inputField = element(by.css('.uiAutocomplete'));
 
-  //     inputField.sendKeys('tchan247/');
+      inputField.sendKeys('tchan247/');
 
-  //     element(by.css('.btn-warning')).getCssValue('background-color').then(function(style){
-  //       console.log(style);
-  //       expect(style).toEqual('rgba(240, 173, 78, 1)');
+      element(by.css('.btn-warning')).getCssValue('background-color').then(function(style){
+        console.log(style);
+        expect(style).toEqual('rgba(240, 173, 78, 1)');
 
-  //       inputField.sendKeys('blog-project');
+        inputField.sendKeys('blog-project');
 
-  //       element(by.css('.btn-success')).getCssValue('background-color').then(function(style){
-  //         expect(style).toEqual('rgba(92, 184, 92, 1)');
-  //         done();
-  //       });
+        element(by.css('.btn-success')).getCssValue('background-color').then(function(style){
+          expect(style).toEqual('rgba(92, 184, 92, 1)');
+          done();
+        });
         
-  //     });
+      });
 
-  //   });
+    });
 
-  //   it('should handle invalid repos', function(done) {
-  //     element(by.css('.uiAutocomplete')).sendKeys('tchan247/asdf');
-  //     element(by.css('.uiAutocomplete')).sendKeys(protractor.Key.ENTER);
+    xit('should handle invalid repos', function(done) {
+      element(by.css('.uiAutocomplete')).sendKeys('tchan247/asdf');
+      element(by.css('.uiAutocomplete')).sendKeys(protractor.Key.ENTER);
 
-  //     browser.wait(element(by.css(".error-message")).isPresent());
+      browser.wait(element(by.css(".error-message")).isPresent());
 
-  //     browser.getCurrentUrl().then(function(url) {
-  //       expect(url).toEqual('http://localhost:3000/#/?error=badRepo');
-  //       done();
-  //     });
-  //   });
+      browser.getCurrentUrl().then(function(url) {
+        expect(url).toEqual('http://localhost:3000/#/?error=badRepo');
+        done();
+      });
+    });
 
-  //   it('should redirect to loading page when input works', function(done) {
-  //     element(by.css('.uiAutocomplete')).sendKeys('tchan247/blog-project');
-  //     element(by.css('.uiAutocomplete')).sendKeys(protractor.Key.ENTER);
-  //     browser.getCurrentUrl().then(function(url) {
-  //       expect(url).toEqual('http://localhost:3000/#/repo/tchan247/blog-project');
-  //       done();
-  //     });
-  //   });
+    xit('should redirect to loading page when input works', function(done) {
+      element(by.css('.uiAutocomplete')).sendKeys('tchan247/blog-project');
+      element(by.css('.uiAutocomplete')).sendKeys(protractor.Key.ENTER);
+      browser.getCurrentUrl().then(function(url) {
+        expect(url).toEqual('http://localhost:3000/#/repo/tchan247/blog-project');
+        done();
+      });
+    });
 
-  // });
+  });
 
 
-  // describe('Loading page', function() {
+  describe('Loading page', function() {
 
-  //   it('should display loading spinner and logo', function() {
-  //     $('img').getAttribute('src').then(function(src) {
-  //       expect(src).toBe('http://localhost:3000/pics/Github-Mark-64px.png');
-  //     });
-  //   });
+    xit('should display loading spinner and logo', function() {
+      $('img').getAttribute('src').then(function(src) {
+        expect(src).toBe('http://localhost:3000/pics/Github-Mark-64px.png');
+      });
+    });
 
-  // });
+  });
 
 
   describe('Visualize page', function() {
