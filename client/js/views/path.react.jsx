@@ -1,5 +1,5 @@
 var ReactBootstrap = require('react-bootstrap');
-var React = require('react');
+var React = require('react/addons');
 var Button = ReactBootstrap.Button;
 
 var Path = React.createClass({

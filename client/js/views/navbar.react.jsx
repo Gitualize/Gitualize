@@ -1,5 +1,5 @@
 var ReactBootstrap = require('react-bootstrap');
-var React = require('react');
+var React = require('react/addons');
 var Navbar = ReactBootstrap.Navbar;
 var Nav = ReactBootstrap.Nav;
 var NavItem = ReactBootstrap.NavItem;
