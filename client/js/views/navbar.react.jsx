@@ -9,13 +9,13 @@ var OverlayTrigger = ReactBootstrap.OverlayTrigger;
 var NavHead = React.createClass({
 
   styles: {
-    imgStyle : {'height': 16+'px', 'width': 16+'px'},
-    navStyle : {marginBottom: '0'}
+    imgStyle : { height: '16px', width: '16px'},
+    navbarStyle : { marginBottom: '0' }
   },
   render: function() {
     return (
-        <Navbar style={this.styles.navStyle} brand={<a href="#">Gitualize</a>}>          
-          <Nav right>
+        <Navbar style={this.styles.navbarStyle} brand={<a href="#">Gitualize</a>} toggleNavKey={0}>          
+          <Nav right eventKey={0}>
             <OverlayTrigger placement='bottom' delayShow={1000} overlay={<Tooltip> Gitualize GitHub Repository </Tooltip>}>
               <NavItem href='https://github.com/incognizantdoppelganger/gitpun'><img style={this.styles.imgStyle} src={'../../pics/GitHub-Mark-64px.png'}/></NavItem>
             </OverlayTrigger>
