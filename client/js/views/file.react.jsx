@@ -12,12 +12,14 @@ var File = React.createClass({
       diff : ''
     };
   },
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps: function(nextProps) { //selecting a new path changes the state of visualize which sets the props of file
     var currFile = this.props.filePaths[nextProps.currentPath];
+    //url props used by the diffualizer but not mainpage visualize
     var nextUrl = this.props.urls.to || currFile.raw_url;
     var url = this.props.urls.from || currFile.last_url || nextUrl;
     $.get(url)
     .always(function(data) {
+      //http requests to rawgit.com will sometimes fail but return the expected data in the responseText
       data = data.responseText || data || '';
       $.get(nextUrl)
       .always(function(nextData) {
@@ -27,12 +29,14 @@ var File = React.createClass({
     }.bind(this));
   },
 
-  componentWillMount: function() {
+  componentWillMount: function() { //on component creation
     var currentFile = this.props.filePaths[this.props.currentPath];
+    //url props used by the diffualizer but not mainpage visualize
     var url = this.props.urls.to || currentFile.raw_url;
     var prevUrl = this.props.urls.from || currentFile.last_url || url;
     $.get(prevUrl)
     .always(function(prevData) {
+      //http requests to rawgit.com will sometimes fail but return the expected data in the responseText
       prevData = prevData.responseText || prevData || '';
       $.get(url)
       .always(function(data) {
@@ -42,7 +46,7 @@ var File = React.createClass({
     }.bind(this));
   },
 
-  compare: function(data, pdata, url) {
+  compare: function(data, pdata, url) { //jsDiff can compare chars, words, as well as lines
     if (typeof data === 'object') {
       data = JSON.stringify(data);
       pdata = JSON.stringify(pdata);
@@ -63,7 +67,7 @@ var File = React.createClass({
     }
     if (typeof diff === 'string') return diff;
 
-    function color(part) {
+    function color(part) { //to color the span if added or removed
       return {color: part.added ? 'green' : part.removed ? 'red' : 'grey'};
     };
     return (
