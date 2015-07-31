@@ -5,6 +5,7 @@ var concat = require('gulp-concat');
 var minifyCss = require('gulp-minify-css');
 var jshint = require('gulp-jshint');
 var jasmine = require('gulp-jasmine');
+var protractor = require('gulp-angular-protractor');
 var notify = require('gulp-notify');
 var shell = require('gulp-shell');
 var browserify = require('browserify');
@@ -42,6 +43,16 @@ gulp.task('min', function(){
 gulp.task('test', function(){
   gulp.src(['./spec/unit/backend.js', './spec/integration/backend.js'])
   .pipe(jasmine());
+});
+
+gulp.task('testE', function(){
+  gulp.src(['./spec/e2e/spec.js'])
+  .pipe(protractor({
+    'configFile': './spec/e2e/conf.js',
+    'args': ['--baseUrl', 'http://127.0.0.1:3000'],
+    'autoStartStopServer': true,
+    'debug': true
+  }));
 });
 
 gulp.task('testify', function() {
