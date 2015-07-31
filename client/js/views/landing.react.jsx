@@ -1,6 +1,6 @@
 var $ = require('jquery');
 var jqueryUI = require('jquery-ui');
-var React = require('react');
+var React = require('react/addons');
 var Navigation = require('react-router').Navigation;
 var ReactBootstrap = require('react-bootstrap');
 var Input = ReactBootstrap.Input;

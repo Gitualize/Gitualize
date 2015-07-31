@@ -1,5 +1,5 @@
 var $ = require('jquery');
-var React = require('react');
+var React = require('react/addons');
 var socketURL = process.env.BASE_URL || 'http://localhost:3000';
 var socket = require('socket.io-client')(socketURL);
 var Navigation = require('react-router').Navigation;
