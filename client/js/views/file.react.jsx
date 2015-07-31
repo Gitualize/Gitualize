@@ -12,16 +12,12 @@ var File = React.createClass({
       diff : ''
     };
   },
-  componentWillReceiveProps: function(nextProps) { //TODO refactor DRY with componentWillMount
-    //var nextFile = nextProps.filePaths[this.props.currentPath];
+  componentWillReceiveProps: function(nextProps) {
     var currFile = this.props.filePaths[nextProps.currentPath];
-    var nextUrl = this.props.urls.to || currFile.raw_url; //:( TODO I think nextFile is the same as the currFile since we are building the filepath as we go...convert to react niceness like below
+    var nextUrl = this.props.urls.to || currFile.raw_url;
     var url = this.props.urls.from || currFile.last_url || nextUrl;
-    //var nextUrl = nextFile.raw_url;
-    //if (url === nextUrl) return;
     $.get(url)
-    .always(function(data) { //for each tick of commitIndex, we get the previous data again...why?? refactor
-      //always is workaround for now, this goes to the .error if encounters JS (but data in responseText)
+    .always(function(data) {
       data = data.responseText || data || '';
       $.get(nextUrl)
       .always(function(nextData) {
@@ -31,13 +27,12 @@ var File = React.createClass({
     }.bind(this));
   },
 
-  componentWillMount: function() { //TODO i don't think this file should know about ALL the other files via filePaths
+  componentWillMount: function() {
     var currentFile = this.props.filePaths[this.props.currentPath];
     var url = this.props.urls.to || currentFile.raw_url;
     var prevUrl = this.props.urls.from || currentFile.last_url || url;
     $.get(prevUrl)
-    .always(function(prevData) { //for each tick of commitIndex, we get the previous data again...why?? refactor
-      //always is workaround for now, this goes to the .error if encounters JS (but data in responseText)
+    .always(function(prevData) {
       prevData = prevData.responseText || prevData || '';
       $.get(url)
       .always(function(data) {
@@ -48,19 +43,15 @@ var File = React.createClass({
   },
 
   compare: function(data, pdata, url) {
-    if (typeof data === 'object') { //when is it an obj? TODO
+    if (typeof data === 'object') {
       data = JSON.stringify(data);
       pdata = JSON.stringify(pdata);
     }
     var diff = jsDiff.diffLines(pdata, data); //try to diff, but may be noncode data
-    this.setState ( {diff} ); //can return and set in above fn
-    //this.setState ( {code: this.codeOr(diff, url)} );
+    this.setState ( {diff} );
   },
 
   formatFile: function(diff) { //html object to render surrounding the code or img
-    //if (typeof data === 'object') return JSON.stringify(data); //something something json
-    //if (typeof data === 'string' && fileType !== 'json') return data;
-    //
     var fileType = this.props.currentPath.split('.').pop();
     if (fileType === 'png' || fileType === 'gif' || fileType === 'jpg' || fileType === 'jpeg') {
       var url = this.props.filePaths[this.props.currentPath].raw_url;
@@ -70,7 +61,7 @@ var File = React.createClass({
           </Well>
         )
     }
-    if (typeof diff === 'string') return diff; //TODO ???only initial case?
+    if (typeof diff === 'string') return diff;
 
     function color(part) {
       return {color: part.added ? 'green' : part.removed ? 'red' : 'grey'};
