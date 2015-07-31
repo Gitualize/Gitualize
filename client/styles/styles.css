@@ -17,8 +17,19 @@
 
 .ui-menu-item a:hover {
   text-decoration: none;
+  color: black;
 }
 
 .ui-helper-hidden-accessible {
   display: none;
+}
+
+.ui-state-focus {
+  font-weight: bold;
+  color: black;
+  outline:none;
+}
+
+.btn:focus {
+  outline: 0px;
 }
