@@ -4,11 +4,8 @@ var Promise = require('bluebird');
 var getCommits = function(repoFullName, accessToken, socket, res) { //res is optional. kept to still keep api functionality for other devs and such. we are using sockets
   if (accessToken) {
     console.log('get Commits accessToken: ', accessToken);
-    //authUtils.setAccessToken(accessToken); //TODO so every controllr has access (like trees)
     utils.setAccessToken(accessToken); //TODO refactor like socket
   }
-  //utils.getTotalCommits(repoFullName)
-  //.then(function(totalNumCommits) {
   utils.getCommitsFromDb(repoFullName)
   .then(function(commitsData) {
     if (commitsData && commitsData.commits && commitsData.commits.length > 0) {
@@ -17,7 +14,6 @@ var getCommits = function(repoFullName, accessToken, socket, res) { //res is opt
       socket.emit('gotCommits', JSON.stringify(commitsData)); //stringify just in case--big arr, just sending the arr caused problems jumping to catch below
     }
   }).catch(function(err) {
-    //console.log('err sending commits from db:', err);
     console.log('commits not in db, going to github');
     //commits not in db, go to github
     if (!accessToken) { //redjrect to /auth with original repo request info
@@ -28,7 +24,6 @@ var getCommits = function(repoFullName, accessToken, socket, res) { //res is opt
       //res.end();
       //next();
     }
-    //100 is the max # of things we can pull at a time
     utils.getCommitsFromGithub(repoFullName, 500, socket)
     .then(function(commitsData) {
       //if (commits === 'finished') {
@@ -42,7 +37,6 @@ var getCommits = function(repoFullName, accessToken, socket, res) { //res is opt
       //else it would be symmetric with above socket emit but with commits
 
       //socket emit is in utils
-      //console.log('got some commits from github'); //, commits);
       if (res) res.json(commitsData); //send back first page of commits if someone users our api as a perk
     })
     .catch(function(error) { //repo doesn't exist msg
