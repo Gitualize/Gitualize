@@ -191,7 +191,7 @@ var scrapeTotalCommits = Promise.promisify(function(repoFullName, callback) {
     });
     spooky.on('commits', function (num) {
       if (typeof num === 'null') return callback('scraped commits was null', null);
-      if (typeof num !== 'string') return callback('unexpected format of scraped # of commits', null);
+      if (typeof num !== 'string') return callback('unexpected format of scraped # of commits: '+num, null);
       num = parseInt(num.replace(',', ''));
       if (isNaN(num)) return callback('commits scraped NaN', null);
       console.log('scraped total commits: ', num);
@@ -275,6 +275,9 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, 
         });
       });
     })();
+  }).catch(function(e) {
+    socket.emit('gotCommitsError', e);
+    console.log("emitted gotCommitsError (couldn't scrape commits)");
   });
 });
 
