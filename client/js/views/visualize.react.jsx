@@ -32,11 +32,6 @@ var Visualize = React.createClass({
     //remove accesstoken from url
     window.location.hash = window.location.hash.split('?')[0];
 
-    // have app adjust size whenever browser window is resized
-    window.onresize = function(){
-      this.setState({windowHeight: $(window).height() - 305});
-    }.bind(this);
-
     var repoFullName = this.props.params.repoOwner + '/' + this.props.params.repoName;
     socket.emit('getCommits', {accessToken: window.localStorage.gitHubAccessToken, repoFullName: repoFullName});
     socket.on('gotCommitsError', function(error) { //error scraping w/ spooky, probably b/c repo doesn't exist. (first step in getting commit data)
@@ -79,6 +74,10 @@ var Visualize = React.createClass({
     }.bind(this));
   },
 
+  updateWindowHeight: function() {
+    this.setState({windowHeight: $(window).height() - 305});
+  },
+
   componentWillMount: function() {
     socket.on('connect', function(socket) {
       console.log('connected to server to get chunks of commits');
@@ -87,6 +86,16 @@ var Visualize = React.createClass({
       //console.log('server disconnected socket');
     //});
     this.getCommits();
+  },
+
+  componentDidMount: function() {
+    // have app adjust size whenever browser window is resized
+    window.addEventListener('resize', this.updateWindowHeight);
+  },
+
+  componentWillUnmount : function() {
+    // remove window event listener for when the page is changed
+    window.removeEventListener('resize', this.updateWindowHeight);
   },
 
   updatePaths: function (index, commits) { //this should be in another utils fn like the tree stuff
