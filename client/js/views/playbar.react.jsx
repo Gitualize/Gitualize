@@ -192,7 +192,7 @@ var Playbar = React.createClass({
         </Col>
         <Col xs={2} sm={2} md={1} className='text-center'>
           <OverlayTrigger placement='top' delayShow={1000} overlay={<Tooltip> current speed </Tooltip>}>
-            <Well style={this.styles.wellStyle}>{this.speeds[this.state.speed]}x </Well>
+            <Well style={this.styles.wellStyle}>{this.speeds[this.state.speed]}x</Well>
           </OverlayTrigger>
         </Col>
         <Col xs={3} sm={3} md={2} className='text-center'>
