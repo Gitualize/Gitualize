@@ -1,5 +1,5 @@
 var ReactBootstrap = require('react-bootstrap');
-var React = require('react');
+var React = require('react/addons');
 var ProgressBar = ReactBootstrap.ProgressBar;
 var Button = ReactBootstrap.Button;
 var Glyphicon = ReactBootstrap.Glyphicon;
@@ -27,7 +27,7 @@ var Playbar = React.createClass({
     }
   },
 
-  clock: function(seconds) {
+  clock: function(seconds) { //custom clock for playbar timekeeping
     var time = {};
     this.total = seconds;
     time.hours = Math.floor(seconds/3600);
@@ -83,7 +83,7 @@ var Playbar = React.createClass({
   speedUp: function() {
     if (this.state.glyphicon !== 'refresh') {
       if (this.state.speed > 100) this.setState( {speed: this.state.speed - 100} );
-      if (this.canSpeedChange) {
+      if (this.canSpeedChange) { //so it doesn't start when the playbar is paused
         clearInterval(this.timer);
         this.timer = setInterval(this.tick, this.state.speed);
       }
@@ -93,7 +93,7 @@ var Playbar = React.createClass({
   slowDown: function() {
     if (this.state.glyphicon !== 'refresh') {
       if (this.state.speed < 400) this.setState( {speed: this.state.speed + 100} );
-      if (this.canSpeedChange) {
+      if (this.canSpeedChange) { //so it doesn't start when the playbar is paused
         clearInterval(this.timer);
         this.timer = setInterval(this.tick, this.state.speed);
       }
@@ -105,8 +105,7 @@ var Playbar = React.createClass({
       this.props.updatePlaybarDirection('backward');
       clearInterval(this.timer);
       this.timer = setInterval(this.tick, this.state.speed);
-      this.setState({glyphicon: 'play'});
-      this.setState({activeButton: 'rewind'});
+      this.setState({glyphicon: 'play', activeButton: 'rewind'});
     }
   },
 
@@ -120,7 +119,7 @@ var Playbar = React.createClass({
     var incrementor = this.props.playbarDirection === 'forward' ? 1 : -1;
     var now = this.state.now + incrementor;
     this.setState( {now} );
-    if (now % 10 === 0) {
+    if (now % 10 === 0) { //custom time settings so that the playbar doesn't lag
       if (this.props.commitIndex === 0 && this.props.playbarDirection === 'backward') return this.end();
       this.props.updateCommitIndex(this.props.commitIndex + incrementor);
       if (now % (this.props.numberOfCommits*10) === 0) this.end();
