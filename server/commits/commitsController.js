@@ -16,7 +16,7 @@ var getCommits = function(repoFullName, accessToken, socket, res) { //res is opt
   }).catch(function(err) {
     console.log('commits not in db, going to github');
     //commits not in db, go to github
-    if (!accessToken) { //redjrect to /auth with original repo request info
+    if (!accessToken) { //redirect to /auth with original repo request info
       socket.emit('authRequired', {authUrl: '/auth?repoFullName='+repoFullName});
       if (res) res.json({msg: 'auth required', authUrl: '/auth?repoFullName='+repoFullName});
       return;
