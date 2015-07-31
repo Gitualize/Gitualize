@@ -1,6 +1,6 @@
 var $ = require('jquery');
 var React = require('react');
-var socketURL = process.env.PRODUCTION ? 'http://gitualize.com' : 'http://localhost:3000';
+var socketURL = process.env.BASE_URL || 'http://localhost:3000';
 var socket = require('socket.io-client')(socketURL);
 var Navigation = require('react-router').Navigation;
 var ReactBootstrap = require('react-bootstrap');
