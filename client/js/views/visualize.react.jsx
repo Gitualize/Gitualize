@@ -83,6 +83,9 @@ var Visualize = React.createClass({
     socket.on('connect', function(socket) {
       console.log('connected to server to get chunks of commits');
     });
+    //socket.on('disconnect', function(socket) {
+      //console.log('server disconnected socket');
+    //});
     this.getCommits();
   },
 
