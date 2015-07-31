@@ -33,3 +33,38 @@
 .btn:focus {
   outline: 0px;
 }
+
+.directory-enter {
+  opacity: 0.01;
+  bottom: -100px;
+  position: relative;
+  color: green;
+}
+.directory-enter button {
+  color: green;
+}
+
+.directory-enter.directory-enter-active {
+  opacity: 1;
+  background: none;
+  bottom: 0;
+  transition: all .5s ease-in;
+}
+.directory-leave {
+  opacity: 1;
+  top: 0;
+  position: relative;
+  color: red;
+}
+.directory-leave button {
+  text-decoration: line-through;
+  color: red;
+}
+
+.directory-leave.directory-leave-active {
+  opacity: 0.01;
+  top: -100px;
+  background: none;
+  transition: all .5s ease-out;
+  text-decoration: line-through;
+}
