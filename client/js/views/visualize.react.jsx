@@ -40,21 +40,6 @@ var Visualize = React.createClass({
     socket.on('authRequired', function(data) {
       window.location = data.authUrl; //redirect to auth
     });
-    //ye olde HTTP request way
-    //$.getJSON('repos/'+repoFullName+'/commits', {accessToken: window.localStorage.gitHubAccessToken})
-    //.success(function(commits) {
-      //if (commits.msg === 'auth required') { //redirect to auth
-        //return window.location = commits.authUrl;
-      //}
-      //console.log('normal get request gets db commits for now:', commits);
-      //if (!Array.isArray(commits)) { //repo fetch failed
-      //return this.transitionTo('/', null, {error: 'badRepo'});
-      //}
-
-      ////commits.forEach(function(commit) {
-      ////commit.files = JSON.parse(commit.files);
-      ////});
-    //});
     var firstCommit = true; //only build tree and paths the first time
     socket.on('gotCommits', function(commitsData) {
       commitsData = JSON.parse(commitsData);
@@ -81,12 +66,6 @@ var Visualize = React.createClass({
   },
 
   componentWillMount: function() {
-    socket.on('connect', function(socket) {
-      console.log('connected to server to get chunks of commits');
-    });
-    //socket.on('disconnect', function(socket) {
-      //console.log('server disconnected socket');
-    //});
     this.getCommits();
   },
 
@@ -100,7 +79,7 @@ var Visualize = React.createClass({
     window.removeEventListener('resize', this.updateWindowHeight);
   },
 
-  updatePaths: function (index, commits) { //this should be in another utils fn like the tree stuff
+  updatePaths: function (index, commits) {
     var filePaths = this.state.filePaths;
     var files = commits? commits[index].files : this.state.commits[index].files;
     files.forEach(function(file) {
@@ -154,9 +133,6 @@ var Visualize = React.createClass({
     this.updatePaths(0);
     this.setState( {commitIndex: 0, currentPath: '', fileTree: fileTree, playbarDirection: 'forward'} );
   },
-  //getDefaultProps: function () { //please put defaults here (if you must) instead of state
-  //return { hi: 'hey' };
-  //},
 
   getInitialState: function() {
     return {windowHeight: $(window).height() - 305, commits: [], commitIndex: 0, currentPath: '', fileTree: {}, filePaths : {}, playbarDirection: 'forward', showFileDiffualize: false};
@@ -164,7 +140,6 @@ var Visualize = React.createClass({
 
   fileOrFolder: function() {
     if (this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder) {
-      //<File key={this.state.currentPath + '/' + this.state.filePaths[this.state.currentPath].commitIndex} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
       return (
         <Col xs={9} md={9} style={{height: this.state.windowHeight, minHeight: 200, overflow: 'scroll'}}>
           <pre style={{wordWrap: 'break-word; white-space; pre-wrap',height: this.state.windowHeight, overflow: 'scroll'}}>
@@ -196,10 +171,6 @@ var Visualize = React.createClass({
 
   render: function () {
     if (this.state.commits.length > 0) {
-      //TODO uncomment these- it's logging multiple times on first load??
-      //console.dir(this.state.commits);
-      //console.log('filetree: ',this.state.fileTree);
-      //console.log('commit index: ',this.state.commitIndex);
       var maindisplay = this.fileOrFolder();
       var modal = this.modalOrNo();
 

@@ -29,7 +29,6 @@ var Folder = React.createClass({
   },
 
   render: function () {
-    //TODO why is everything in render????
     var context = this;
     var changes = {};
     var showFiles = {};
@@ -65,7 +64,7 @@ var Folder = React.createClass({
           showFiles[key].status = changes[currentDir._folderDetails.path];
         }
         if(currentDir._folderDetails.isFolder) {
-          showFiles[key].isFolder = true; //looks like we are again remaking the file tree, but a section of it TODO refactor
+          showFiles[key].isFolder = true;
           for(var i=0; i<commitLength; i++) {
             var slicedPath = currentCommit[i].filename.substring(0, currentDir._folderDetails.path.length);
             if(!merge && currentDir._folderDetails.path === slicedPath) {
@@ -94,7 +93,6 @@ var Folder = React.createClass({
 var File = React.createClass({
   render: function() {
     var context = this.props.context;
-    // DO NOT DELETE DIVS WRAPPING BUTTON OR COLORS DISSAPEAR VIA TOOLTIP
     return (
         <div style={context.styles.containerStyle}>
           <OverlayTrigger placement='top' delayShow={1000} overlay={<Tooltip> { this.props.status } </Tooltip>}>
