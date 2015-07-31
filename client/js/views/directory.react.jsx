@@ -15,7 +15,7 @@ var Directory = React.createClass({
       if (filename === '_folderDetails') return;
       var details = contents._folderDetails;
       return (
-          <div style={this.styles.paddingStyle}>
+          <div key={details.path} style={this.styles.paddingStyle}>
             <Glyphicon glyph={details.isFolder ? 'folder-open' : 'file'}/>
             <Button bsSize="xsmall" onClick={this.handleClick.bind(this, details.path)} bsStyle="link">{filename}</Button>
             {details.isFolder ? this.formatTree(contents) : null}
