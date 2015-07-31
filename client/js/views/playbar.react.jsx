@@ -16,6 +16,15 @@ var Playbar = React.createClass({
     wellStyle : {
         padding : '6px',
     },
+    activeButtonStyle : {
+      backgroundColor : 'lightblue'
+    }
+  },
+
+  getStyle: function(button) {
+    if (this.state.activeButton === button) {
+      return this.styles.activeButtonStyle;
+    }
   },
 
   clock: function(seconds) {
@@ -52,7 +61,8 @@ var Playbar = React.createClass({
       now: 0,
       glyphicon: 'play',
       commit : 0,
-      speed : 100
+      speed : 100,
+      activeButton: 'pause'
     };
   },
 
@@ -61,11 +71,13 @@ var Playbar = React.createClass({
     clearInterval(this.timer);
     this.timer = setInterval(this.tick, this.state.speed);
     this.canSpeedChange = true;
+    this.setState({activeButton: 'play'});
   },
 
   pause: function () {
     clearInterval(this.timer);
     this.canSpeedChange = false;
+    this.setState({activeButton: 'pause'});
   },
 
   speedUp: function() {
@@ -94,6 +106,7 @@ var Playbar = React.createClass({
       clearInterval(this.timer);
       this.timer = setInterval(this.tick, this.state.speed);
       this.setState({glyphicon: 'play'});
+      this.setState({activeButton: 'rewind'});
     }
   },
 
@@ -160,13 +173,13 @@ var Playbar = React.createClass({
           <ButtonToolbar>
             <ButtonGroup bsSize='medium'>
               <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> rewind </Tooltip>}>
-                <Button onClick={this.rewind}><Glyphicon glyph='backward' /></Button>
+                <Button onClick={this.rewind} style={this.getStyle('rewind')}><Glyphicon glyph='backward' /></Button>
               </OverlayTrigger>
               <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> {this.state.glyphicon} </Tooltip>}>
-                <Button onClick={this.handleClick}><Glyphicon glyph={this.state.glyphicon} /></Button>
+                <Button onClick={this.handleClick} style={this.getStyle('play')}><Glyphicon glyph={this.state.glyphicon} /></Button>
               </OverlayTrigger>
               <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> pause </Tooltip>}>
-                <Button onClick={this.pause}><Glyphicon glyph='pause' /></Button>
+                <Button onClick={this.pause} style={this.getStyle('pause')}><Glyphicon glyph='pause' /></Button>
               </OverlayTrigger>
               <OverlayTrigger placement='top' delayShow={500} overlay={<Tooltip> slow-down </Tooltip>}>
                 <Button onClick={this.slowDown}><Glyphicon glyph='minus-sign' /></Button>

@@ -29,3 +29,7 @@
   color: black;
   outline:none;
 }
+
+.btn:focus {
+  outline: 0px;
+}
