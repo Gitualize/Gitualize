@@ -52,7 +52,7 @@ gulp.task('testE', function(){
     'args': ['--baseUrl', 'http://127.0.0.1:3000'],
     'autoStartStopServer': true,
     'debug': true
-  });
+  }));
 });
 
 gulp.task('testify', function() {
