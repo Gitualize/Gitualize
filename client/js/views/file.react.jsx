@@ -29,7 +29,7 @@ var File = React.createClass({
     }.bind(this));
   },
 
-  componentWillMount: function() { //on component creation
+  componentWillMount: function() {
     var currentFile = this.props.filePaths[this.props.currentPath];
     //url props used by the diffualizer but not mainpage visualize
     var url = this.props.urls.to || currentFile.raw_url;
@@ -46,7 +46,7 @@ var File = React.createClass({
     }.bind(this));
   },
 
-  compare: function(data, pdata, url) { //jsDiff can compare chars, words, as well as lines
+  compare: function(data, pdata, url) {
     if (typeof data === 'object') {
       data = JSON.stringify(data);
       pdata = JSON.stringify(pdata);

@@ -27,7 +27,7 @@ var Playbar = React.createClass({
     }
   },
 
-  clock: function(seconds) { //custom clock for no particular reason
+  clock: function(seconds) { //custom clock for playbar timekeeping
     var time = {};
     this.total = seconds;
     time.hours = Math.floor(seconds/3600);
@@ -52,12 +52,10 @@ var Playbar = React.createClass({
   },
 
   getInitialState: function() {
-    //set some non state variables
     this.time = this.clock(0);
     this.totalTime = this.clock(this.props.totalNumCommits);
     this.canSpeedChange = false;
     this.speeds = {'100': '1', '200': '.5', '300': '.33', '400': '.25'};
-    // return the state variables
     return {
       date: this.time.toString(),
       now: 0,
@@ -121,7 +119,7 @@ var Playbar = React.createClass({
     var incrementor = this.props.playbarDirection === 'forward' ? 1 : -1;
     var now = this.state.now + incrementor;
     this.setState( {now} );
-    if (now % 10 === 0) { //custom time settings so that the playbar isn't super janky
+    if (now % 10 === 0) { //custom time settings so that the playbar doesn't lag
       if (this.props.commitIndex === 0 && this.props.playbarDirection === 'backward') return this.end();
       this.props.updateCommitIndex(this.props.commitIndex + incrementor);
       if (now % (this.props.numberOfCommits*10) === 0) this.end();
