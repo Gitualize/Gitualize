@@ -24,8 +24,8 @@ var Landing = React.createClass({
       minWidth: 1000
     },
     stepStyle: {
-      width: 300,
-      height: 375,
+      width: 275,
+      height: 360,
       margin: 10,
       padding: 0,
       display: 'inline-block',
@@ -35,23 +35,30 @@ var Landing = React.createClass({
     }, 
     stepContentStyle: {
       width: 'auto',
-      height: 300,
+      height: 275,
       display: 'block',
       backgroundColor: 'lightcyan'
     },
+    imageStyle: {
+      width: 275,
+      height: 275,
+      margin: 0
+    },
     stepTextStyle: {
       width: 'auto',
-      height: 75,
+      height: 85,
+      padding: 3,
       display: 'block',
-      backgroundColor: 'white',
-      textWrap: 'break-word'
+      backgroundColor: 'antiquewhite',
+      textWrap: 'break-word',
+      borderTop: '5px double lightsteelblue'
     },
     instructionStyle: {
       width: '100%',
-      minWidth: '1000',
+      minWidth: 1200,
       marginTop: 30,
       padding: 10,
-      borderRadius: 10,
+      borderRadius: 5,
       backgroundColor: 'lightblue',
       display: 'inline-block',
       textAlign: 'center'
@@ -117,7 +124,7 @@ var Landing = React.createClass({
           <Row>
             <Col style={this.styles.stepStyle}> 
               <div style={this.styles.stepContentStyle}> 
-                (add content)
+                <img style={this.styles.imageStyle} src={'../../pics/instruction1.jpg'}/>
               </div>
               <div style={this.styles.stepTextStyle}>
                 <p> Step 1</p>
@@ -126,7 +133,7 @@ var Landing = React.createClass({
             </Col>
             <Col style={this.styles.stepStyle}> 
               <div style={this.styles.stepContentStyle}> 
-                (add content)
+                <img style={this.styles.imageStyle} src='../../pics/instruction2.jpg'/>
               </div>
               <div style={this.styles.stepTextStyle}>
                 <p> Step 2 </p>
@@ -135,11 +142,20 @@ var Landing = React.createClass({
             </Col>
             <Col style={this.styles.stepStyle}> 
               <div style={this.styles.stepContentStyle}> 
-                (add content)
+                <img style={this.styles.imageStyle} src='../../pics/instruction3.jpg'/>
               </div>
               <div style={this.styles.stepTextStyle}>
                 <p> Step 3 </p>
                 <p> Navigate through folder and directory views </p>
+              </div>
+            </Col>
+            <Col style={this.styles.stepStyle}> 
+              <div style={this.styles.stepContentStyle}> 
+                <img style={this.styles.imageStyle} src='../../pics/instruction4.jpg'/>
+              </div>
+              <div style={this.styles.stepTextStyle}>
+                <p> Step 4 </p>
+                <p> See changes in a file within a commit range </p>
               </div>
             </Col>
           </Row>
