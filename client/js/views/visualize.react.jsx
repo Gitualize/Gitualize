@@ -152,7 +152,7 @@ var Visualize = React.createClass({
     if (this.state.filePaths[this.state.currentPath] && !this.state.filePaths[this.state.currentPath].isFolder) {
       //<File key={this.state.currentPath + '/' + this.state.filePaths[this.state.currentPath].commitIndex} currentIndex={this.state.commitIndex} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
       return (
-        <Col xs={9} md={9} style={{height: this.state.windowHeight, overflow: 'scroll'}}>
+        <Col xs={9} md={9} style={{height: this.state.windowHeight, minHeight: 200, overflow: 'scroll'}}>
           <pre style={{wordWrap: 'break-word; white-space; pre-wrap',height: this.state.windowHeight, overflow: 'scroll'}}>
             <File urls={{to : '', from: ''}} filePaths={this.state.filePaths} currentPath={this.state.currentPath}/>
           </pre>
@@ -162,7 +162,7 @@ var Visualize = React.createClass({
     else {
       return (
         <Col xs={9} md={9}>
-          <Well bsSize='small' style={{height: this.state.windowHeight, overflow: 'scroll'}}>
+          <Well bsSize='small' style={{height: this.state.windowHeight, minHeight: 200, overflow: 'scroll'}}>
             <Folder fileTree={this.state.fileTree} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
           </Well>
         </Col>
@@ -202,7 +202,7 @@ var Visualize = React.createClass({
 
             <Row className='show-grid'>
               <Col xs={3} md={3}>
-                <Well bsSize='small' style={{height: this.state.windowHeight, overflow: 'scroll'}}>
+                <Well bsSize='small' style={{height: this.state.windowHeight, minHeight: 200, overflow: 'scroll'}}>
                   <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
                 </Well>
               </Col>
