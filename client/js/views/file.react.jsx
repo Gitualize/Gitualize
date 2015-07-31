@@ -1,5 +1,5 @@
 var ReactBootstrap = require('react-bootstrap');
-var React = require('react');
+var React = require('react/addons');
 var Button = ReactBootstrap.Button;
 var Glyphicon = ReactBootstrap.Glyphicon;
 var Well = ReactBootstrap.Well;
