@@ -82,7 +82,7 @@ var Folder = React.createClass({
       var fileName = file.filename;
       var iconType = FolderUtils.getFileType(fileName, file.isFolder);
       return (
-          <File iconType={iconType} fileName={fileName} status={file.status} animation={file.style} context={context}/>
+          <File key={fileName + iconType} iconType={iconType} fileName={fileName} status={file.status} animation={file.style} context={context}/>
         );
     });
     return (
