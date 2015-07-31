@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var ReactBootstrap = require('react-bootstrap');
-var React = require('react');
+var React = require('react/addons');
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 var Button = ReactBootstrap.Button;
 var Glyphicon = ReactBootstrap.Glyphicon;
 
@@ -27,8 +28,9 @@ var Directory = React.createClass({
     this.props.updateCurrentPath(path);
   },
   render: function () {
+    debugger;
     return (
-      <div>{ this.formatTree(this.props.fileTree) }</div>
+      <ReactCSSTransitionGroup transitionName='example'>{ this.formatTree(this.props.fileTree) }</ReactCSSTransitionGroup>
     )
   }
 });
