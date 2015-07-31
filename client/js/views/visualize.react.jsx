@@ -70,7 +70,9 @@ var Visualize = React.createClass({
         this.updatePaths(0, commits);
         firstCommit = false;
       }
-      this.setState({commits: this.state.commits.concat(commits)});
+      if (this.isMounted()) {
+        this.setState({commits: this.state.commits.concat(commits)});
+      }
     }.bind(this));
   },
 
