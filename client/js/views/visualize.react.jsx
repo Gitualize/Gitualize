@@ -1,8 +1,7 @@
 var $ = require('jquery');
 var React = require('react/addons');
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-var socketURL = process.env.BASE_URL || 'http://localhost:3000';
-var socket = require('socket.io-client')(socketURL);
+var socket = require('socket.io-client')('http://gitualize.com');
 var Navigation = require('react-router').Navigation;
 var ReactBootstrap = require('react-bootstrap');
 var Grid = ReactBootstrap.Grid;
