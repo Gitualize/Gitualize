@@ -33,15 +33,27 @@ describe('Gitualize', function() {
       browser.get('http://localhost:3000');
     });
 
-    it('should load the landing page', function(done) {
+    it('should load the landing page', function() {
       browser.getCurrentUrl().then(function(url) {
         expect(url).toEqual('http://localhost:3000/#/');
-        done();
+
+        it('should display loading spinner and logo', function() {
+          $('#content > div > div > img:nth-child(1)').getAttribute('src').then(function(src) {
+            expect(src).toBe('http://localhost:3000/pics/octocat-spinner.svg');
+          });
+
+          $('#content > div > div > img:nth-child(3)').getAttribute('src').then(function(src) {
+            expect(src).toBe('http://localhost:3000/pics/GitHub_Logo.png');
+          });
+        });
+
       });
+
+
     });
 
     // imlement dropdown testing here:
-    it('should have a functional repo inupt form', function(done) {
+    it('should have a functional repo inupt form', function() {
       var inputField = $('#content > div > div > form > div:nth-child(1) > input');
 
       inputField.sendKeys('tchan247/');
@@ -54,7 +66,6 @@ describe('Gitualize', function() {
 
         $('.btn-success').getCssValue('background-color').then(function(style){
           expect(style).toEqual('rgba(92, 184, 92, 1)');
-          done();
         });
         
       });
@@ -85,36 +96,20 @@ describe('Gitualize', function() {
   });
 
 
-  describe('Loading page', function() {
-
-    beforeAll(function() {
-      browser.get('http://localhost:3000/#/repo/asdf/asdf');
-    });
-
-    it('should display loading spinner and logo', function() {
-      $('#content > div > div > img:nth-child(1)').getAttribute('src').then(function(src) {
-        expect(src).toBe('http://localhost:3000/pics/octocat-spinner.svg');
-      });
-
-      $('#content > div > div > img:nth-child(3)').getAttribute('src').then(function(src) {
-        expect(src).toBe('http://localhost:3000/pics/GitHub_Logo.png');
-      });
-    });
-
-  });
-
-
   describe('Visualize page', function() {
 
     beforeAll(function(){
       browser.get('http://localhost:3000/');
       var inputField = $('#content > div > div > form > div:nth-child(1) > input');
       inputField.sendKeys('tchan247/blog-project');
+      browser.sleep(1000);
       inputField.sendKeys(protractor.Key.ENTER);
     });
 
     it('should load the visualize page', function(done) {
-      expect($('#content > div > div > div > div:nth-child(3) > div.col-md-9.col-xs-9 > div').waitReady()).toBeTruthy();
+      // additional waiting time for repo to load
+      browser.sleep(10000);
+      browser.wait($('#content > div > div > div > div:nth-child(3) > div.col-md-9.col-xs-9 > div').waitReady());
       browser.getCurrentUrl().then(function(url){
         expect(url).toBe('http://localhost:3000/#/repo/tchan247/blog-project');
         done();
@@ -154,12 +149,13 @@ describe('Gitualize', function() {
 
     it('should show correct files in a commit', function() {
       expect(
-        $('#content > div > div > div > div:nth-child(3) > div.col-md-9.col-xs-9 > div > div > p > span:nth-child(2)').getText()
+        $('#content > div > div > div > div:nth-child(3) > div.col-md-9.col-xs-9 > div > div > div:nth-child(2) > p > span:nth-child(2)').getText()
       ).toBe('script.js');
     });
 
     it('should display correct color for file status', function() {
-      $('#content > div > div > div > div:nth-child(3) > div.col-md-9.col-xs-9 > div > div > div > button').getCssValue('background-color').then(function(style){
+      $('#content > div > div > div > div:nth-child(3) > div.col-md-9.col-xs-9 > div > div > div:nth-child(1) > div > button')
+      .getCssValue('background-color').then(function(style){
         expect(style).toBe('rgba(154, 205, 50, 1)');
       });
     });
@@ -170,7 +166,6 @@ describe('Gitualize', function() {
       $('#content > div > div > div > div:nth-child(4) > div.col-md-3.col-sm-4.col-xs-5 > div > div > button:nth-child(1) > span').click();
 
       browser.sleep(2000);
-
       expect(
         $('#content > div > div > div > div:nth-child(4) > div.text-center.col-md-2.col-sm-3.col-xs-3 > div > span:nth-child(1)').getText()
         ).toBe('0');
@@ -189,8 +184,6 @@ describe('Gitualize', function() {
       slowDown.click();
       slowDown.click();
 
-      browser.sleep(2000);
-
       expect(
         $('#content > div > div > div > div:nth-child(4) > div.text-center.col-md-1.col-sm-2.col-xs-2 > div > span:nth-child(1)')
         ).toBeTruthy('.25');
@@ -199,11 +192,13 @@ describe('Gitualize', function() {
       speedUp.click();
       speedUp.click();
 
-      browser.sleep(2000);
+      // temporary fix for making playbar reach end
+      browser.sleep(15000);
 
       expect(
         $('#content > div > div > div > div:nth-child(4) > div.text-center.col-md-1.col-sm-2.col-xs-2 > div > span:nth-child(1)')
-        ).toBeTruthy('1');
+        .getText()
+        ).toEqual('1');
     });
 
     it('should refresh the playbar', function() {
@@ -212,7 +207,8 @@ describe('Gitualize', function() {
       $('span.glyphicon-refresh').click();
 
       expect(
-        $('#content > div > div > div > div:nth-child(4) > div.text-center.col-md-2.col-sm-3.col-xs-3 > div > span:nth-child(1)').getText()
+          $('#content > div > div > div > div:nth-child(4) > div.text-center.col-md-2.col-sm-3.col-xs-3 > div > span:nth-child(1)')
+          .getText()
         ).toBe('0');
     });
 
@@ -266,7 +262,7 @@ describe('Gitualize', function() {
 
     it('should load the about page', function() {
 
-      expect($('#content > div > div > button').isPresent()).toBeTruthy();
+      expect($('#content > div > div > p').isPresent()).toBeTruthy();
     });
 
     it('should display information in the about page', function() {
