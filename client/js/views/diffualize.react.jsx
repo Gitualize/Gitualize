@@ -12,7 +12,7 @@ var File = require('./file.react.jsx');
 
 var Diffualize = React.createClass({
   getInitialState: function() {
-    return {help: 'Enter a range or from can be left blank and to can be ±n commits.', urls: {from: '', to: ''}};
+    return {help: 'Enter a range. From can be left blank and to can be ±n commits.', urls: {from: '', to: ''}};
   },
 
   handleSubmit: function(e) {
