@@ -107,7 +107,7 @@ describe('Gitualize', function() {
 
     it('should load the visualize page', function(done) {
       // additional waiting time for repo to load
-      browser.sleep(10000);
+      browser.sleep(7000);
       browser.wait($('#content > div > div > div > div:nth-child(3) > div.col-md-9.col-xs-9 > div').waitReady());
       browser.getCurrentUrl().then(function(url){
         expect(url).toBe('http://localhost:3000/#/repo/tchan247/blog-project');
@@ -117,14 +117,14 @@ describe('Gitualize', function() {
 
     it('should play and pause', function() {
       // play
-      $('#content > div > div > div > div:nth-child(4) > div.col-md-3.col-sm-4.col-xs-5 > div > div > button:nth-child(2) > span').click();
+      $('#content > div > div > div > div:nth-child(4) > div.col-md-3.col-sm-4.col-xs-5 > div > div > button:nth-child(2)').click();
 
       // wait for javascript folder to appear
       var folder = $('#content > div > div > div > div:nth-child(3) > div.col-md-3.col-xs-3 > div > div > div:nth-child(6) > div > div:nth-child(3) > button');
       folder.waitReady();
 
       // pause
-      $('#content > div > div > div > div:nth-child(4) > div.col-md-3.col-sm-4.col-xs-5 > div > div > button:nth-child(3) > span').click();
+      $('#content > div > div > div > div:nth-child(4) > div.col-md-3.col-sm-4.col-xs-5 > div > div > button:nth-child(3)').click();
 
       expect(folder.getText()).toEqual('javascript');
     });
