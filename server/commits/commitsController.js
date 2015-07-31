@@ -7,52 +7,47 @@ var getCommits = function(repoFullName, accessToken, socket, res) { //res is opt
     //authUtils.setAccessToken(accessToken); //TODO so every controllr has access (like trees)
     utils.setAccessToken(accessToken); //TODO refactor like socket
   }
-  utils.getTotalCommits(repoFullName)
-  .then(function(totalNumCommits) {
-    utils.getCommitsFromDb(repoFullName)
-    .then(function(commits) {
-      if (commits && commits.length > 0) {
-        if (res) res.json(commits); //commits are in db, send back if someone is using our api endpoint as a nice feature
-        var commitsData = JSON.stringify({commits: commits, totalNumCommits: totalNumCommits});
-        socket.emit('gotCommits', commitsData); //stringify just in case--big arr, just sending the arr caused problems jumping to catch below
-      }
-    }).catch(function(err) {
-      //console.log('err sending commits from db:', err);
-      console.log('commits not in db, going to github');
-      //commits not in db, go to github
-      if (!accessToken) { //redjrect to /auth with original repo request info
-        socket.emit('authRequired', {authUrl: '/auth?repoFullName='+repoFullName});
-        if (res) res.json({msg: 'auth required', authUrl: '/auth?repoFullName='+repoFullName});
-        return;
-        //return res.redirect('/auth?repoFullName='+repoFullName); //don't let server redirect, client should
-        //res.end();
-        //next();
-      }
-      //100 is the max # of things we can pull at a time
-      var maxCommits = 500;
-      maxCommits = Math.min(500, totalNumCommits);
-      console.log('total num commits of repo is ', totalNumCommits, ', we are getting ', maxCommits, ' max');
-      utils.getCommitsFromGithub(repoFullName, totalNumCommits, maxCommits, socket)
-      .then(function(commits) {
-        //if (commits === 'finished') {
-        //debugger;
-        //return res.end('got all commits');
-        //}
-        //res.write(commits);
+  //utils.getTotalCommits(repoFullName)
+  //.then(function(totalNumCommits) {
+  utils.getCommitsFromDb(repoFullName)
+  .then(function(commitsData) {
+    if (commitsData && commitsData.commits && commitsData.commits.length > 0) {
+      var commits = commitsData.commits;
+      if (res) res.json(commitsData); //commits are in db, send back if someone is using our api endpoint as a nice feature
+      socket.emit('gotCommits', JSON.stringify(commitsData)); //stringify just in case--big arr, just sending the arr caused problems jumping to catch below
+    }
+  }).catch(function(err) {
+    //console.log('err sending commits from db:', err);
+    console.log('commits not in db, going to github');
+    //commits not in db, go to github
+    if (!accessToken) { //redjrect to /auth with original repo request info
+      socket.emit('authRequired', {authUrl: '/auth?repoFullName='+repoFullName});
+      if (res) res.json({msg: 'auth required', authUrl: '/auth?repoFullName='+repoFullName});
+      return;
+      //return res.redirect('/auth?repoFullName='+repoFullName); //don't let server redirect, client should
+      //res.end();
+      //next();
+    }
+    //100 is the max # of things we can pull at a time
+    utils.getCommitsFromGithub(repoFullName, 500, socket)
+    .then(function(commitsData) {
+      //if (commits === 'finished') {
+      //return res.end('got all commits');
+      //}
+      //res.write(commits);
 
-        //cannot put socket emitting here unfortunately
-        //due to how promise/callback works. callback is only called once
-        //(only emits the first time, doesn't seem to work with recursive getMoreCommits in utils)
-        //else it would be symmetric with above socket emit but with commits
-        
-        //socket emit is in utils
-        console.log('got some commits from github'); //, commits);
-        if (res) res.json(commits); //send back first page of commits if someone users our api as a perk
-      })
-      .catch(function(error) { //repo doesn't exist msg
-        console.error(error);
-        if (res) res.send(error);
-      });
+      //cannot put socket emitting here unfortunately
+      //due to how promise/callback works. callback is only called once
+      //(only emits the first time, doesn't seem to work with recursive getMoreCommits in utils)
+      //else it would be symmetric with above socket emit but with commits
+
+      //socket emit is in utils
+      //console.log('got some commits from github'); //, commits);
+      if (res) res.json(commitsData); //send back first page of commits if someone users our api as a perk
+    })
+    .catch(function(error) { //repo doesn't exist msg
+      console.error(error);
+      if (res) res.send(error);
     });
   }).catch(function(err) {
     console.error(err);
@@ -68,10 +63,10 @@ module.exports = function(socket) {
   });
 };
 //getCommitsHttp: function(req, res) { //wrapper for normal http api
-  //var accessToken = req.query.accessToken;
-  //var repoOwner = req.params.repoOwner;
-  //var repoName = req.params.repoName;
-  //var repoFullName = repoOwner + '/' + repoName;
-  //getCommits(repoFullName, accessToken, res);
+//var accessToken = req.query.accessToken;
+//var repoOwner = req.params.repoOwner;
+//var repoName = req.params.repoName;
+//var repoFullName = repoOwner + '/' + repoName;
+//getCommits(repoFullName, accessToken, res);
 //},
 //getCommits: getCommits
