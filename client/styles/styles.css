@@ -34,34 +34,34 @@
   outline: 0px;
 }
 
-.example-enter {
+.directory-enter {
   opacity: 0.01;
   bottom: -100px;
   position: relative;
   color: green;
 }
-.example-enter button {
+.directory-enter button {
   color: green;
 }
 
-.example-enter.example-enter-active {
+.directory-enter.directory-enter-active {
   opacity: 1;
   background: none;
   bottom: 0;
   transition: all .5s ease-in;
 }
-.example-leave {
+.directory-leave {
   opacity: 1;
   top: 0;
   position: relative;
   color: red;
 }
-.example-leave button {
+.directory-leave button {
   text-decoration: line-through;
   color: red;
 }
 
-.example-leave.example-leave-active {
+.directory-leave.directory-leave-active {
   opacity: 0.01;
   top: -100px;
   background: none;

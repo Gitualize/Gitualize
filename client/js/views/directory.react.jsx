@@ -28,9 +28,8 @@ var Directory = React.createClass({
     this.props.updateCurrentPath(path);
   },
   render: function () {
-    debugger;
     return (
-      <ReactCSSTransitionGroup transitionName='example'>{ this.formatTree(this.props.fileTree) }</ReactCSSTransitionGroup>
+      <ReactCSSTransitionGroup transitionName='directory'>{ this.formatTree(this.props.fileTree) }</ReactCSSTransitionGroup>
     )
   }
 });
