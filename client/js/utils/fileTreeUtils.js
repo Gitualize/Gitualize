@@ -76,7 +76,7 @@ var removeFile = function (tree, file) {
   if (_.every(currentFolder, function(contents, filename) { //detect if folder empty
     return (filename === '_folderDetails'); //if there is only folderDetails in folder
   })) {
-    var folderName = currentFolder._folderDetails.value;
+    var folderName = currentFolder._folderDetails? currentFolder._folderDetails.value : undefined;
     parentFolder && delete parentFolder[folderName]; //delete the folder if it's empty now
   }
 };
