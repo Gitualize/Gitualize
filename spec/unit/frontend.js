@@ -120,5 +120,87 @@ describe('Test frontend.', function(){
       shallowRender.render(<Playbar playbarDirection={playbarDirection} updatePlaybarDirection={updatePlaybarDirection} numberOfCommits={numberOfCommits} commitIndex={commitIndex} updateCommitIndex={updateCommitIndex} totalNumCommits={totalNumCommits} reset={reset} showFileDiffualize={showFileDiffualize} isFile={isFile}/>);
       component = shallowRender.getRenderOutput();
     });
+
+    it("Should be of type 'Row'", function() {
+      expect(component.type.displayName).toBe('Row');
+    });
+
+    it("Should contain a 'Col' as the first child with the ProgressBar and its Tooltip", function() {
+      expect(component._store.props.children[0].type.displayName).toBe('Col');
+      expect(component._store.props.children[0]._store.props.children.type.displayName).toBe('OverlayTrigger');
+      expect(component._store.props.children[0]._store.props.children._store.props.overlay.type.displayName).toBe('Tooltip');
+      expect(component._store.props.children[0]._store.props.children._store.props.children.type.displayName).toBe('ProgressBar');
+    });
+
+    it("Should contain a 'Col' as the second child with the ButtonToolbar.", function() {
+      expect(component._store.props.children[1].type.displayName).toBe('Col');
+      expect(component._store.props.children[1]._store.props.children.type.displayName).toBe('ButtonToolbar');
+      expect(component._store.props.children[1]._store.props.children._store.props.children.type.displayName).toBe('ButtonGroup');
+
+      it("Should Contain a backward button wrapped in its Tooltip", function() {
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0].type.displayName).toBe('OverlayTrigger');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.overlay.type.displayName).toBe('Tooltip');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children.type.displayName).toBe('Button');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children._store.props.children.type.displayName).toBe('Glyphicon');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children._store.props.children._store.props.glyph).toBe('backward');
+      });
+
+      it("Should Contain a play button wrapped in its Tooltip", function() {
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0].type.displayName).toBe('OverlayTrigger');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.overlay.type.displayName).toBe('Tooltip');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children.type.displayName).toBe('Button');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children._store.props.children.type.displayName).toBe('Glyphicon');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children._store.props.children._store.props.glyph).toBe('play');
+      });
+
+      it("Should Contain a pause button wrapped in its Tooltip", function() {
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0].type.displayName).toBe('OverlayTrigger');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.overlay.type.displayName).toBe('Tooltip');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children.type.displayName).toBe('Button');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children._store.props.children.type.displayName).toBe('Glyphicon');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children._store.props.children._store.props.glyph).toBe('pause');
+      });
+
+      it("Should Contain a minus-sign button wrapped in its Tooltip", function() {
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0].type.displayName).toBe('OverlayTrigger');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.overlay.type.displayName).toBe('Tooltip');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children.type.displayName).toBe('Button');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children._store.props.children.type.displayName).toBe('Glyphicon');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children._store.props.children._store.props.glyph).toBe('minus-sign');
+      });
+
+      it("Should Contain a plus-sign button wrapped in its Tooltip", function() {
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0].type.displayName).toBe('OverlayTrigger');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.overlay.type.displayName).toBe('Tooltip');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children.type.displayName).toBe('Button');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children._store.props.children.type.displayName).toBe('Glyphicon');
+        expect(component._store.props.children[1]._store.props.children._store.props.children._store.props.children[0]._store.props.children._store.props.children._store.props.glyph).toBe('plus-sign');
+      });
+    });
+
+    it("Should contain a 'Col' as the third child with the Speed Well and its Tooltip", function() {
+      expect(component._store.props.children[2].type.displayName).toBe('Col');
+      expect(component._store.props.children[2]._store.props.children.type.displayName).toBe('OverlayTrigger');
+      expect(component._store.props.children[2]._store.props.children._store.props.overlay.type.displayName).toBe('Tooltip');
+      expect(component._store.props.children[2]._store.props.children._store.props.children.type.displayName).toBe('Well');
+      expect(component._store.props.children[2]._store.props.children._store.props.children._store.props.children[0]).toBe('1');
+    });
+
+    it("Should contain a 'Col' as the fourth child with the Commits Well and its Tooltip", function() {
+      expect(component._store.props.children[3].type.displayName).toBe('Col');
+      expect(component._store.props.children[3]._store.props.children.type.displayName).toBe('OverlayTrigger');
+      expect(component._store.props.children[3]._store.props.children._store.props.overlay.type.displayName).toBe('Tooltip');
+      expect(component._store.props.children[3]._store.props.children._store.props.children.type.displayName).toBe('Well');
+      expect(component._store.props.children[3]._store.props.children._store.props.children._store.props.children[0]).toBe(0);
+      expect(component._store.props.children[3]._store.props.children._store.props.children._store.props.children[2]).toBe(10);
+    });
+
+    it("Should contain a 'Col' as the fifth child with the Diffualize Button", function() {
+      expect(component._store.props.children[4].type.displayName).toBe('Col');
+      expect(component._store.props.children[4]._store.props.children.type.displayName).toBe('Button');
+      expect(component._store.props.children[4]._store.props.children._store.props.children[0].type.displayName).toBe('Glyphicon');
+      expect(component._store.props.children[4]._store.props.children._store.props.children[0]._store.props.glyph).toBe('modal-window');
+      expect(component._store.props.children[4]._store.props.children._store.props.children[1]).toBe(' Diffualize');
+    });
   });
 });
