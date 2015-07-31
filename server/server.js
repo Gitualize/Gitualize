@@ -8,7 +8,8 @@ var morgan = require('morgan'), // used for logging incoming request
   authController = require('./auth/authController.js'),
   request = require('request'),
   fs = require('fs'),
-  compress = require('compression');
+  compress = require('compression'),
+  favicon = require('serve-favicon');
 
 var app = express();
 var server = require('http').Server(app);
@@ -23,6 +24,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(compress());
 app.use(bodyParser.json());
+app.use(favicon(__dirname + '/../client/pics/favicon.ico'));
 app.use(express.static(__dirname + '/../client'));
 server.listen(process.env.PORT || 3000, function(){
   console.log('listening to port: ' + 3000);
