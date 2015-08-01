@@ -71,35 +71,48 @@
 
 .folder-enter {
   opacity: 0.01;
-  bottom: -100px;
-  position: relative;
-  color: green;
+  transform: scale(.01);
 }
 .folder-enter button {
-  color: green;
+  transform: scale(.01);
 }
 
 .folder-enter.folder-enter-active {
   opacity: 1;
-  background: none;
-  bottom: 0;
-  transition: all .5s ease-in;
+  transform: scale(1);
+  transition: all .3s;
 }
-.folder-leave {
+
+.folder-enter.folder-enter-active button{
   opacity: 1;
-  top: 0;
-  position: relative;
-  color: red;
-}
-.folder-leave button {
-  text-decoration: line-through;
-  color: red;
+  transform: scale(1);
+  transition: all .3s;
 }
 
 .folder-leave.folder-leave-active {
   opacity: 0.01;
-  top: -100px;
-  background: none;
-  transition: all .5s ease-out;
-  text-decoration: line-through;
+  transform: scale(.01);
+  transition: all .3s;
+}
+
+.folder-leave.folder-leave-active button {
+  opacity: 0.01;
+  transform: scale(.01);
+  transition: all .3s;
+}
+
+.modified {
+  bottom: 8px;
+  position: relative;
+  opacity: 1;
+  transform: scale(1.3);
+  transition: all .5s;
+}
+
+.unchanged {
+  bottom: 0px;
+  position: relative;
+  opacity: .6;
+  transform: scale(1);
+  transition: all .3s;
 }

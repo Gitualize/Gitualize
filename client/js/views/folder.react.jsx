@@ -58,10 +58,9 @@ var Folder = React.createClass({
       if(currentDir._folderDetails) { //this is a file or folder
         showFiles[key] = {filename: key};
         showFiles[key].style = currentDir.style || {'backgroundColor': 'white'};
-        showFiles[key].status = 'no changes';
+        showFiles[key].status = 'unchanged';
 
         if(!merge && currentDir._folderDetails.path && changes[currentDir._folderDetails.path]) {
-          showFiles[key].style = {'backgroundColor': animation[changes[currentDir._folderDetails.path]]};
           showFiles[key].status = changes[currentDir._folderDetails.path];
         }
         if(currentDir._folderDetails.isFolder) {
@@ -69,8 +68,7 @@ var Folder = React.createClass({
           for(var i=0; i<commitLength; i++) {
             var slicedPath = currentCommit[i].filename.substring(0, currentDir._folderDetails.path.length);
             if(!merge && currentDir._folderDetails.path === slicedPath) {
-              showFiles[key].style = {'backgroundColor': 'orange'};
-              showFiles[key].status = 'changed';
+              showFiles[key].status = 'modified';
             }
           }
         }
@@ -98,7 +96,7 @@ var File = React.createClass({
         <div style={context.styles.containerStyle}>
           <OverlayTrigger placement='top' delayShow={1000} overlay={<Tooltip> { this.props.status } </Tooltip>}>
             <div>
-              <Button style={_.extend(context.styles.buttonStyle, this.props.animation)} bsSize='large' onClick={function() {context.props.updateCurrentPath(context.props.currentPath === ''? this.props.fileName: context.props.currentPath + '/' + this.props.fileName)}.bind(this)}>
+              <Button style={_.extend(context.styles.buttonStyle, this.props.animation)} bsSize='large' className={this.props.status} onClick={function() {context.props.updateCurrentPath(context.props.currentPath === ''? this.props.fileName: context.props.currentPath + '/' + this.props.fileName)}.bind(this)}>
                 <Glyphicon glyph={this.props.iconType}/>
               </Button>
             </div>
