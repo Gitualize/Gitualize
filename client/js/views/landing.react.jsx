@@ -31,17 +31,16 @@ var Landing = React.createClass({
       display: 'inline-block',
       wordWrap: 'break-word',
       overflow: 'hidden',
-      border: '5px double white'
     }, 
     stepContentStyle: {
-      width: 'auto',
-      height: 275,
-      display: 'block',
-      backgroundColor: 'lightcyan'
-    },
-    imageStyle: {
       width: 275,
       height: 275,
+      display: 'block',
+      border: '1px solid powderBlue'
+    },
+    imageStyle: {
+      width: 273,
+      height: 273,
       margin: 0
     },
     stepTextStyle: {
@@ -49,7 +48,6 @@ var Landing = React.createClass({
       height: 85,
       padding: 3,
       display: 'block',
-      backgroundColor: 'antiquewhite',
       textWrap: 'break-word',
       borderTop: '5px double lightsteelblue'
     },
@@ -59,7 +57,6 @@ var Landing = React.createClass({
       marginTop: 30,
       padding: 10,
       borderRadius: 5,
-      backgroundColor: 'lightblue',
       display: 'inline-block',
       textAlign: 'center'
     }
@@ -103,6 +100,37 @@ var Landing = React.createClass({
     this.setState( this.validationState() );
   },
 
+  cycleInstructions: function() {
+    var num = 0;
+    var context = this;
+    var instructions = $('.fade');
+    var len = instructions.length;
+
+    var cycle = function() {
+
+      instructions.eq(num-1).removeClass('hovered');
+      instructions.eq(num).addClass('hovered');
+
+      if(num < len - 1) {
+        num++;
+      } else {
+        num = 0;
+      }
+
+      console.log(num);
+
+      setTimeout(function(){
+        cycle();
+      }, 2000);
+    };
+
+    setTimeout(cycle, 2000);
+  },
+
+  componentDidMount: function() {
+    this.cycleInstructions();
+  },
+
   render: function() {
     if (this.props.query.error) {
       var errorMessage = (
@@ -123,38 +151,38 @@ var Landing = React.createClass({
         <Grid style={this.styles.instructionStyle} bsSize='small'>
           <Row>
             <Col style={this.styles.stepStyle}> 
-              <div style={this.styles.stepContentStyle}> 
-                <img style={this.styles.imageStyle} src={'../../pics/instruction1.jpg'}/>
+              <div className='fade' style={this.styles.stepContentStyle}> 
+                  <img style={this.styles.imageStyle} src={'../../pics/instruction1.jpg'}/>
               </div>
               <div style={this.styles.stepTextStyle}>
-                <p> Step 1</p>
+                <h1> Step 1</h1>
                 <p> Input an existing public GitHub repository </p>
               </div>
             </Col>
             <Col style={this.styles.stepStyle}> 
-              <div style={this.styles.stepContentStyle}> 
+              <div className='fade' style={this.styles.stepContentStyle}> 
                 <img style={this.styles.imageStyle} src='../../pics/instruction2.jpg'/>
               </div>
               <div style={this.styles.stepTextStyle}>
-                <p> Step 2 </p>
+                <h1> Step 2 </h1>
                 <p> Press play/pause and adjust speed if needed </p>
               </div>
             </Col>
             <Col style={this.styles.stepStyle}> 
-              <div style={this.styles.stepContentStyle}> 
+              <div className='fade' style={this.styles.stepContentStyle}> 
                 <img style={this.styles.imageStyle} src='../../pics/instruction3.jpg'/>
               </div>
               <div style={this.styles.stepTextStyle}>
-                <p> Step 3 </p>
+                <h1> Step 3 </h1>
                 <p> Navigate through folder and directory views </p>
               </div>
             </Col>
             <Col style={this.styles.stepStyle}> 
-              <div style={this.styles.stepContentStyle}> 
+              <div className='fade' style={this.styles.stepContentStyle}> 
                 <img style={this.styles.imageStyle} src='../../pics/instruction4.jpg'/>
               </div>
               <div style={this.styles.stepTextStyle}>
-                <p> Step 4 </p>
+                <h1> Step 4 </h1>
                 <p> See changes in a file within a commit range </p>
               </div>
             </Col>
