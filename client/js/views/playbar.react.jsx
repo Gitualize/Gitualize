@@ -21,6 +21,10 @@ var Playbar = React.createClass({
     }
   },
 
+  componentWillUnMount: function() {
+    clearInterval(this.timer);
+  },
+
   getStyle: function(button) {
     if (this.state.activeButton === button) {
       return this.styles.activeButtonStyle;
@@ -118,7 +122,9 @@ var Playbar = React.createClass({
   tick: function() {
     var incrementor = this.props.playbarDirection === 'forward' ? 1 : -1;
     var now = this.state.now + incrementor;
-    this.setState( {now} );
+    if (this.isMounted()) {
+      this.setState( {now} );
+    }
     if (now % 10 === 0) { //custom time settings so that the playbar doesn't lag
       if (this.props.commitIndex === 0 && this.props.playbarDirection === 'backward') return this.end();
       this.props.updateCommitIndex(this.props.commitIndex + incrementor);
