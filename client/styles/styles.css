@@ -130,18 +130,13 @@
   transition: all .3s;
 }
 
-.unchanged:active {
+.unchanged:active, .added:active {
   transform: scale(.9);
   outline: none !important;
 }
 
 .modified:active {
   transform: scale(1.1);
-  outline: none !important;
-}
-
-.added:active {
-  transform: scale(.9);
   outline: none !important;
 }
 
