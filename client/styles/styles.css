@@ -144,3 +144,21 @@
   text-decoration: none;
   outline: none !important;
 }
+
+.loading-leave {
+  opacity: 1;
+}
+
+.loading-leave.loading-leave-active {
+  opacity: 0.01;
+  transition: opacity .5s ease-in;
+}
+
+.visualize-appear {
+  opacity: 0.01;
+  transition: opacity .5s ease-in;
+}
+
+.visualize-appear.visualize-appear-active {
+  opacity: 1;
+}
