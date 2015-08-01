@@ -55,44 +55,27 @@ var File = React.createClass({
     var diff = jsDiff.diffLines(pdata, data); //try to diff, but may be noncode data
     this.setState ( {diff} );
   },
-  color : function(line) {
-    return {color: line.added ? 'green' : line.removed ? 'red' : 'grey'};
-  },
-  //formatFile: function(diff) { //html object to render surrounding the code or img
-    //var fileType = this.props.currentPath.split('.').pop();
-    //if (fileType === 'png' || fileType === 'gif' || fileType === 'jpg' || fileType === 'jpeg') {
-      //var url = this.props.filePaths[this.props.currentPath].raw_url;
-      //return (
-        //<Well bsSize='small'>
-          //<img src={url}/>
-        //</Well>
-      //)
-    //}
-    //if (typeof diff === 'string') return diff; 
-
-    //function color(line) {
-    //return {color: line.added ? 'green' : line.removed ? 'red' : 'grey'};
-    //};
-
-    //return (
-    //{ diff.map(function(line) {
-    //return (<span style={color(line)}>{line.value}</span>);
-    //})}
-    //);
-  //},
   render: function () {
-    //if (this.state.diff === '') return;
-    var diff = this.state.diff.map(function(line, i) {
-      return (<span style={this.color(line)} key={line.value}> {line.value} </span>);
-    }.bind(this));
-    //<div>
-    //{this.formatFile(this.state.diff)}
-    //</div>
 
+    var fileType = this.props.currentPath.split('.').pop();
+    if (fileType === 'png' || fileType === 'gif' || fileType === 'jpg' || fileType === 'jpeg') {
+      var url = this.props.filePaths[this.props.currentPath].raw_url;
+      return (
+        <Well bsSize='small'>
+          <img src={url}/>
+        </Well>
+      )
+    }
+
+    var diff = this.state.diff.map(function(line, i) {
+      var cssClass = line.added ? 'diff-added' : line.removed ? 'diff-removed' : 'diff-unchanged';
+      return (<span className={cssClass} key={line.value+i+cssClass}> {line.value} </span>);
+    }.bind(this));
     return (
-      <ReactCSSTransitionGroup transitionName="example">
-        {diff}
-      </ReactCSSTransitionGroup>
+      <div>{diff}</div>
+      //<ReactCSSTransitionGroup transitionName="lines">
+        //{diff}
+      //</ReactCSSTransitionGroup>
     )
   }
 });
