@@ -192,7 +192,11 @@ var Playbar = React.createClass({
             <Well style={this.styles.wellStyle}>{this.props.commitIndex}/{this.props.totalNumCommits} Commits</Well>
           </OverlayTrigger>
         </Col>
-          <Col xs={3} sm={3} md={2}><Button onClick={this.showFileDiffualizeModal} disabled={!this.props.isFile}><Glyphicon glyph='modal-window' /> Diffualize</Button></Col>
+        <Col xs={3} sm={3} md={2}>
+          <OverlayTrigger placement='top' delayShow={1000} overlay={<Tooltip>{!this.props.isFile ? "Click on a file to Diffualize" : "Diffualize this file"}</Tooltip>}>
+            <Button onClick={this.showFileDiffualizeModal} disabled={!this.props.isFile}><Glyphicon glyph='modal-window' /> Diffualize</Button>
+          </OverlayTrigger>
+        </Col>
       </Row>
     )
   }

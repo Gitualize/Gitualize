@@ -125,3 +125,22 @@
   opacity: 1;
 }
 
+.added {
+  transform: scale(1);
+  transition: all .3s;
+}
+
+.unchanged:active, .added:active {
+  transform: scale(.9);
+  outline: none !important;
+}
+
+.modified:active {
+  transform: scale(1.1);
+  outline: none !important;
+}
+
+.btn:hover, .btn:active, .btn:focus, a:hover, a:active,  a:focus {
+  text-decoration: none;
+  outline: none !important;
+}
