@@ -61,6 +61,7 @@ var Landing = React.createClass({
       textAlign: 'center'
     }
   },
+
   handleSubmit: function(e) {
     e.preventDefault();
     var repo = this.refs.repo.getValue().split('/');
@@ -70,7 +71,8 @@ var Landing = React.createClass({
   getInitialState: function() {
     return {
       disabled: true,
-      style: null
+      style: null,
+      instruction: 0
     };
   },
 
@@ -101,6 +103,11 @@ var Landing = React.createClass({
   },
 
   cycleInstructions: function() {
+<<<<<<< HEAD
+=======
+    // console.log(this.state.instruction);
+    // this.setState({instruction: 0)};
+>>>>>>> (feat) add instruction opacity cycling
     var num = 0;
     var context = this;
     var instructions = $('.fade');
@@ -155,7 +162,7 @@ var Landing = React.createClass({
                   <img style={this.styles.imageStyle} src={'../../pics/instruction1.jpg'}/>
               </div>
               <div style={this.styles.stepTextStyle}>
-                <h1> Step 1</h1>
+                <h4> Step 1</h4>
                 <p> Input an existing public GitHub repository </p>
               </div>
             </Col>
@@ -164,7 +171,7 @@ var Landing = React.createClass({
                 <img style={this.styles.imageStyle} src='../../pics/instruction2.jpg'/>
               </div>
               <div style={this.styles.stepTextStyle}>
-                <h1> Step 2 </h1>
+                <h4> Step 2 </h4>
                 <p> Press play/pause and adjust speed if needed </p>
               </div>
             </Col>
@@ -173,7 +180,7 @@ var Landing = React.createClass({
                 <img style={this.styles.imageStyle} src='../../pics/instruction3.jpg'/>
               </div>
               <div style={this.styles.stepTextStyle}>
-                <h1> Step 3 </h1>
+                <h4> Step 3 </h4>
                 <p> Navigate through folder and directory views </p>
               </div>
             </Col>
@@ -182,7 +189,7 @@ var Landing = React.createClass({
                 <img style={this.styles.imageStyle} src='../../pics/instruction4.jpg'/>
               </div>
               <div style={this.styles.stepTextStyle}>
-                <h1> Step 4 </h1>
+                <h4> Step 4 </h4>
                 <p> See changes in a file within a commit range </p>
               </div>
             </Col>
