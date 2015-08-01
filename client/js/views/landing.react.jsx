@@ -107,6 +107,7 @@ var Landing = React.createClass({
     var context = this;
     var instructions = $('.fade');
     var len = instructions.length;
+    var hovering = false;
 
     $.each(instructions, function(i, x){
       $(x).mouseenter(function(){
@@ -114,7 +115,12 @@ var Landing = React.createClass({
           $(x).removeClass('hovered');
         });
         $(this).addClass('hovered');
+        hovering = true;
         num = i;
+      });
+
+      $(x).mouseleave(function(){
+        hovering = false;
       });
     });
 
@@ -124,10 +130,12 @@ var Landing = React.createClass({
       });
       instructions.eq(num).addClass('hovered');
 
-      if(num < len - 1) {
-        num++;
-      } else {
-        num = -1; 
+      if(!hovering) {
+        if(num < len - 1) {
+          num++;
+        } else {
+          num = 0;
+        }
       }
 
       setTimeout(function(){
