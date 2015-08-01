@@ -103,35 +103,39 @@ var Landing = React.createClass({
   },
 
   cycleInstructions: function() {
-<<<<<<< HEAD
-=======
-    // console.log(this.state.instruction);
-    // this.setState({instruction: 0)};
->>>>>>> (feat) add instruction opacity cycling
     var num = 0;
     var context = this;
     var instructions = $('.fade');
     var len = instructions.length;
 
-    var cycle = function() {
+    $.each(instructions, function(i, x){
+      $(x).mouseenter(function(){
+        instructions.each(function(i, x){
+          $(x).removeClass('hovered');
+        });
+        $(this).addClass('hovered');
+        num = i;
+      });
+    });
 
-      instructions.eq(num-1).removeClass('hovered');
+    var cycle = function() {
+      instructions.each(function(i, x){
+        $(x).removeClass('hovered');
+      });
       instructions.eq(num).addClass('hovered');
 
       if(num < len - 1) {
         num++;
       } else {
-        num = 0;
+        num = -1; 
       }
-
-      console.log(num);
 
       setTimeout(function(){
         cycle();
       }, 2000);
     };
 
-    setTimeout(cycle, 2000);
+    setTimeout(function(){cycle(num)}, 2000);
   },
 
   componentDidMount: function() {
