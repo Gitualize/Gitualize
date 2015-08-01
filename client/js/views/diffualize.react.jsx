@@ -41,7 +41,7 @@ var Diffualize = React.createClass({
     } else if (!isNaN(to) && this.validCommit(to,from)) {
       to = this.props.commitIndex + to;
       var toUrl = this.props.commits[to].files[0].raw_url.split('/').slice(0,6).join('/') + '/' + this.props.currentPath;
-      var fromUrl = context.state.commits[context.state.commitIndex].files[0].raw_url.split('/').slice(0,6).join('/') + '/' + context.state.currentPath;
+      var fromUrl = this.props.commits[this.props.commitIndex].files[0].raw_url.split('/').slice(0,6).join('/') + '/' + this.props.currentPath;
       $.get(toUrl)
       .always(function(toStatus) {
         if (typeof toStatus === 'string' || toStatus.statusText === 'OK') {
