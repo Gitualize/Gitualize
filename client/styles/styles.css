@@ -136,11 +136,11 @@
   outline: none !important;
 }
 
-.visualize-appear, .visualize-appear-active, .loading-leave {
+.visualize-appear.visualize-appear-active, .loading-leave {
   opacity: 1;
 }
 
-.visualize-appear, loading-leave.loading-leave-active {
+.visualize-appear, .loading-leave.loading-leave-active {
   opacity: 0.01;
   transition: opacity .5s ease-in;
 }
@@ -177,5 +177,5 @@
   opacity: 0.01;
   top: -50px;
   transition: all .1s ease-out;
-  [>text-decoration: line-through;<]
+  text-decoration: line-through;
 }
