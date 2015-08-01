@@ -50,7 +50,7 @@ var Landing = React.createClass({
       padding: 3,
       display: 'block',
       textWrap: 'break-word',
-      borderTop: '5px double lightsteelblue'
+      borderTop: '3px double lightsteelblue'
     },
     instructionStyle: {
       width: 980,
