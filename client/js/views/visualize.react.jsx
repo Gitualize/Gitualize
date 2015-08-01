@@ -190,7 +190,7 @@ var Visualize = React.createClass({
             <Row className='show-grid'>
               <Col xs={3} md={3}>
                 <Well bsSize='small' style={{height: this.state.windowHeight, minHeight: 200, overflow: 'scroll'}}>
-                  <Directory fileTree={this.state.fileTree} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
+                  <Directory fileTree={this.state.fileTree} currentCommit={this.state.commits[this.state.commitIndex]} currentPath={this.state.currentPath} updateCurrentPath={this.updateCurrentPath}/>
                 </Well>
               </Col>
               {maindisplay}
