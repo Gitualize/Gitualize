@@ -121,7 +121,7 @@
   opacity: .3;
 }
 
-.fade:hover {
+.fade:hover, .fade.hovered {
   opacity: 1;
 }
 
