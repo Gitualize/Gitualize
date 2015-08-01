@@ -21,6 +21,10 @@ var Playbar = React.createClass({
     }
   },
 
+  componentWillUnMount: function() {
+    clearInterval(this.timer);
+  },
+
   getStyle: function(button) {
     if (this.state.activeButton === button) {
       return this.styles.activeButtonStyle;
@@ -118,7 +122,9 @@ var Playbar = React.createClass({
   tick: function() {
     var incrementor = this.props.playbarDirection === 'forward' ? 1 : -1;
     var now = this.state.now + incrementor;
-    this.setState( {now} );
+    if (this.isMounted()) {
+      this.setState( {now} );
+    }
     if (now % 10 === 0) { //custom time settings so that the playbar doesn't lag
       if (this.props.commitIndex === 0 && this.props.playbarDirection === 'backward') return this.end();
       this.props.updateCommitIndex(this.props.commitIndex + incrementor);
@@ -147,20 +153,7 @@ var Playbar = React.createClass({
     this.props.showFileDiffualize();
   },
 
-  isFile: function() {
-    if (this.props.isFile) {
-      return (
-          <Col xs={3} sm={3} md={2}><Button onClick={this.showFileDiffualizeModal}><Glyphicon glyph='modal-window' /> Diffualize</Button></Col>
-        )
-    } else  {
-      return (
-          <Col xs={3} sm={3} md={2}></Col>
-        )
-    }
-  },
-
   render: function () {
-    var diffualizeFile = this.isFile();
     return (
       <Row className='show-grid'>
         <Col xs={12} sm={12} md={12}>
@@ -199,7 +192,7 @@ var Playbar = React.createClass({
             <Well style={this.styles.wellStyle}>{this.props.commitIndex}/{this.props.totalNumCommits} Commits</Well>
           </OverlayTrigger>
         </Col>
-        {diffualizeFile}
+          <Col xs={3} sm={3} md={2}><Button onClick={this.showFileDiffualizeModal} disabled={!this.props.isFile}><Glyphicon glyph='modal-window' /> Diffualize</Button></Col>
       </Row>
     )
   }
