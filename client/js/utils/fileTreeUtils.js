@@ -1,20 +1,23 @@
 var _ = require('underscore');
 
+//update the fileTree with all of the files changed in the current commit
 module.exports.updateTree = function(currentCommit, fileTree, direction) {
-  var filepath;
   if (!currentCommit || !currentCommit.files) {
     return null;
   }
+  //if the user is rewinding, we have to remove files with status added, and add files with status removed
   if (direction === 'backward') {
     currentCommit.files.forEach(function(file) {
       file.status === 'added' || file.status === 'renamed' ? removeFile(fileTree, file) : addFile(fileTree, file);
+      cleanTree(fileTree);
     });
   } else {
     currentCommit.files.forEach(function(file) {
       if (file.status === 'renamed') {
+        //remove the old version
         removeFile(fileTree, {filename: file.previous_filename});
+        //and add the new
         addFile(fileTree, file);
-        cleanTree(fileTree);
       } else if (file.status === 'removed'){
         removeFile(fileTree, file);
       } else {
@@ -22,15 +25,17 @@ module.exports.updateTree = function(currentCommit, fileTree, direction) {
       }
     });
   }
+  //clean tree in case removing/renaming files left us with empty folders
   cleanTree(fileTree);
 };
 
+//add a file to the fileTree
 var addFile = function (tree, file) {
-  var filePath = file.filename;
-  var path = filePath.split('/');
-  var originalPath = filePath.split('/');
+  var path = file.filename.split('/');
+  var originalPath = file.filename.split('/');
   var currentFolder = tree;
   var folderMatch, folder;
+  //enter next folder level until we get to the last element in path
   while (path.length > 1) {
     folderMatch = false;
     for (folder in currentFolder) {
@@ -39,52 +44,57 @@ var addFile = function (tree, file) {
         folderMatch = true;
       }
     }
+    //if the file we are adding is inside a folder that doesn't exist yet, create the folder
     if (!folderMatch) {
-      var index = filePath.indexOf(path[0]) + path[0].length;
+      //the path of the folder we are creating is the original path minus anything after the current folder
       var folderPath = originalPath.slice(0, originalPath.length - path.length + 1).join('/');
+      //currentFolder is the parent of the folder we are creating, path[0] is the name of the folder we are creating
       currentFolder[path[0]] = {_folderDetails: {isFolder: true, path: folderPath, value: path[0]}};
+      //after creating the folder, go inside it
       currentFolder = currentFolder[path[0]];
     }
+    //we are now inside the path[0] folder, so remove it from path
     path.shift();
   }
-  currentFolder[path[0]] = {_folderDetails: {isFolder: false, path: filePath, url: file.raw_url}};
+  //path is now a single element, so we are in the parent folder of the file, and we can create the file here
+  currentFolder[path[0]] = {_folderDetails: {isFolder: false, path: file.filename, url: file.raw_url}};
 };
 
 var removeFile = function (tree, file) {
-  var filePath = file.filename;
-  var path = filePath.split('/');
+  var path = file.filename.split('/');
   var currentFolder = tree;
-  var parentFolder, folderOrFileName, targetFolderOrFileName;
+  var folderOrFileName, targetFolderOrFileName;
   targetFolderOrFileName = path[0];
+  //enter next folder level until we get to the last element in path
   while (path.length > 1) {
     var found = _.find(currentFolder, function(contents, folderOrFileName) {
       if (folderOrFileName === targetFolderOrFileName) {
-        parentFolder = currentFolder;
-        currentFolder = parentFolder[folderOrFileName];
+        currentFolder = currentFolder[folderOrFileName];
         return true;
       }
     });
-    if (!found) return console.log('File or Folder not found in our tree: ', targetFolderOrFileName);
+    //if the folder this file is inside can't be found
+    if (!found) {
+      return null;
+    }
+    //we are now inside the path[0] folder, so remove it from path
     path.shift();
     targetFolderOrFileName = path[0];
   }
-  delete currentFolder[targetFolderOrFileName]; //delete the file
-
-  // if the currentFolder is now empty, delete the folder
-  if (_.every(currentFolder, function(contents, filename) { //detect if folder empty
-    return (filename === '_folderDetails'); //if there is only folderDetails in folder
-  })) {
-    var folderName = currentFolder._folderDetails? currentFolder._folderDetails.value : undefined;
-    parentFolder && delete parentFolder[folderName]; //delete the folder if it's empty now
-  }
+  delete currentFolder[targetFolderOrFileName];
+  cleanTree(tree);
 };
 
-var cleanTree = function (tree) { //for deleting nested empty folders
+//for deleting nested empty folders
+var cleanTree = function (tree) {
   for (var node in tree) {
+    //if node is a folder
     if (tree[node]._folderDetails && tree[node]._folderDetails.isFolder){
+      //if _folderDetails is the only element in the current folder
       if (Object.keys(tree[node]).length === 1) {
         delete tree[node];
       } else {
+        //recursively clean all child folders
         cleanTree(tree[node]);
       }
     }
