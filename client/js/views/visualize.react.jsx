@@ -1,5 +1,6 @@
 var $ = require('jquery');
 var React = require('react/addons');
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 var socketURL = process.env.BASE_URL || 'http://localhost:3000';
 var socket = require('socket.io-client')(socketURL);
 var Navigation = require('react-router').Navigation;
@@ -175,6 +176,7 @@ var Visualize = React.createClass({
       var modal = this.modalOrNo();
 
       return (
+      <ReactCSSTransitionGroup transitionName="visualize" transitionAppear={true}>
         <div>
           <Grid>
             <Row className='show-grid'>
@@ -204,6 +206,7 @@ var Visualize = React.createClass({
             {modal}
           </Modal>
         </div>
+      </ReactCSSTransitionGroup>
       )
     } else {
       return (
