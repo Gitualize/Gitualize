@@ -155,28 +155,27 @@
   color: grey;
 }
 
-/*.lines-enter.diff-added{*/
-  /*opacity: 0.01;*/
-  /*bottom: -50px;*/
-  /*position: relative;*/
-  /*color: green;*/
-/*}*/
-/*.lines-enter.lines-enter-active.diff-added{*/
-  /*opacity: 1;*/
-  /*bottom: 0;*/
-  /*transition: all .1s ease-in;*/
-/*}*/
-
+.lines-enter.diff-added{
+  opacity: 0.01;
+  bottom: -50px;
+  position: relative;
+  color: green;
+}
+.lines-enter.lines-enter-active.diff-added{
+  opacity: 1;
+  bottom: 0;
+  transition: all .1s ease-in;
+}
 /*[>debug react animations for leave<]*/
-/*.lines-leave.diff-removed{*/
-  /*opacity: 1;*/
-  /*top: 0;*/
-  /*position: relative;*/
-  /*color: red;*/
-/*}*/
-/*.lines-leave.lines-leave-active.diff-removed{*/
-  /*opacity: 0.01;*/
-  /*top: -50px;*/
-  /*transition: all .1s ease-out;*/
-  /*[>text-decoration: line-through;<]*/
-/*}*/
+.lines-leave.diff-removed{
+  opacity: 1;
+  top: 0;
+  position: relative;
+  color: red;
+}
+.lines-leave.lines-leave-active.diff-removed{
+  opacity: 0.01;
+  top: -50px;
+  transition: all .1s ease-out;
+  [>text-decoration: line-through;<]
+}
