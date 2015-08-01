@@ -26,7 +26,7 @@ var Landing = React.createClass({
     },
     stepStyle: {
       width: 225,
-      height: 290,
+      height: 360,
       margin: 10,
       padding: 0,
       display: 'inline-block',
@@ -45,9 +45,7 @@ var Landing = React.createClass({
       margin: 0
     },
     stepTextStyle: {
-      width: 'auto',
-      height: 65,
-      padding: 3,
+      padding: 0,
       display: 'block',
       textWrap: 'break-word',
       borderTop: '3px double lightsteelblue'
