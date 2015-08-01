@@ -9,7 +9,7 @@ var OverlayTrigger = ReactBootstrap.OverlayTrigger;
 var NavHead = React.createClass({
 
   styles: {
-    imgStyle : { height: '16px', width: '16px'},
+    imgStyle : { height: '20px', width: '20px'},
     navbarStyle : { marginBottom: '0' }
   },
   render: function() {
