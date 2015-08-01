@@ -1,5 +1,6 @@
 var React = require('react/addons');
 var ReactBootstrap = require('react-bootstrap');
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 var Glyphicon = ReactBootstrap.Glyphicon;
 var Button = ReactBootstrap.Button;
 var FolderUtils = require('../utils/folderUtils');
@@ -85,7 +86,7 @@ var Folder = React.createClass({
         );
     });
     return (
-        <div>{showFiles}</div>
+        <ReactCSSTransitionGroup transitionName='folder'>{showFiles}</ReactCSSTransitionGroup>
       );
   }
 });
