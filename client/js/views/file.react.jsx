@@ -1,5 +1,6 @@
 var ReactBootstrap = require('react-bootstrap');
 var React = require('react/addons');
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 var Button = ReactBootstrap.Button;
 var Glyphicon = ReactBootstrap.Glyphicon;
 var Well = ReactBootstrap.Well;
@@ -9,7 +10,7 @@ var jsDiff = require('diff');
 var File = React.createClass({
   getInitialState: function() {
     return {
-      diff : ''
+      diff : [] 
     };
   },
   componentWillReceiveProps: function(nextProps) { //selecting a new path changes the state of visualize which sets the props of file
@@ -54,35 +55,44 @@ var File = React.createClass({
     var diff = jsDiff.diffLines(pdata, data); //try to diff, but may be noncode data
     this.setState ( {diff} );
   },
-
-  formatFile: function(diff) { //html object to render surrounding the code or img
-    var fileType = this.props.currentPath.split('.').pop();
-    if (fileType === 'png' || fileType === 'gif' || fileType === 'jpg' || fileType === 'jpeg') {
-      var url = this.props.filePaths[this.props.currentPath].raw_url;
-      return (
-          <Well bsSize='small'>
-            <img src={url}/>
-          </Well>
-        )
-    }
-    if (typeof diff === 'string') return diff;
-
-    function color(part) { //to color the span if added or removed
-      return {color: part.added ? 'green' : part.removed ? 'red' : 'grey'};
-    };
-    return (
-        <div>
-          { diff.map(function(part) {
-            return (<span style={color(part)}>{part.value}</span>);
-          })}
-        </div>
-      )
+  color : function(line) {
+    return {color: line.added ? 'green' : line.removed ? 'red' : 'grey'};
   },
+  //formatFile: function(diff) { //html object to render surrounding the code or img
+    //var fileType = this.props.currentPath.split('.').pop();
+    //if (fileType === 'png' || fileType === 'gif' || fileType === 'jpg' || fileType === 'jpeg') {
+      //var url = this.props.filePaths[this.props.currentPath].raw_url;
+      //return (
+        //<Well bsSize='small'>
+          //<img src={url}/>
+        //</Well>
+      //)
+    //}
+    //if (typeof diff === 'string') return diff; 
+
+    //function color(line) {
+    //return {color: line.added ? 'green' : line.removed ? 'red' : 'grey'};
+    //};
+
+    //return (
+    //{ diff.map(function(line) {
+    //return (<span style={color(line)}>{line.value}</span>);
+    //})}
+    //);
+  //},
   render: function () {
+    //if (this.state.diff === '') return;
+    var diff = this.state.diff.map(function(line, i) {
+      return (<span style={this.color(line)} key={line.value}> {line.value} </span>);
+    }.bind(this));
+    //<div>
+    //{this.formatFile(this.state.diff)}
+    //</div>
+
     return (
-      <div>
-        {this.formatFile(this.state.diff)}
-      </div>
+      <ReactCSSTransitionGroup transitionName="example">
+        {diff}
+      </ReactCSSTransitionGroup>
     )
   }
 });
