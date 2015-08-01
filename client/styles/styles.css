@@ -1,3 +1,9 @@
+.dir-pad {
+  padding-left: 10px;
+}
+.dir-modified, .dir-modified button {
+  color: orange;
+}
 .ui-autocomplete {
   max-height: 100px;
   max-width: 500px;
@@ -38,18 +44,17 @@
   opacity: 0.01;
   bottom: -100px;
   position: relative;
+}
+.directory-enter, .directory-enter button {
   color: green;
 }
-.directory-enter button {
-  color: green;
-}
-
 .directory-enter.directory-enter-active {
   opacity: 1;
   background: none;
   bottom: 0;
-  transition: all .5s ease-in;
+  transition: all .3s ease-in;
 }
+
 .directory-leave {
   opacity: 1;
   top: 0;
@@ -60,15 +65,13 @@
   text-decoration: line-through;
   color: red;
 }
-
 .directory-leave.directory-leave-active {
   opacity: 0.01;
   top: -100px;
   background: none;
-  transition: all .5s ease-out;
+  transition: all .4s ease-out;
   text-decoration: line-through;
 }
-
 .folder-enter {
   opacity: 0.01;
   transform: scale(.01);
@@ -77,30 +80,19 @@
   transform: scale(.01);
 }
 
-.folder-enter.folder-enter-active {
+.folder-enter.folder-enter-active, .folder-enter.folder-enter-active button {
   opacity: 1;
   transform: scale(1);
   transition: all .3s;
 }
 
-.folder-enter.folder-enter-active button{
-  opacity: 1;
-  transform: scale(1);
-  transition: all .3s;
-}
-
-.folder-leave.folder-leave-active {
+.folder-leave.folder-leave-active, .folder-leave.folder-leave-active button {
   opacity: 0.01;
   transform: scale(.01);
   transition: all .3s;
 }
 
-.folder-leave.folder-leave-active button {
-  opacity: 0.01;
-  transform: scale(.01);
-  transition: all .3s;
-}
-
+/*folder view stuff*/
 .modified {
   bottom: 8px;
   position: relative;
@@ -108,7 +100,6 @@
   transform: scale(1.3);
   transition: all .5s;
 }
-
 .unchanged {
   bottom: 0px;
   position: relative;
@@ -145,20 +136,46 @@
   outline: none !important;
 }
 
-.loading-leave {
+.visualize-appear.visualize-appear-active, .loading-leave {
   opacity: 1;
 }
 
-.loading-leave.loading-leave-active {
+.visualize-appear, .loading-leave.loading-leave-active {
   opacity: 0.01;
   transition: opacity .5s ease-in;
 }
 
-.visualize-appear {
-  opacity: 0.01;
-  transition: opacity .5s ease-in;
+.diff-added {
+  color: green;
+}
+.diff-removed {
+  color: red;
+}
+.diff-unchanged {
+  color: grey;
 }
 
-.visualize-appear.visualize-appear-active {
+.lines-enter.diff-added{
+  opacity: 0.01;
+  bottom: -50px;
+  position: relative;
+  color: green;
+}
+.lines-enter.lines-enter-active.diff-added{
   opacity: 1;
+  bottom: 0;
+  transition: all .1s ease-in;
+}
+/*[>debug react animations for leave<]*/
+.lines-leave.diff-removed{
+  opacity: 1;
+  top: 0;
+  position: relative;
+  color: red;
+}
+.lines-leave.lines-leave-active.diff-removed{
+  opacity: 0.01;
+  top: -50px;
+  transition: all .1s ease-out;
+  text-decoration: line-through;
 }
