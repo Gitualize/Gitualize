@@ -144,3 +144,8 @@
   transform: scale(.9);
   outline: none !important;
 }
+
+.btn:hover, .btn:active, .btn:focus, a:hover, a:active,  a:focus {
+  text-decoration: none;
+  outline: none !important;
+}
