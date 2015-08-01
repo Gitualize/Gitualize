@@ -68,3 +68,51 @@
   transition: all .5s ease-out;
   text-decoration: line-through;
 }
+
+.folder-enter {
+  opacity: 0.01;
+  transform: scale(.01);
+}
+.folder-enter button {
+  transform: scale(.01);
+}
+
+.folder-enter.folder-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: all .3s;
+}
+
+.folder-enter.folder-enter-active button{
+  opacity: 1;
+  transform: scale(1);
+  transition: all .3s;
+}
+
+.folder-leave.folder-leave-active {
+  opacity: 0.01;
+  transform: scale(.01);
+  transition: all .3s;
+}
+
+.folder-leave.folder-leave-active button {
+  opacity: 0.01;
+  transform: scale(.01);
+  transition: all .3s;
+}
+
+.modified {
+  bottom: 8px;
+  position: relative;
+  opacity: 1;
+  transform: scale(1.3);
+  transition: all .5s;
+}
+
+.unchanged {
+  bottom: 0px;
+  position: relative;
+  opacity: .6;
+  transform: scale(1);
+  transition: all .3s;
+}
