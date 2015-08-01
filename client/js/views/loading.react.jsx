@@ -1,5 +1,5 @@
 var React = require('react/addons');
-
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Loader = React.createClass({
   styles: {
@@ -23,11 +23,13 @@ var Loader = React.createClass({
   render: function(){
 
     return (
-      <div style={this.styles.loadingStyle}>
-        <img style={this.styles.spinnerStyle} src={'../../pics/octocat-spinner.svg'}/>
-        <p style={this.styles.textStyle}> Loading from </p>
-        <img style={this.styles.spinnerStyle} src={'../../pics/GitHub_Logo.png'}/>
-      </div>
+      <ReactCSSTransitionGroup transitionName="loading" transitionLeave={true}>
+        <div style={this.styles.loadingStyle}>
+          <img style={this.styles.spinnerStyle} src={'../../pics/octocat-spinner.svg'}/>
+          <p style={this.styles.textStyle}> Loading from </p>
+          <img style={this.styles.spinnerStyle} src={'../../pics/GitHub_Logo.png'}/>
+        </div>
+      </ReactCSSTransitionGroup>
     )
   }
 })
