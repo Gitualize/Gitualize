@@ -40,6 +40,9 @@
   outline: 0px;
 }
 
+pre {
+  font-size: 10px;
+}
 .directory-enter {
   opacity: 0.01;
   bottom: -100px;
