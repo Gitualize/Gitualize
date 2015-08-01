@@ -71,8 +71,7 @@ var Landing = React.createClass({
   getInitialState: function() {
     return {
       disabled: true,
-      style: null,
-      instruction: 0
+      style: null
     };
   },
 
