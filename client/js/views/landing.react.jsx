@@ -16,16 +16,17 @@ var Landing = React.createClass({
   errorMessages: {badRepo: 'Unable to fetch the requested repository. You may only gitualize public repositories.'},
   styles: {
     containerStyle: {
-      paddingTop: 25,
-      paddingLeft: 100,
-      paddingRight: 100
+      width: '980',
+      marginTop: 25,
+      marginLeft: 'auto',
+      marginRight: 'auto'
     },
     formStyle: {
-      minWidth: 1000
+      width: 980
     },
     stepStyle: {
-      width: 275,
-      height: 360,
+      width: 225,
+      height: 290,
       margin: 10,
       padding: 0,
       display: 'inline-block',
@@ -33,27 +34,26 @@ var Landing = React.createClass({
       overflow: 'hidden',
     }, 
     stepContentStyle: {
-      width: 275,
-      height: 275,
+      width: 225,
+      height: 225,
       display: 'block',
       border: '1px solid powderBlue'
     },
     imageStyle: {
-      width: 273,
-      height: 273,
+      width: 223,
+      height: 223,
       margin: 0
     },
     stepTextStyle: {
       width: 'auto',
-      height: 85,
+      height: 65,
       padding: 3,
       display: 'block',
       textWrap: 'break-word',
       borderTop: '5px double lightsteelblue'
     },
     instructionStyle: {
-      width: '100%',
-      minWidth: 1200,
+      width: 980,
       marginTop: 30,
       padding: 10,
       borderRadius: 5,
@@ -142,7 +142,7 @@ var Landing = React.createClass({
       }, 2000);
     };
 
-    cycle(num);
+    cycle();
   },
 
   componentDidMount: function() {
@@ -161,8 +161,8 @@ var Landing = React.createClass({
     return (
       <div style={this.styles.containerStyle}>
           <form style={this.styles.formStyle} className='repoForm' onSubmit={this.handleSubmit}>
-            <Input type='text' ref='repo' className='uiAutocomplete' label='Visualize a repo' onChange={this.handleChange} placeholder='user/reponame - try jashkenas/backbone'/>
-            <ButtonInput type='submit' value='Gitualize' bsStyle={this.state.style} disabled={this.state.disabled}/>
+            <h4> Visualize a repo </h4>
+            <Input type='text' ref='repo' className='uiAutocomplete' buttonBefore={<ButtonInput type='submit' value='Gitualize' bsStyle={this.state.style} disabled={this.state.disabled}/>} onChange={this.handleChange} placeholder='user/reponame - try jashkenas/backbone'/>
             {errorMessage}
           </form>
 
