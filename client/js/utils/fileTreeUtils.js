@@ -18,7 +18,7 @@ module.exports.updateTree = function(currentCommit, fileTree, direction) {
         addFile(fileTree, file);
       } else if (file.status === 'removed'){
         removeFile(fileTree, file);
-      } else {
+      } else if (file.status === 'added'){ //don't do anything if modified. thus url will be the first time touched/added
         addFile(fileTree, file);
       }
     });
