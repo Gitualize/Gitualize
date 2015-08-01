@@ -14,9 +14,7 @@ module.exports.updateTree = function(currentCommit, fileTree, direction) {
   } else {
     currentCommit.files.forEach(function(file) {
       if (file.status === 'renamed') {
-        //remove the old version
         removeFile(fileTree, {filename: file.previous_filename});
-        //and add the new
         addFile(fileTree, file);
       } else if (file.status === 'removed'){
         removeFile(fileTree, file);
@@ -90,11 +88,10 @@ var cleanTree = function (tree) {
   for (var node in tree) {
     //if node is a folder
     if (tree[node]._folderDetails && tree[node]._folderDetails.isFolder){
-      //if _folderDetails is the only element in the current folder
+      //if _folderDetails is the only element in the current folder, the folder is empty
       if (Object.keys(tree[node]).length === 1) {
         delete tree[node];
       } else {
-        //recursively clean all child folders
         cleanTree(tree[node]);
       }
     }
