@@ -153,20 +153,7 @@ var Playbar = React.createClass({
     this.props.showFileDiffualize();
   },
 
-  isFile: function() {
-    if (this.props.isFile) {
-      return (
-          <Col xs={3} sm={3} md={2}><Button onClick={this.showFileDiffualizeModal}><Glyphicon glyph='modal-window' /> Diffualize</Button></Col>
-        )
-    } else  {
-      return (
-          <Col xs={3} sm={3} md={2}></Col>
-        )
-    }
-  },
-
   render: function () {
-    var diffualizeFile = this.isFile();
     return (
       <Row className='show-grid'>
         <Col xs={12} sm={12} md={12}>
@@ -205,7 +192,7 @@ var Playbar = React.createClass({
             <Well style={this.styles.wellStyle}>{this.props.commitIndex}/{this.props.totalNumCommits} Commits</Well>
           </OverlayTrigger>
         </Col>
-        {diffualizeFile}
+          <Col xs={3} sm={3} md={2}><Button onClick={this.showFileDiffualizeModal} disabled={!this.props.isFile}><Glyphicon glyph='modal-window' /> Diffualize</Button></Col>
       </Row>
     )
   }
