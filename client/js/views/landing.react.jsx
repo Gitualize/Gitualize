@@ -135,7 +135,7 @@ var Landing = React.createClass({
       }, 2000);
     };
 
-    setTimeout(function(){cycle(num)}, 2000);
+    cycle(num);
   },
 
   componentDidMount: function() {
