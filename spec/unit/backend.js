@@ -23,7 +23,7 @@ describe('test db', function(){
   });
 
   it('should have the right configurations', function(){
-    expect(config.connection.database).toBe('gitpun');
+    expect(config.connection.database).toBe('gitualize');
     expect(config.connection.host).toBe('127.0.0.1');
     expect(config.connection.port).toBe('5432');
   });
