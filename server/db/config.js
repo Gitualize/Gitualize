@@ -31,8 +31,7 @@ bookshelf.knex.schema.hasTable('repo').then(function (exists) {
           bookshelf.knex.schema.createTable('commit', function (commit) {
             commit.increments('id').primary(); //TODO specify storage bytes
             commit.string('sha', 50).unique();
-            commit.text('files', 20000); //files changed. json obj containing urls and patches
-            //commit.integer('repo_id').notNullable().references('repo.id');
+            commit.text('files', 4000); //files changed. json obj containing urls, file status etc
             commit.text('committer').notNullable(); //.references('user')
             commit.string('avatarUrl', 60);
             commit.text('message', 200); //truncate if too long

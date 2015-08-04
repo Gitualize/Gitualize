@@ -4,7 +4,7 @@
   "description": "Visualize your git repository with Gitualize",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\""
+    "test": "gulp testifyWatchless && gulp testf && gulp test"
   },
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/IncognizantDoppelganger/gitpun/issues"
   },
-  "homepage": "https://github.com/IncognizantDoppelganger/gitpun#readme",
+  "homepage": "http://gitualize.com",
   "dependencies": {
     "babelify": "^6.1.3",
     "bluebird": "^2.9.33",

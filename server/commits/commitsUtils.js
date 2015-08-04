@@ -1,15 +1,14 @@
 var Spooky = require('spooky');
 var Promise = require('bluebird');
-var db = require('../db/config');
 var fs = require('fs');
 var url = require('url');
 var _ = require('underscore');
-var Commit = require('../db/models/commit');
-//var Commits = require('../db/collections/commits');
-var Repo = require('../db/models/repo');
-
 var request = require('request');
 var rp = require('request-promise');
+
+var db = require('../db/config');
+var Commit = require('../db/models/commit');
+var Repo = require('../db/models/repo');
 
 var accessToken;
 var setAccessToken = function(token) { //TODO refactor
@@ -50,7 +49,6 @@ var addCommitsToRepo = function(dbRepo, commits, callback) { //helper for saveCo
   var repoCommits = dbRepo.commits();
   if (!repoCommits) return console.error('repo ', repoFullName, ' has no commits relationship. Something is wrong with the db if this occurs.');
   console.log('# commits in addCommitsToRepo: ', commits.length);
-  //callback(null, commits); //give caller immediately so don't have to wait for them to finish storing--in our case for the batching to work we must wait for them to store in db
   var dbCommits = Promise.map(commits, function(commit) { //map commits to dbCommits
     return new Commit({sha: commit.sha}).fetch()
     .then(function(dbCommit) {
@@ -64,43 +62,11 @@ var addCommitsToRepo = function(dbRepo, commits, callback) { //helper for saveCo
   }).catch(function(err) {
     callback('err getting saved dbCommits: '+err, null);
   });
-
-  //BELOW: notes for methods of saving sequential data to db 
-  //-------Previous one to many (repo to commits) method of saving:
-  //commits.reduce(function(prevCommitPromise, commit) {
-  //return prevCommitPromise
-  //.then(function(dbCommit) {
-  //return repoCommits.create(commit); // correctly set the repo_id on each commit row
-  //});
-  //}, new Promise(function(resolve) { resolve(); }))
-  //.then(function(commitChain) {
-  //callback(null, commits); //give caller here to ensure no pinging of more github pages before saving the current batch
-  //})
-  //.catch(function(err) {
-  //console.error(err);
-  //callback('error saving commits with chained commit promises', null);
-  //});
-  //
-  //--------The below would work if these are all new commits:
-  //var commitsCollection = Commits.add(commits); //or don't use bookshelf collection and just call save on manual Commit objs
-  //Promise.all(commitsCollection.invoke('save'))
-  //.then(function(commitsSaved) { //research order of commits saved in db TODO
-  //repoCommits.attach(commitsCollection);
-  ////.then(function(commitsSaved) {
-  //if (!commitsSaved) return callback('error saving all commits via repoCommits.attach', null);
-  //callback(null, commits);
-  //})
-  //.catch(function(err) {
-  //console.error(err);
-  //callback('error saving all commits then doing repoCommits.attach: '+err, null);
-  //});
-  //Commits.reset();
-
 };
+
 var saveCommitsToDb = Promise.promisify(function(repoData, commits, callback) {
   console.log('begin saving repo: ', repoData.repoFullName, ' to db');
   console.log('and saving commits to db');
-  //try }).fetch({withRelated: ['commits']}).then(function(dbRepo) { below if doesn't fetch commits with repo
   new Repo({
     fullName: repoData.repoFullName
   }).fetch({}).then(function(dbRepo) {
@@ -117,6 +83,7 @@ var saveCommitsToDb = Promise.promisify(function(repoData, commits, callback) {
     }
   });
 });
+
 var getShas = function(commits) {
   if (commits === null) return;
   return _.pluck(commits, 'sha');
@@ -130,10 +97,12 @@ var rawgittify = function(githubUrl) { //helper to change raw_url to max cdn.raw
   u.pathname = u.pathname.join('/');
   return url.format(u);
 };
+
 var cleanCommitsDetailed = function(commits) {
   if (commits === null) return;
   var committer, avatarUrl, message;
-  var c = _.map(commits, function(commit) {
+
+  return _.map(commits, function(commit) {
     commit = JSON.parse(commit);
     if (!commit.sha) return; //skip this commit...maybe reached some api access limit? check elsewhere perhaps
     committer = (commit.committer && commit.committer.login) || (commit.author && commit.author.login) || commit.commit.committer.name;
@@ -141,14 +110,21 @@ var cleanCommitsDetailed = function(commits) {
 
     message = commit.commit.message;
     if (message.length > 195) message = message.substr(0,195) + '...';
-    //if (avatarUrl.length > 250) debugger;
     _.each(commit.files, function(file) {
+      delete file.patch;
       file.raw_url = rawgittify(file.raw_url);
     });
-    return {sha: commit.sha, merge: commit.parents.length > 1, committer: committer, avatarUrl: avatarUrl, message: message, date: commit.commit.committer.date, files: JSON.stringify(commit.files)}; //omg
+    return {sha: commit.sha,
+            merge: commit.parents.length > 1,
+            committer: committer,
+            avatarUrl: avatarUrl,
+            message: message,
+            date: commit.commit.committer.date,
+            files: JSON.stringify(commit.files)
+    };
   });
-  return c;
 };
+
 var visitEachCommit = function(shas, options) { //visit each commit, update commits array with more info about each commit
   var generalUrl = options.url;
   var commitsDetailed = _.map(shas, function(sha) {
@@ -160,7 +136,10 @@ var visitEachCommit = function(shas, options) { //visit each commit, update comm
 
 var scrapeTotalCommits = Promise.promisify(function(repoFullName, callback) {
   var spooky = new Spooky({
-    child: { transport: 'http' }, casper: { logLevel: 'debug', verbose: true } }, function (err) {
+    child: { transport: 'http' },
+    casper: { logLevel: 'debug',
+    verbose: true } 
+    }, function (err) {
       if (err) {
         e = new Error('Failed to initialize SpookyJS');
         e.details = err;
@@ -170,7 +149,6 @@ var scrapeTotalCommits = Promise.promisify(function(repoFullName, callback) {
       spooky.then(function () {
         var scrapeNumCommits = function() {
           return document.querySelector('li.commits .num').firstChild.nodeValue.trim();
-          //return $('li.commits .num').text().trim();
         };
         this.emit('commits', this.evaluate(scrapeNumCommits));
       });
@@ -181,9 +159,6 @@ var scrapeTotalCommits = Promise.promisify(function(repoFullName, callback) {
       callback(e, null);
       if (stack) console.log(stack);
     });
-    //spooky.on('console', function (line) { //uncomment to debug
-    //console.log(line);
-    //});
     spooky.on('log', function (log) {
       if (log.space === 'remote') {
         console.log(log.message.replace(/ \- .*/, ''));
@@ -199,27 +174,6 @@ var scrapeTotalCommits = Promise.promisify(function(repoFullName, callback) {
     });
 });
 
-//original http way
-//var processCommits = Promise.promisify(function(commits, repoFullName, callback) { //getCommitsFromGithub helper
-//commitShas = getShas(commits).reverse(); //so first thing is the oldest commit for this batch
-//var commitOptions = { url: 'https://api.github.com/repos/' + repoFullName + '/commits/', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken} };
-////TODO DRY with above options
-//visitEachCommit(commitShas, commitOptions)
-//.then(function(commitsDetailed) {
-//if (!Array.isArray(commitsDetailed)) callback('commits fetched not an array. api limit?', null);
-//commitsDetailed = cleanCommitsDetailed(commitsDetailed);
-//callback(null, commitsDetailed); //give data to getCommitsFromGithub
-////TODO adding a callback above means a promise here but also returns the save promise below
-//return saveCommitsToDb(repoFullName, commitsDetailed);
-////}).then(function(commits) {
-////console.log('should have saved ' + commits.length + ' commits');
-//////if (!commits) return res.status(500).end();
-//}).catch(function(err) { //is this ok or must be at end?
-//console.error('Error visiting all commits for detailed info: ', err);
-//}).catch(function(error) { //TODO many to many commits to repos relationship establish for forks
-//console.log('error saving commits to db: ', error);
-//});
-//});
 var processCommits = function(commits, repoData) { //getCommitsFromGithub helper
   commitShas = getShas(commits).reverse(); //so first thing is the oldest commit for this batch
   var commitOptions = { url: 'https://api.github.com/repos/' + repoData.repoFullName + '/commits/', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken} };
@@ -244,6 +198,7 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, 
     console.log('starting with page: ', startPage);
     var options = { url: 'https://api.github.com/repos/' + repoFullName + '/commits', headers: { 'User-Agent': 'http://developer.github.com/v3/#user-agent-required' }, qs: {access_token: accessToken, per_page: 100, page: startPage} };
     var totalCommitsCount = 0;
+
     (function getMoreCommits() {
       request(options, function(error, response, commitsOverview) { //TODO promisify
         if (error) return callback(error, null);
@@ -254,10 +209,6 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, 
           var msg = 'Repo ' + repoFullName + ' does not exist.';
           return callback(msg, null);
         }
-        //console.log('commitsOverview.length = ', commitsOverview.length);
-        //TODO handle if commitsOverview is empty
-        //totalCommits = totalCommits.concat(commitsOverview);
-        //totalCommits = commitsOverview;
         totalCommitsCount += commitsOverview.length;
 
         //len should always be > 0 unless we are at startPage and didn't select it right
