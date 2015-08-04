@@ -33,33 +33,30 @@ Gitualize allows you to visualize the changes in a GitHub repository.
 ## Installation:
 
 Running on local machine:
+see below for database setup instructions. then:
 
 ```sh
-psql> create database gitualize;
+npm install -g gulp && npm install -g casperjs && npm install -g phantomjs
 npm install
-npm install -g gulp
-npm install -g casperjs
-npm install -g phantomjs
 gulp
 node server/server.js
 ```
 
-### Setting up Travis CI   
-   
-1. Navigate to [travis-ci](https://travis-ci.org/) and click Signup or Signin if you already have an account   
-1. Mouseover your Account name on the top right and select Accounts    
-1. Enable the checkbox for 'your_github_username/gitpun'   
-1. Your Travis CI information can be found at https://travis-ci.org/your_github_username/gitpun upon pushing to your repo    
+### Setting up Travis CI
+
+1. Navigate to [travis-ci](https://travis-ci.org/) and click Signup or Signin if you already have an account
+2. Mouseover your Account name on the top right and select Accounts
+3. Enable the checkbox for 'your_github_username/gitualize'
+4. Your Travis CI information can be found at https://travis-ci.org/your_github_username/gitualize upon pushing to your repo
 
 ### Setting up your Database
 
 We use PostgreSQL as our RDB.
 
-1. Navigate to [postgressapp](http://postgresapp.com/) and follow the download instructions
-1. Open the Postgres App by clicking on the elephant on the top right of your menu bar and selecting open psql
-1. Type 'CREATE DATABASE gitpun;' and press enter to create your database
-1. Run 'node index.js' or 'nodemon index.js' from the root directory command line
-1. The app will navigate to 'postgres://127.0.0.1:5432/gitpun' where 127.0.0.1 is the default localhost and 5432 is the default port
+1. `brew install postgres`
+2. open postgres via `psql`
+3. run `create database gitualize;`
+4. The app will navigate to 'postgres://127.0.0.1:5432/gitualize' when you start the server
 
 ### Github OAuth
 
