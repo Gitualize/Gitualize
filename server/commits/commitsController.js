@@ -1,5 +1,4 @@
 var utils = require('./commitsUtils');
-//var authUtils = require('./auth/authUtils');
 var Promise = require('bluebird');
 var getCommits = function(repoFullName, accessToken, socket, res) { //res is optional. kept to still keep api functionality for other devs and such. we are using sockets
   if (accessToken) {
@@ -20,24 +19,16 @@ var getCommits = function(repoFullName, accessToken, socket, res) { //res is opt
       socket.emit('authRequired', {authUrl: '/auth?repoFullName='+repoFullName});
       if (res) res.json({msg: 'auth required', authUrl: '/auth?repoFullName='+repoFullName});
       return;
-      //return res.redirect('/auth?repoFullName='+repoFullName); //don't let server redirect, client should
-      //res.end();
-      //next();
     }
     utils.getCommitsFromGithub(repoFullName, 500, socket)
     .then(function(commitsData) {
-      //if (commits === 'finished') {
-      //return res.end('got all commits');
-      //}
-      //res.write(commits);
-
       //cannot put socket emitting here unfortunately
       //due to how promise/callback works. callback is only called once
       //(only emits the first time, doesn't seem to work with recursive getMoreCommits in utils)
       //else it would be symmetric with above socket emit but with commits
 
       //socket emit is in utils
-      if (res) res.json(commitsData); //send back first page of commits if someone users our api as a perk
+      if (res) res.json(commitsData); //send back first page of commits if someone uses our api
     })
     .catch(function(error) { //repo doesn't exist msg
       console.error(error);
@@ -56,11 +47,3 @@ module.exports = function(socket) {
     getCommits(requestData.repoFullName, requestData.accessToken, socket);
   });
 };
-//getCommitsHttp: function(req, res) { //wrapper for normal http api
-//var accessToken = req.query.accessToken;
-//var repoOwner = req.params.repoOwner;
-//var repoName = req.params.repoName;
-//var repoFullName = repoOwner + '/' + repoName;
-//getCommits(repoFullName, accessToken, res);
-//},
-//getCommits: getCommits

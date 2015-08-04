@@ -58,9 +58,6 @@ describe('Test frontend.', function(){
       expect(component._store.props.children[0]._store.props.onClick.__reactBoundArguments[0]).toBe(-1);
       expect(component._store.props.children[0]._store.props.className).toBe('path-root');
       expect(component._store.props.children[0]._store.props.children).toBe('testRepo');
-      // node = component._store.props.children[0]._store.props.onClick.__reactBoundContext.getDOMNode();
-      // TestUtils.Simulate.click(node);
-      // expect(onClick).toBe('');
     });
 
     it("Should contain as the next child an array of 'spans' featuring '/ topLevelFolder' and '/ secondLevelFile' React Buttons properly indexed to 0 and 1, respectively", function() {
