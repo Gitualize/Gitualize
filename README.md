@@ -15,15 +15,15 @@ Gitualize allows you to visualize the changes in a GitHub repository.
 
 ## Usage
 
-* **The Landing Page** provides a step by step walk through with detailed visuals and commentary on how the site works. The search bar will attempt to auto complete any user/ you type into the search bar by listing relevant repositories.
+* **The Landing Page** provides a walk through with visuals on how the site works. The search bar will attempt to auto complete any user/ you type into the search bar by listing their relevant repositories.
 * **The Navbar** leads with our brand name 'Gitualize' which will lead back to the landing page. The Octocat mark on the top right will lead to our GitHub repository.
-* **The Directory** contains all the files in a repository at the current commit index. File and Folder icons will reveal whether clicking on one will lead to the File or Folder view.
-* **The Playbar** contains several basic buttons. The play button will iterate through all available commits in the forward direction while the backwards button will do so in reverse. The gitualization can be paused at any time with the pause button. The plus and minus button will speed up and slow down the gitualization process. Access to the Diffualizer will be available upon viewing a file.
+* **The Directory** contains all the files in a repository at the current commit. File and Folder icons will reveal whether clicking on one will lead to the File or Folder view. This dynamically updates as time progresses.
+* **The Playbar** contains several basic buttons. The play button will iterate through all available commits in the forward direction while the backwards button will do so in reverse. Currently we fetch at most 1000 commits from Github for each repo as there is an API access limit in effect. The gitualization can be paused at any time with the pause button. The plus and minus button will speed up and slow down playback. Access to the Diffualizer will be available upon viewing a specific file.
 * **The Path controller** is intialized to the root directory. Clicking on a name in the path will lead to the File view or Folder view depending on whether it's a file or folder.
-* **The Folder View** is intialized the root directory like the path. Folders and Files are animated upon creation, modification, renaming, or deletion. Clicking on a file will lead to that file's File view and clicking on a folder will lead to that folder's Folder view.
-* **The File View** does not contain any user interaction. While the visualization is happening it will routinely update the file's text showing the commit difference if the file was updated at the current commit. Text that was added will be green while text that was deleted will be red.
-* **The Commit View** contains the basic information relevant to the commit. On the left will be an avatar for the committer as well as their name which is a clickable link to their GitHub page. On the right will be the commit message for the current commit.
-* **The Diffualizer** is an interactive File view. It can be intitalized from the Playbar. Entering a valid commit ranges will show the difference in the file from commit to commit. Additionally the 'from' field can be left blank. The current commit will be highlighted and entering a valid positive or negative number in the 'to' field will reveal the difference from the range of '-to' to the current commit or the current commit to 'to'.
+* **The Folder View** is intialized in the root directory like the path. Folders and Files are animated upon creation, modification, renaming, or deletion. Clicking on a file will lead to the file view and clicking a folder will step inside another folder view.
+* **The File View** While the visualization is happening it will routinely update the file's text showing the commit difference if the file was updated at the current commit. Code that was added will be green while code that was deleted will be red.
+* **The Commit View** contains the basic information relevant to the commit. On the left is an avatar and name for the committer linked to their GitHub page. On the right is the current commit message.
+* **The Diffualizer** is an interactive File view. Entering two valid commit indices will show the difference between the them. The 'from' field can be left blank. The current commit will be highlighted and entering a valid positive or negative number in the 'to' field will reveal the difference from the range of '-to' to the current commit or the current commit to 'to'.
 
 ## Requirements
 
@@ -35,6 +35,7 @@ Gitualize allows you to visualize the changes in a GitHub repository.
 Running on local machine:
 
 ```sh
+psql> create database gitualize;
 npm install
 npm install -g gulp
 npm install -g casperjs
@@ -60,23 +61,21 @@ We use PostgreSQL as our RDB.
 1. Run 'node index.js' or 'nodemon index.js' from the root directory command line
 1. The app will navigate to 'postgres://127.0.0.1:5432/gitpun' where 127.0.0.1 is the default localhost and 5432 is the default port
 
-### API Use
+### Github OAuth
 
 ```sh
 /auth
 ```
 
-Redirects to github where GitHub where you will be prompted to authorize gitualize.com to perferform API requests on your behalf to fetch repos when neccessary.
+Redirects to github where GitHub where you will be prompted to authorize gitualize.com to perform API requests on your behalf to fetch repos when neccessary. This is done by the client.
 
 ```sh
 /getAccessToken
 ```
 
-The redirect route that GitHub uses upon completeing authorization for API use
+The redirect route on our server that GitHub uses upon completing authorization for API use. This redirects back to the client page with the correct access token.
 
-### Docker
-
-### AWS
+### Docker, AWS
 
 ## Team
 
