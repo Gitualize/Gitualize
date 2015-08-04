@@ -4,7 +4,7 @@
   "description": "Visualize your git repository with Gitualize",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\""
+    "test": "gulp testifyWatchless && gulp testf && gulp test"
   },
   "repository": {
     "type": "git",
