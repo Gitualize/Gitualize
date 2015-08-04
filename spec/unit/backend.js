@@ -166,24 +166,10 @@ describe('User model', function(){
     expect(u.repos().relatedData.target).toBe(Repo);
   });
   
-  // it('should add a model to the database', function(done){
-
-  //   new User({current_user: 'test'}).save().then(function(user) {
-  //     var attr = user.attributes;
-
-  //     expect(attr.current_user).toBe('test');
-
-  //     user.destroy();
-  //     done();
-  //   });
-    
-  // });
-
 });
 
 
 describe('Repos Collection', function(){
-  // var rs = Repos.forge([{name1: 'terry'},{name2: 'terrance'}])
 
   it('should have Repos defined', function(){
     expect(Repos).toBeDefined();
@@ -214,7 +200,6 @@ describe('Users Collection', function(){
 
 
 describe('Server', function(){
-  // console.log(server.server.address());
 
   it('should be defined', function() {
     expect(server.app).toBeDefined();
