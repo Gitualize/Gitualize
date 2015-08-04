@@ -4,7 +4,7 @@ var connection = process.env.IS_DOCKER_CONTAINER ? {
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
   charset: 'utf8'
-} : 'postgres://127.0.0.1:5432/gitpun';
+} : 'postgres://127.0.0.1:5432/gitualize';
 
 var knex = require('knex')({
   client: 'pg',
