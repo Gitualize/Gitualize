@@ -28,7 +28,6 @@ gulp.task('jshint', function(done){
   gulp.src(paths.backend.concat(paths.frontend))
   .pipe(jshint())
   .pipe(jshint.reporter('jshint-stylish'))
-  // .pipe(jshint.reporter('fail'))
   .on('error', notify.onError(function(error) {
     return error.message;
   }));

@@ -1,5 +1,7 @@
 var express = require('express');
 var request = require('request');
+var MockBrowser = require('mock-browser');
+
 var db = require('../../server/db/config.js');
 var Repo = require('../../server/db/models/repo.js');
 var Commit = require('../../server/db/models/commit.js');
@@ -8,7 +10,6 @@ var Repos = require('../../server/db/collections/repos.js');
 var Commits = require('../../server/db/collections/commits.js');
 var Users = require('../../server/db/collections/users.js');
 
-var MockBrowser = require('mock-browser');
 
 describe('Commits controller', function(){
  
@@ -20,8 +21,6 @@ describe('Commits controller', function(){
     request('http://127.0.0.1:3000/getAccessToken?repoFullName=tchan247/blog-project', function(error, response, body){
 
       new Commit({committer: 'tchan247'}).fetch().then(function(item){
-        // console.log('ITEMS!!!!');
-        // console.log(item.attributes);
 
         expect(item).toBeDefined();
         if(item) {
@@ -42,8 +41,6 @@ describe('Repos Controller', function(){
     request('http://127.0.0.1:3000/getAccessToken?repoFullName=tchan247/blog-project', function(error, response, body){
 
       new Repo({'fullName': 'tchan247/blog-project'}).fetch().then(function(item){
-        // console.log('ITEMS!!!!');
-        // console.log(item);
 
         expect(item).toBeDefined();
         if(item) {
@@ -75,20 +72,6 @@ describe('Authentication Controller', function(){
     });
 
   });
-
-    // TODO:
-    // test login
-  // it('should create a session for the user', function(){
-  //   request('http://127.0.0.1:3000/getAccessToken?repoFullName=tchan247/blog-project', function(error, response, body){
-  //     if(error) {
-  //       throw error;
-  //     }
-
-
-  //     expect(false).toBe(true);
-  //   });
-
-  // });
 
   it('should not authenticate user if user already in a session', function(done){
     request('http://127.0.0.1:3000/auth?repoFullName=tchan247/blog-project', function(error, response, body){
