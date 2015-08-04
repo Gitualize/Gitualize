@@ -102,7 +102,7 @@ var cleanCommitsDetailed = function(commits) {
   if (commits === null) return;
   var committer, avatarUrl, message;
 
-  var mappedCommits = _.map(commits, function(commit) {
+  return _.map(commits, function(commit) {
     commit = JSON.parse(commit);
     if (!commit.sha) return; //skip this commit...maybe reached some api access limit? check elsewhere perhaps
     committer = (commit.committer && commit.committer.login) || (commit.author && commit.author.login) || commit.commit.committer.name;
@@ -111,6 +111,7 @@ var cleanCommitsDetailed = function(commits) {
     message = commit.commit.message;
     if (message.length > 195) message = message.substr(0,195) + '...';
     _.each(commit.files, function(file) {
+      delete file.patch;
       file.raw_url = rawgittify(file.raw_url);
     });
     return {sha: commit.sha,
@@ -122,8 +123,6 @@ var cleanCommitsDetailed = function(commits) {
             files: JSON.stringify(commit.files)
     };
   });
-
-  return mappedCommits;
 };
 
 var visitEachCommit = function(shas, options) { //visit each commit, update commits array with more info about each commit
