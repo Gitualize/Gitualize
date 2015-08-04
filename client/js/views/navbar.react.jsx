@@ -17,7 +17,7 @@ var NavHead = React.createClass({
         <Navbar style={this.styles.navbarStyle} brand={<a href="#">Gitualize</a>} toggleNavKey={0}>          
           <Nav right eventKey={0}>
             <OverlayTrigger placement='bottom' delayShow={1000} overlay={<Tooltip> Gitualize GitHub Repository </Tooltip>}>
-              <NavItem href='https://github.com/Gitualize/Gitualize'><img style={this.styles.imgStyle} src={'../../pics/GitHub-Mark-64px.png'}/></NavItem>
+            <NavItem href='https://github.com/gitualize/gitualize'><img style={this.styles.imgStyle} src={'../../pics/GitHub-Mark-64px.png'}/></NavItem>
             </OverlayTrigger>
           </Nav>
         </Navbar>
