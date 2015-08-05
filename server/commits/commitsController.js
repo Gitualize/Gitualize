@@ -20,7 +20,7 @@ var getCommits = function(repoFullName, accessToken, socket, res) { //res is opt
       if (res) res.json({msg: 'auth required', authUrl: '/auth?repoFullName='+repoFullName});
       return;
     }
-    utils.getCommitsFromGithub(repoFullName, 500, socket)
+    utils.getCommitsFromGithub(repoFullName, 1000, socket)
     .then(function(commitsData) {
       //cannot put socket emitting here unfortunately
       //due to how promise/callback works. callback is only called once
