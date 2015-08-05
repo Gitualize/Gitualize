@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IncognizantDoppelganger/gitpun.git"
+    "url": "git+https://github.com/gitualize/gitualize.git"
   },
   "author": "Alberto D'Souza, Dani Hu, Devon Harvey, Terry Chan",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/IncognizantDoppelganger/gitpun/issues"
+    "url": "https://github.com/gitualize/gitualize/issues"
   },
   "homepage": "http://gitualize.com",
   "dependencies": {

@@ -19,7 +19,7 @@ describe('Gitualize', function() {
       browser.wait($(".is-copy-enabled").isPresent());
 
       browser.getCurrentUrl().then(function(url) {
-        expect(url).toEqual('https://github.com/incognizantdoppelganger/gitpun');
+        expect(url).toEqual('https://github.com/gitualize/gitualize');
         done();
       });
 
