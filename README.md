@@ -2,7 +2,7 @@
 
 Gitualize allows you to visualize the changes in a GitHub repository.
 
-[gitualize.com](gitualize.com)
+[gitualize.com](http://gitualize.com)
 
 
 ## Table of Contents
