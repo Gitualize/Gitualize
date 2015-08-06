@@ -7,7 +7,7 @@ Gitualize allows you to visualize the changes in a GitHub repository.
 
 ## Table of Contents
 
-1. [Usage](#Usage)
+1. [Usage](#usage)
 1. [Requirements](#requirements)
 1. [Installation](#installation)
 1. [Team](#team)
