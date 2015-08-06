@@ -23,7 +23,7 @@ Gitualize allows you to visualize the changes in a GitHub repository.
 * **The Folder View** is intialized in the root directory like the path. Folders and Files are animated upon creation, modification, renaming, or deletion. Clicking on a file will lead to the file view and clicking a folder will step inside another folder view.
 * **The File View** While the visualization is happening it will routinely update the file's text showing the commit difference if the file was updated at the current commit. Code that was added will be green while code that was deleted will be red.
 * **The Commit View** contains the basic information relevant to the commit. On the left is an avatar and name for the committer linked to their GitHub page. On the right is the current commit message.
-* **The Diffualizer** is an interactive File view. Entering two valid commit indices will show the difference between the them. The 'from' field can be left blank. The current commit will be highlighted and entering a valid positive or negative number in the 'to' field will reveal the difference from the range of '-to' to the current commit or the current commit to 'to'.
+* **The Diffualizer** is an interactive File view. Entering two valid commit indices will show the difference between them. The 'from' field can be left blank. The current commit will be highlighted and entering a valid positive or negative number in the 'to' field will reveal the difference from the range of '-to' to the current commit or the current commit to 'to'.
 
 ## Requirements
 
