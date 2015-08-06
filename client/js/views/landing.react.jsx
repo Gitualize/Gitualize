@@ -13,7 +13,7 @@ var OverlayTrigger = ReactBootstrap.OverlayTrigger;
 
 var Landing = React.createClass({
   mixins : [Navigation],
-  errorMessages: {badRepo: 'Unable to fetch the requested repository. You may only gitualize public repositories.'},
+  errorMessages: {badRepo: "Unable to fetch the requested repository. You may only gitualize public repositories. Please try again in a little while if you believe this is a mistake, we're doing our best :)."},
   styles: {
     containerStyle: {
       width: '980',
