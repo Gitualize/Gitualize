@@ -41,7 +41,7 @@ bookshelf.knex.schema.hasTable('repo').then(function (exists) {
           }).then(function (table) {
             console.log('Created table: commit');
             bookshelf.knex.schema.createTable('commit_repo', function (commitsRepos) {
-              commitsRepos.increments('id').primary();
+              commitsRepos.primary(['repo_id', 'commit_id']);
               commitsRepos.integer('repo_id').notNullable().references('repo.id');
               commitsRepos.integer('commit_id').notNullable().references('commit.id');
             }).then(function(table) {

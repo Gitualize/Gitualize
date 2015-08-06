@@ -10,6 +10,8 @@ var db = require('../db/config');
 var Commit = require('../db/models/commit');
 var Repo = require('../db/models/repo');
 
+var verbose = false;
+
 var accessToken;
 var setAccessToken = function(token) { //TODO refactor
   accessToken = token;
@@ -28,7 +30,7 @@ var getCommitsFromDb = Promise.promisify(function(repoFullName, callback) {
     dbRepo.commits().fetch().then(function(dbCommits) {
       //sort in correct order (may not come in order from db)
       var formattedCommits = _.sortBy(_.pluck(dbCommits.models, 'attributes'), function(dbCommit) { return dbCommit.id });
-      console.log('found repo commits in db, returning ', formattedCommits.length, ' commits');
+      console.log('found repo ', repoFullName, ' commits in db, returning ', formattedCommits.length, ' commits');
       callback(null, {commits: formattedCommits, totalNumCommits:scrapedTotCommits});
     }).catch(function(err) {
       callback('error fetching commits of repo: '+err, null);
@@ -45,11 +47,11 @@ var addCommitsToRepo = function(dbRepo, commits, callback) { //helper for saveCo
     console.error(msg);
     return callback(msg, null);
   }
-  console.log('saved or got existing db repo');
+  if (verbose) console.log('saved or got existing db repo');
   var repoCommits = dbRepo.commits();
   if (!repoCommits) return console.error('repo ', repoFullName, ' has no commits relationship. Something is wrong with the db if this occurs.');
-  console.log('# commits in addCommitsToRepo: ', commits.length);
-  var dbCommits = Promise.map(commits, function(commit) { //map commits to dbCommits
+  if (verbose) console.log('# commits in addCommitsToRepo: ', commits.length);
+  Promise.map(commits, function(commit) { //map commits to dbCommits
     return new Commit({sha: commit.sha}).fetch()
     .then(function(dbCommit) {
       return dbCommit || new Commit(commit).save();
@@ -65,8 +67,7 @@ var addCommitsToRepo = function(dbRepo, commits, callback) { //helper for saveCo
 };
 
 var saveCommitsToDb = Promise.promisify(function(repoData, commits, callback) {
-  console.log('begin saving repo: ', repoData.repoFullName, ' to db');
-  console.log('and saving commits to db');
+  if (verbose) console.log('begin saving repo: ', repoData.repoFullName, ' to db\n and saving commits to db');
   new Repo({
     fullName: repoData.repoFullName
   }).fetch({}).then(function(dbRepo) {
@@ -103,7 +104,11 @@ var cleanCommitsDetailed = function(commits) {
   var committer, avatarUrl, message;
 
   return _.map(commits, function(commit) {
-    commit = JSON.parse(commit);
+    if (typeof commit === 'string') {
+      commit = JSON.parse(commit); //will be string upon first getting from request rp, will be object if fetching from db
+    } else { //from db, already cleaned
+      return commit.attributes;
+    }
     if (!commit.sha) return; //skip this commit...maybe reached some api access limit? check elsewhere perhaps
     committer = (commit.committer && commit.committer.login) || (commit.author && commit.author.login) || commit.commit.committer.name;
     avatarUrl = (commit.committer && commit.committer.avatar_url) || (commit.author && commit.author.avatar_url);
@@ -127,16 +132,29 @@ var cleanCommitsDetailed = function(commits) {
 
 var visitEachCommit = function(shas, options) { //visit each commit, update commits array with more info about each commit
   var generalUrl = options.url;
-  var commitsDetailed = _.map(shas, function(sha) {
-    options.url = generalUrl + sha;
-    return rp(options);
+  return Promise.map(shas, function(sha) { //map commit shas to detailed commits (from db or github). ie don't visit commits if already in db
+    return new Commit({sha: sha}).fetch()
+    .then(function(dbCommit) {
+      if (dbCommit) return dbCommit;
+      options.url = generalUrl + sha;
+      return rp(options);
+    })
+    .catch(function(err) {
+      console.err('error getting detailed commit from db or visiting it with github api: '+err);
+    });
   });
-  return Promise.all(commitsDetailed);
+
+  //var commitsDetailed = _.map(shas, function(sha) { //old method always visited commit even if already in db
+    //options.url = generalUrl + sha;
+    //return rp(options);
+  //});
+  //return Promise.all(commitsDetailed);
 };
 
 var scrapeTotalCommits = Promise.promisify(function(repoFullName, callback) {
+  //set a port in case it conflicts with aws listening to node port
   var spooky = new Spooky({
-    child: { transport: 'http' },
+    child: { transport: 'http', port: 1337 },
     casper: { logLevel: 'debug',
     verbose: true } 
     }, function (err) {
@@ -145,7 +163,7 @@ var scrapeTotalCommits = Promise.promisify(function(repoFullName, callback) {
         e.details = err;
         throw e;
       }
-      spooky.start('https://github.com/'+repoFullName);
+      spooky.start('https://github.com/'+repoFullName); //consider starting spooky instance on landing page to decrease load time
       spooky.then(function () {
         var scrapeNumCommits = function() {
           return document.querySelector('li.commits .num').firstChild.nodeValue.trim();
@@ -158,6 +176,7 @@ var scrapeTotalCommits = Promise.promisify(function(repoFullName, callback) {
       console.error(e);
       callback(e, null);
       if (stack) console.log(stack);
+      //spooky.destroy();
     });
     spooky.on('log', function (log) {
       if (log.space === 'remote') {
@@ -169,8 +188,9 @@ var scrapeTotalCommits = Promise.promisify(function(repoFullName, callback) {
       if (typeof num !== 'string') return callback('unexpected format of scraped # of commits: '+num, null);
       num = parseInt(num.replace(',', ''));
       if (isNaN(num)) return callback('commits scraped NaN', null);
-      console.log('scraped total commits: ', num);
+      console.log('scraped total commits for repo: ', repoFullName, num);
       callback(null, num);
+      spooky.destroy();
     });
 });
 
@@ -181,7 +201,7 @@ var processCommits = function(commits, repoData) { //getCommitsFromGithub helper
   .then(function(commitsDetailed) {
     if (!Array.isArray(commitsDetailed)) return console.error('commits fetched not an array. api limit?');
     commitsDetailed = cleanCommitsDetailed(commitsDetailed);
-    return saveCommitsToDb(repoData, commitsDetailed);
+    return saveCommitsToDb(repoData, commitsDetailed); // this will attempt to save commits already in the db if it is a fork. could refactor to skim over those
   }).catch(function(err) {
     console.error('Error visiting all commits for detailed info: ', err);
   });
@@ -203,7 +223,7 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, 
       request(options, function(error, response, commitsOverview) { //TODO promisify
         if (error) return callback(error, null);
         commitsOverview = JSON.parse(commitsOverview);
-        console.log('getting commits on page: ', options.qs.page);
+        console.log('tried to get ', repoFullName, ' commits on page: ', options.qs.page);
         if (commitsOverview.message === 'Bad credentials') return callback(commitsOverview.message, null);
         if (commitsOverview.message === 'Not Found') {
           var msg = 'Repo ' + repoFullName + ' does not exist.';
@@ -217,8 +237,8 @@ var getCommitsFromGithub = Promise.promisify(function(repoFullName, maxCommits, 
         .then(function(commitsDetailed) {
           var commitsData = JSON.stringify({commits: commitsDetailed, totalNumCommits: totalNumCommits});
           socket.emit('gotCommits', commitsData); //stringify just in case, big data objs cause problems
-          console.log('emitted socket commits.length ', commitsDetailed.length);
-          console.log('should have saved ' + commitsDetailed.length + ' commits');
+          //console.log('emitted socket commits.length ', commitsDetailed.length);
+          console.log('should have saved and emitted' + commitsDetailed.length + ' commits');
           callback(null, commitsData); // to commitsController to handle normal http requests
           if (--options.qs.page > 0 && totalCommitsCount < maxCommits) getMoreCommits();
         }).catch(function(err) {
