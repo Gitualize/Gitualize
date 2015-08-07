@@ -25,6 +25,7 @@ Gitualize allows you to visualize the changes in a GitHub repository.
 * **The Commit View** contains the basic information relevant to the commit. On the left is an avatar and name for the committer linked to their GitHub page. On the right is the current commit message.
 * **The Diffualizer** is an interactive File view. Entering two valid commit indices will show the difference between them. The 'from' field can be left blank. The current commit will be highlighted and entering a valid positive or negative number in the 'to' field will reveal the difference from the range of '-to' to the current commit or the current commit to 'to'.
 
+
 ## Requirements
 
 - Node 0.12.x
