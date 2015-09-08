@@ -4,6 +4,8 @@ var React = require('react/addons');
 var Navigation = require('react-router').Navigation;
 var ReactBootstrap = require('react-bootstrap');
 var Input = ReactBootstrap.Input;
+var Button = ReactBootstrap.Button;
+var ButtonToolbar = ReactBootstrap.ButtonToolbar;
 var ButtonInput = ReactBootstrap.ButtonInput;
 var Grid = ReactBootstrap.Grid;
 var Row = ReactBootstrap.Row;
@@ -13,7 +15,7 @@ var OverlayTrigger = ReactBootstrap.OverlayTrigger;
 
 var Landing = React.createClass({
   mixins : [Navigation],
-  errorMessages: {badRepo: "Unable to fetch the requested repository. You may only gitualize public repositories. Please try again in a little while if you believe this is a mistake, we're doing our best :)."},
+  errorMessages: {badRepo: "Unable to fetch the requested repository. You may only gitualize public repositories. Please try again in a little while if you believe this is a mistake, we're doing our best :)"},
   styles: {
     containerStyle: {
       width: '980',
@@ -59,11 +61,27 @@ var Landing = React.createClass({
       textAlign: 'center'
     }
   },
+  // parse:
+  // jashkenas/backbone
+  // https://github.com/jashkenas/backbone.git
+  // https://github.com/jashkenas/backbone
+  GITHUB_URL: /^(?:https?\:\/\/github\.com\/)?(\w+)\/(\w+)(?:\.git)?$/,
+  GITHUB_URL_PARTIAL: /^(?:https?\:\/\/github\.com\/)?(\w+)\/$/,
+
+  handleClick: function(e) {
+    var repo = $(e.target).text().split('/');
+    this.transitionTo('repo', {repoOwner: repo[0], repoName: repo[1]});
+  },
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var repo = this.refs.repo.getValue().split('/');
-    this.transitionTo('repo', {repoOwner: repo[0], repoName: repo[1]});
+
+    var input = this.refs.repo.getValue();
+    var repo = input.match(this.GITHUB_URL);
+    if (!repo || repo.length < 3) {
+      return; //TODO better err handling
+    }
+    this.transitionTo('repo', {repoOwner: repo[1], repoName: repo[2]});
   },
 
   getInitialState: function() {
@@ -76,11 +94,13 @@ var Landing = React.createClass({
   validationState: function() {
     var string = this.refs.repo.getValue();
     var style = 'danger';
+    var partialMatch = string.match(this.GITHUB_URL_PARTIAL);
 
-    if (string.match(/[\w]+\/[\w]+/)) { style = 'success'; }
-    else if (string.match(/[\w]+\//)) { 
+    if (string.match(this.GITHUB_URL)) {
+      style = 'success';
+    } else if (partialMatch) {
       style = 'warning';
-      var userName = this.refs.repo.getValue().split('/')[0];
+      var userName = partialMatch[1];
       $.get('http://api.github.com/users/' + userName + '/repos', {access_token: window.localStorage.gitHubAccessToken})
       .success(function (repos) {
         var repoNames = repos.map(function(repo) {return userName + '/' + repo.name});
@@ -160,9 +180,16 @@ var Landing = React.createClass({
       <div style={this.styles.containerStyle}>
           <form style={this.styles.formStyle} className='repoForm' onSubmit={this.handleSubmit}>
             <h4> Visualize a repo </h4>
-            <Input type='text' ref='repo' className='uiAutocomplete' buttonBefore={<ButtonInput type='submit' value='Gitualize' bsStyle={this.state.style} disabled={this.state.disabled}/>} onChange={this.handleChange} placeholder='user/reponame - try jashkenas/backbone'/>
+            <Input type='text' ref='repo' className='uiAutocomplete' buttonBefore={<ButtonInput type='submit' value='Gitualize' bsStyle={this.state.style} disabled={this.state.disabled}/>} onChange={this.handleChange} placeholder="repo owner/repo name OR paste GitHub repo url here"/>
             {errorMessage}
           </form>
+        Demos:
+
+      <ButtonToolbar onClick={this.handleClick}>
+        <Button>jashkenas/backbone</Button>
+        <Button>angular/angular</Button>
+        <Button>tchan247/blog-project</Button>
+      </ButtonToolbar>
 
         <Grid style={this.styles.instructionStyle} bsSize='small'>
           <Row>
