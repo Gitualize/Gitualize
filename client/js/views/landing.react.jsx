@@ -34,7 +34,7 @@ var Landing = React.createClass({
       display: 'inline-block',
       wordWrap: 'break-word',
       overflow: 'hidden',
-    }, 
+    },
     stepContentStyle: {
       width: 225,
       height: 225,
