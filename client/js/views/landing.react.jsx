@@ -34,7 +34,7 @@ var Landing = React.createClass({
       display: 'inline-block',
       wordWrap: 'break-word',
       overflow: 'hidden',
-    }, 
+    },
     stepContentStyle: {
       width: 225,
       height: 225,
@@ -188,7 +188,7 @@ var Landing = React.createClass({
       <ButtonToolbar onClick={this.handleClick}>
         <Button>jashkenas/backbone</Button>
         <Button>angular/angular</Button>
-        <Button>tchan247/blog-project</Button>
+        <Button>substack/node-browserify</Button>
       </ButtonToolbar>
 
         <Grid style={this.styles.instructionStyle} bsSize='small'>
