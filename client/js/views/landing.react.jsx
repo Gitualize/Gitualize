@@ -65,7 +65,7 @@ var Landing = React.createClass({
   // jashkenas/backbone
   // https://github.com/jashkenas/backbone.git
   // https://github.com/jashkenas/backbone
-  GITHUB_URL: /^(?:https?\:\/\/github\.com\/)?(\w+)\/(\w+)(?:\.git)?$/,
+  GITHUB_URL: /^(?:https?\:\/\/github\.com\/)?(\w+)\/([\w.-]+)(?:\.git)?$/,
   GITHUB_URL_PARTIAL: /^(?:https?\:\/\/github\.com\/)?(\w+)\/$/,
 
   handleClick: function(e) {
